@@ -1,5 +1,7 @@
 # JSON Schema to ElasticSearch mapping schema
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kristianmandrup/json-schema-to-es-mapping.svg)](https://greenkeeper.io/)
+
 Convert JSON schema to [ElasticSearch mapping schema](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html)
 
 Note: Made to be compatible with Elastic Search 6, using a flat index without types.
