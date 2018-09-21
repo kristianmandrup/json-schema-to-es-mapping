@@ -1,0 +1,34 @@
+{
+  "name": "json-schema-to-es-mapping",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "description": "Generate ES mapping schema from JSON Schema",
+  "license": "MIT",
+  "author": "Kristian Mandrup <kmandrup@gmail.com>",
+  "homepage": "https://github.com/kristianmandrup/json-schema-to-es-mapping#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kristianmandrup/json-schema-to-es-mapping.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kristianmandrup/json-schema-to-es-mapping/issues",
+    "email": "kmandrup@gmail.com"
+  },
+  "devDependencies": {
+    "jest": "^23.0.0"
+  },
+  "keywords": [
+    "yup",
+    "json",
+    "json-schema",
+    "schema",
+    "validate",
+    "validation",
+    "convert",
+    "build",
+    "builder"
+  ],
+  "scripts": {
+    "test": "jest"
+  }
+}
