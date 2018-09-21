@@ -18,15 +18,17 @@
     "jest": "^23.0.0"
   },
   "keywords": [
-    "yup",
+    "elastic",
+    "search",
+    "elasticsearch",
+    "elastic-search",
     "json",
     "json-schema",
     "schema",
-    "validate",
-    "validation",
     "convert",
     "build",
-    "builder"
+    "builder",
+    "generator"
   ],
   "scripts": {
     "test": "jest"
