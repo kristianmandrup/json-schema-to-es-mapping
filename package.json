@@ -2,7 +2,7 @@
   "name": "json-schema-to-es-mapping",
   "version": "0.1.0",
   "main": "src/index.js",
-  "description": "Generate ES mapping schema from JSON Schema",
+  "description": "Generate Elastic Search mapping schema from JSON Schema",
   "license": "MIT",
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "homepage": "https://github.com/kristianmandrup/json-schema-to-es-mapping#readme",
