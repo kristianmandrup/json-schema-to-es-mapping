@@ -2,8 +2,16 @@ const {MappingBaseType} = require('./base')
 
 const {buildMapping} = require('../')
 
+function isObjectType(obj) {
+  return obj === Object(obj);
+}
+
+function isObject(obj) {
+  return obj.type === 'object' // && isObjectType(obj.properties)
+}
+
 function toObject(obj) {
-  return isObject(obj.type) && MappingObject
+  return isObject(obj) && MappingObject
     .create(obj)
     .convert()
 }
