@@ -1,6 +1,6 @@
 const {MappingBaseType} = require('./base')
 
-function isBoolean(type) {
+function isArray(type) {
   return type === 'array'
 }
 

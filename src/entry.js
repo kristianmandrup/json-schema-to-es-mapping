@@ -58,11 +58,11 @@ class SchemaEntry {
     return toBoolean(config || this.obj)
   }
 
-  array() {
+  array(config) {
     return toArray(config || this.obj)
   }
 
-  object() {
+  object(config) {
     return toObject(config || this.obj)
   }
 

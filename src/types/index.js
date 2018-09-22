@@ -1,9 +1,10 @@
-const {MappingMixed, toMixed, ConvertMappingSchemaError} = require('./base')
+const {MappingBaseType, ConvertMappingSchemaError} = require('./base')
 const {MappingArray, toArray} = require('./array')
 const {MappingBoolean, toBoolean} = require('./boolean')
 const {MappingNumber, toNumber} = require('./number')
 const {MappingObject, toObject} = require('./object')
 const {MappingString, toString} = require('./string')
+const {MappingDate, toDate} = require('./date')
 
 module.exports = {
   MappingArray,
@@ -16,7 +17,8 @@ module.exports = {
   toObject,
   MappingString,
   toString,
-  MappingMixed,
-  toMixed,
+  MappingDate,
+  toDate,
+  MappingBaseType,
   ConvertMappingSchemaError
 }
