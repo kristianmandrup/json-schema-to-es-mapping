@@ -175,7 +175,7 @@ module.exports = function toObject(obj) {
 };
 ```
 
-Import the toObject function and pass it in the `types` object of the `config` object passed to the `build` function.
+Import the `toObject` function and pass it in the `types` object of the `config` object passed to the `build` function.
 
 ````js
 // custom implementation
@@ -190,6 +190,15 @@ const myConfig = {
 // will now use the custom toObject for mapping JSON schema object to ES object
 build(schema, myConfig)
 ```
+
+Depending on your requirements, you can post-process the generated mapping to better suit your specific needs and strategies for handling nested/complex data relationships.
+
+### Elastic Search nested objects and data
+
+- [Elasticsearch: Nested datatype](https://www.elastic.co/guide/en/elasticsearch/reference/current/nested.html)
+- [Elasticsearch: Nested Objects](https://www.elastic.co/guide/en/elasticsearch/guide/current/nested-objects.html)
+- [Elasticsearch data schema for nested objects](https://stackoverflow.com/questions/43488166/elasticsearch-data-schema-for-nested-objects)
+- [Elasticsearch : Advanced search and nested objects](http://obtao.com/blog/2014/04/elasticsearch-advanced-search-and-nested-objects/)
 
 ### Rules
 
