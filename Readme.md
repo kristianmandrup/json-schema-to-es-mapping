@@ -31,8 +31,8 @@ const schema = {
   required: ["name"]
 };
 
-const { buildMapping } = require("json-schema-to-es-mapping");
-const mapping = buildMapping(schema);
+const { build } = require("json-schema-to-es-mapping");
+const mapping = build(schema);
 
 console.log({
   mapping
@@ -83,9 +83,11 @@ const config = {
   }
 };
 
-const { buildMapping } = require("json-schema-to-es-mapping");
-const mapping = buildMapping(schema, config);
+const { build } = require("json-schema-to-es-mapping");
+const mapping = build(schema, config);
 ```
+
+Also note that you can pass in many of the functions used internally, so that the internal mechanics themselves can easily be customized as needed or used as building blocks.
 
 ## ElasticSearch mapping resources
 
