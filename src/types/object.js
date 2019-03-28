@@ -21,17 +21,21 @@ class MappingObject extends MappingBaseType {
   }
 
   convert() {
-    const { buildMapping } = this.config;
     return this.hasProperties
-      ? buildMapping(this.objectValue, this.config)
-      : this.defaultObj;
+      ? this.buildObjectValueMapping()
+      : this.defaultObjectValueMapping;
+  }
+
+  buildObjectValueMapping() {
+    const { buildMapping } = this.config;
+    return buildMapping(this.objectValue, this.config);
   }
 
   get objectValue() {
     return this.value;
   }
 
-  get defaultObj() {
+  get defaultObjectValueMapping() {
     return {};
   }
 

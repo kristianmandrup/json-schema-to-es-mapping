@@ -157,6 +157,17 @@ const { MappingObject, toObject, util } = types;
 
 class MyMappingObject extends MappingObject {
   // ...override
+
+  convert() {
+    return this.hasProperties
+      ? this.buildObjectValueMapping()
+      : this.defaultObjectValueMapping;
+  }
+
+  buildObjectValueMapping() {
+    const { buildMapping } = this.config;
+    return buildMapping(this.objectValue, this.config);
+  }
 }
 
 module.exports = function toObject(obj) {
