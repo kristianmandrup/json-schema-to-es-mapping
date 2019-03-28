@@ -11,7 +11,9 @@ const {
 class SchemaEntryError extends Error {}
 
 class SchemaEntry {
-  constructor(key, value, config) {
+  constructor(obj, config = {}) {
+    const { parentName, key, value } = obj;
+    this.parentName = parentName;
     this.key = key;
     this.value = value;
     this.config = config;
@@ -57,6 +59,7 @@ class SchemaEntry {
 
   get obj() {
     return {
+      parentName: this.parentName,
       key: this.key,
       value: this.value,
       type: this.type,

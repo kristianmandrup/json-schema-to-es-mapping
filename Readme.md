@@ -32,7 +32,16 @@ const schema = {
 };
 
 const { build } = require("json-schema-to-es-mapping");
-const mapping = build(schema);
+
+const results = [];
+const onResult = result => {
+  console.log("received", result);
+  results.push(result);
+};
+
+const config = { onResult };
+const mapping = build(schema, config);
+console.log({ mapping, results });
 
 console.log({
   mapping
@@ -59,6 +68,19 @@ Will output the following Elastic Search Mapping schema:
     }
   }
 }
+```
+
+The `onResult` handler will populate the `results` array with the following:
+
+```js
+[ { parentName: 'Person',
+    key: 'name',
+    resultKey: 'name',
+    type: 'text' },
+  { parentName: 'Person',
+    key: 'age',
+    resultKey: 'age',
+    type: 'integer' } ] }
 ```
 
 ## Nested schemas
@@ -130,10 +152,39 @@ mappings: {
 }
 ```
 
-PS: Not sure if this is a correct mapping in the Elastic Search context. Please let me know ;)
-I'm happy to take any PR that improves the mapping.
+If you add an `onResult` handler to receive `results`, it will look as follows:
+
+```js
+results:
+  [ { parentName: 'Person',
+      key: 'name',
+      resultKey: 'name',
+      type: 'text' },
+    { parentName: 'dog',
+      key: 'name',
+      resultKey: 'dog_name',
+      type: 'text' },
+    { parentName: 'dog',
+      key: 'age',
+      resultKey: 'dog_age',
+      type: 'integer' },
+    { parentName: 'Person',
+      key: 'dog',
+      resultKey: 'dog',
+      mappings:
+      { doc:
+          { properties:
+            { _type_: { type: 'keyword' },
+              name: { type: 'text' },
+              age: { type: 'integer' } } } } } ] }
+```
+
+You can use the `results` to generate a more context specific mapping for Elastic Search context, given your requirements.
 
 ## Customization
+
+- Type mappers
+- Rules
 
 ### Type mappers
 

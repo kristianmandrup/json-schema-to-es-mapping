@@ -1,8 +1,8 @@
 const { createSchemaEntry } = require("./create-schema-entry");
 
-function propToSchemaEntry(key, value, config = {}) {
+function propToSchemaEntry(obj, config = {}) {
   const entryBuilder = createSchemaEntry || config.createSchemaEntry;
-  return entryBuilder(key, value, config);
+  return entryBuilder(obj, config);
 }
 
 module.exports = {

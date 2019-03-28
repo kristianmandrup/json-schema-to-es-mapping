@@ -28,7 +28,10 @@ function buildMapping(schema, config = {}) {
     error(`invalid schema, missing properties`, { schema, properties });
   }
   properties = normalizeRequired(schema);
-  const propMappings = propsToMapping(properties, config);
+  const parentName =
+    schema.name || schema.parentName || schema.title || config.name;
+
+  const propMappings = propsToMapping({ parentName, properties }, config);
   return {
     mappings: {
       doc: {

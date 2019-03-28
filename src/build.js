@@ -5,6 +5,7 @@ const { propToSchemaEntry } = require("./prop-to-schema-entry");
 
 function buildConfig(config) {
   return {
+    resultObj: {},
     normalizeRequired,
     buildMapping,
     propsToMapping,

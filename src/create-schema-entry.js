@@ -1,7 +1,7 @@
 const { SchemaEntry } = require("./entry");
 
-function createSchemaEntry(key, value, config) {
-  return new SchemaEntry(key, value, config).toEntry();
+function createSchemaEntry(obj, config) {
+  return new SchemaEntry(obj, config).toEntry();
 }
 
 module.exports = {
