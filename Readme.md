@@ -61,7 +61,126 @@ Will output the following Elastic Search Mapping schema:
 }
 ```
 
+## Nested schemas
+
+For a nested schema of the form:
+
+```js
+{
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "http://example.com/person.schema.json",
+  title: "Person",
+  description: "A person",
+  type: "object",
+  properties: {
+    name: {
+      description: "Name of the person",
+      type: "string"
+    },
+    dog: {
+      type: "object",
+      properties: {
+        name: {
+          description: "Name of the dog",
+          type: "string",
+          required: true
+        },
+        age: {
+          description: "Age of dog",
+          type: "number"
+        }
+      }
+    }
+  },
+  required: ["name"]
+};
+```
+
+It will generate an Elastic Search mapping as follows:
+
+```js
+mappings: {
+  doc: {
+    properties: {
+      _type_: {
+        type: "keyword"
+      },
+      name: {
+        type: "text"
+      },
+      dog: {
+        mappings: {
+          doc: {
+            properties: {
+              _type_: {
+                type: "keyword"
+              },
+              name: {
+                type: "text"
+              },
+              age: {
+                type: "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+PS: Not sure if this is a correct mapping in the Elastic Search context. Please let me know ;)
+I'm happy to take any PR that improves the mapping.
+
 ## Customization
+
+### Type mappers
+
+You can pass in custom Type mapper factories if you want to override how specific types are mapped.
+Internally this is managed in the `SchemaEntry` constructor:
+
+```js
+this.types = {
+  ...this.defaultTypes,
+  ...(config.types || {})
+};
+```
+
+#### Custom Type mapper example (object)
+
+Create a `toObject` file loally in your project that contains your overrides
+
+```js
+const { types } = require("json-schema-to-es-mapping");
+const { MappingObject, toObject, util } = types;
+
+class MyMappingObject extends MappingObject {
+  // ...override
+}
+
+module.exports = function toObject(obj) {
+  return util.isObject(obj) && new MyMappingObject(obj).convert();
+};
+```
+
+Import the toObject function and pass it in the `types` object of the `config` object passed to the `build` function.
+
+````js
+// custom implementation
+const toObject = require('./toObject')
+
+const myConfig = {
+  types: {
+    toObject
+  }
+}
+
+// will now use the custom toObject for mapping JSON schema object to ES object
+build(schema, myConfig)
+```
+
+### Rules
 
 You can pass an extra configuration object with specific rules for ES mapping properties that will be merged into the resulting mapping.
 
@@ -85,7 +204,7 @@ const config = {
 
 const { build } = require("json-schema-to-es-mapping");
 const mapping = build(schema, config);
-```
+````
 
 Also note that you can pass in many of the functions used internally, so that the internal mechanics themselves can easily be customized as needed or used as building blocks.
 

@@ -1,5 +1,5 @@
 const { MappingBaseType } = require("./base");
-const { isObject } = require("./util");
+const { isObject, isObjectType } = require("./util");
 
 function toObject(obj) {
   return isObject(obj) && MappingObject.create(obj).convert();
@@ -22,7 +22,21 @@ class MappingObject extends MappingBaseType {
 
   convert() {
     const { buildMapping } = this.config;
-    return this.properties ? buildMapping(this.value) : {};
+    return this.hasProperties
+      ? buildMapping(this.objectValue, this.config)
+      : this.defaultObj;
+  }
+
+  get objectValue() {
+    return this.value;
+  }
+
+  get defaultObj() {
+    return {};
+  }
+
+  get hasProperties() {
+    return isObjectType(this.properties);
   }
 }
 
