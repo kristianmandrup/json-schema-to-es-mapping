@@ -40,8 +40,8 @@ const onResult = result => {
 };
 
 const config = { onResult };
-const mapping = build(schema, config);
-console.log({ mapping, results });
+const { mapping, result } = build(schema, config);
+console.log({ mapping, result, results });
 
 console.log({
   mapping
@@ -67,6 +67,15 @@ Will output the following Elastic Search Mapping schema:
       }
     }
   }
+}
+```
+
+The `result` will give:
+
+```js
+{
+  name: { type: 'text' },
+  age: { type: 'integer' }
 }
 ```
 
@@ -152,6 +161,20 @@ mappings: {
 }
 ```
 
+The `result` will give:
+
+```js
+{
+  name: { type: 'text' },
+  dog_name: { type: 'text' },
+  dog_age: { type: 'integer' },
+  dog: {
+    name: { type: 'text' },
+    age: { type: 'integer' }
+  }
+}
+```
+
 If you add an `onResult` handler to receive `results`, it will look as follows:
 
 ```js
@@ -209,7 +232,7 @@ const { MappingObject, toObject, util } = types;
 class MyMappingObject extends MappingObject {
   // ...override
 
-  convert() {
+  createMappingResult() {
     return this.hasProperties
       ? this.buildObjectValueMapping()
       : this.defaultObjectValueMapping;
@@ -217,7 +240,7 @@ class MyMappingObject extends MappingObject {
 
   buildObjectValueMapping() {
     const { buildMapping } = this.config;
-    return buildMapping(this.objectValue, this.config);
+    return buildMapping(this.objectValue, this.mappingConfig);
   }
 }
 

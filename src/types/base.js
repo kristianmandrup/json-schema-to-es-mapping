@@ -26,11 +26,12 @@ const $default = {
 };
 
 class MappingBaseType {
-  constructor({ parentName, key, value, config }) {
+  constructor({ parentName, key, value, result, config }) {
     this.parentName = parentName;
     this.key = key;
     this.value = value;
     this.format = value.format;
+    this.result = result || config.resultObj || {};
     this.config = {
       ...$default.config,
       ...config
@@ -42,7 +43,7 @@ class MappingBaseType {
   }
 
   setResultObj(result) {
-    this.config.resultObj[this.key] = result;
+    this.result[this.key] = result;
   }
 
   get resultKey() {
@@ -54,12 +55,11 @@ class MappingBaseType {
   }
 
   get resultObj() {
-    this.config.resultObj = this.config.resultObj || {};
-    return this.config.resultObj[this.resultKey];
+    return this.result[this.resultKey];
   }
 
   setResultObj(result) {
-    this.config[this.resultKey] = result;
+    this.result[this.resultKey] = result;
   }
 
   setResult(result) {
@@ -92,16 +92,23 @@ class MappingBaseType {
   }
 
   createResult() {
-    return {
+    if (this._result) return this._result;
+    this._result = {
       ...this.configEntry,
       type: this.type
     };
+    return this._result;
+  }
+
+  createMappingResult() {
+    return this.createResult();
   }
 
   createAndStoreResult() {
     const result = this.createResult();
     this.setResult(result);
-    return result;
+    const mappingResult = this.createMappingResult();
+    return mappingResult;
   }
 
   convert() {

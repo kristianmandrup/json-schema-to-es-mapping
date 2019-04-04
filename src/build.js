@@ -16,7 +16,12 @@ function buildConfig(config) {
 
 function build(schema, config = {}) {
   config = buildConfig(config);
-  return config.buildMapping(schema, config);
+  mapping = config.buildMapping(schema, config);
+  result = config.resultObj;
+  return {
+    mapping,
+    result
+  };
 }
 
 module.exports = {

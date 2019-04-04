@@ -4,7 +4,6 @@ const {
   toBoolean,
   toArray,
   toObject,
-  toMixed,
   toDate
 } = require("./types");
 
@@ -25,8 +24,7 @@ class SchemaEntry {
       boolean: toBoolean,
       array: toArray,
       object: toObject,
-      date: toDate,
-      mixed: toMixed
+      date: toDate
     };
 
     this.types = {
@@ -53,7 +51,7 @@ class SchemaEntry {
       this.array(config) ||
       this.object(config) ||
       this.date(config) ||
-      this.mixed(config)
+      this.defaultTypeHandler(config)
     );
   }
 
@@ -91,8 +89,11 @@ class SchemaEntry {
     return toDate(config || this.obj);
   }
 
-  mixed(config) {
-    return toMixed(config || this.obj);
+  defaultTypeHandler(config) {
+    this.error(`No type matched for type: ${this.type}`, {
+      obj: this.obj,
+      config
+    });
   }
 }
 

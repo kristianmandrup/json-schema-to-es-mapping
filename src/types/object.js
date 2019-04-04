@@ -20,10 +20,20 @@ class MappingObject extends MappingBaseType {
     return new MappingObject(obj);
   }
 
-  createResult() {
+  createMappingResult() {
     return this.hasProperties
       ? this.buildObjectValueMapping()
       : this.defaultObjectValueMapping;
+  }
+
+  createResult() {
+    const mapping = this.createMappingResult();
+    const props = mapping.mappings.doc.properties;
+    return Object.keys(props).reduce((acc, key) => {
+      if (key === "_type_") return acc;
+      acc[key] = props[key];
+      return acc;
+    }, {});
   }
 
   buildObjectValueMapping() {
@@ -38,6 +48,7 @@ class MappingObject extends MappingBaseType {
 
   get mappingConfig() {
     return {
+      result: this.result,
       name: this.key,
       nestingLv: this.incNestingLevel,
       nested: true,

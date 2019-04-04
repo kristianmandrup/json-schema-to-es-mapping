@@ -29,8 +29,8 @@ describe("build", () => {
     };
 
     const config = { onResult };
-    const mapping = build(json, config);
-    console.log({ mapping, results });
+    const { mapping, result } = build(json, config);
+    console.log({ mapping, result, results });
 
     console.log("SIMPLE", JSON.stringify(mapping, null, 2));
     expect(mapping).toEqual({
@@ -89,15 +89,17 @@ describe("build", () => {
     };
 
     const config = { onResult };
-    const mapping = build(json, config);
-    console.log({ mapping, results });
+    const { mapping, result } = build(json, config);
+    console.log({ mapping, result, results });
 
     console.log("NESTED", JSON.stringify(mapping, null, 2));
 
-    expect(results[1]).toEqual({ parentName: 'dog',
-    key: 'name',
-    resultKey: 'dog_name',
-    type: 'text' });
+    expect(results[1]).toEqual({
+      parentName: "dog",
+      key: "name",
+      resultKey: "dog_name",
+      type: "text"
+    });
 
     expect(mapping).toEqual({
       mappings: {

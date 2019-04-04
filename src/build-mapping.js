@@ -44,7 +44,6 @@ function buildMapping(schema, config = {}) {
       }
     }
   };
-  error(`invalid schema: ${type}`, schema);
 }
 
 module.exports = {
