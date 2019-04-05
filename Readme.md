@@ -175,6 +175,31 @@ The `result` will give:
 }
 ```
 
+You can pass a custom function `shouldSetResult(converter)` which controls under which converter conditions the result should be set. You can also pass:
+
+- a custom name separator `nameSeparator`
+- a `resultKey(converter)` function, to customize how result keys (names) are generated
+- a `nestedKey(converter)` function, to customize how nested result keys (names) are generated
+
+```js
+const config = {
+  shouldSetResult: converter => {
+    return converter.type !== "object";
+  },
+  nameSeparator: "__" // example: dog__age
+};
+```
+
+This configuration will result in:
+
+```js
+{
+  name: { type: 'text' },
+  dog__name: { type: 'text' },
+  dog__age: { type: 'integer' },
+}
+```
+
 If you add an `onResult` handler to receive `results`, it will look as follows:
 
 ```js
@@ -202,7 +227,7 @@ results:
               age: { type: 'integer' } } } } } ] }
 ```
 
-You can use the `results` to generate a more context specific mapping for Elastic Search context, given your requirements.
+You can use the `onResult` handler or the to generate a more context specific mapping for Elastic Search context, given your requirements.
 
 ## Customization
 

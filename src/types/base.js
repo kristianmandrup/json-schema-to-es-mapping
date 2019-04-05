@@ -36,26 +36,37 @@ class MappingBaseType {
       ...$default.config,
       ...config
     };
+
+    this.shouldSetResult = config.shouldSetResult || this.shouldSetResult;
+    this.nestedKey = config.nestedKey || this.nestedKey;
+    this.resultKey = config.resultKey || this.resultKey;
+    this.nameSeparator = config.nameSeparator || this.defaultNameSeparator;
+
     this.nested = config.nested;
     this.nestingLv = config.nestingLv;
     this._meta = this.config._meta_ || {};
     this._types = this._meta.types || {};
   }
 
+  get defaultNameSeparator() {
+    return "_";
+  }
+
   setResultObj(result) {
     this.result[this.key] = result;
   }
 
-  get resultKey() {
-    return this.nested ? this.nestedKey : this.key;
+  resultKey() {
+    return this.nested ? this.nestedKey(this) : this.key;
   }
 
-  get nestedKey() {
+  nestedKey() {
     return [this.parentName, this.key].join("_");
   }
 
   get resultObj() {
-    return this.result[this.resultKey];
+    const key = this.resultKey(this);
+    return this.result[key];
   }
 
   setResultObj(result) {
@@ -73,7 +84,7 @@ class MappingBaseType {
       onResult({
         parentName: this.parentName,
         key: this.key,
-        resultKey: this.resultKey,
+        resultKey: this.resultKey(),
         ...result
       });
     }
@@ -91,6 +102,10 @@ class MappingBaseType {
     return this.configEntry.type;
   }
 
+  shouldSetResult() {
+    return true;
+  }
+
   createResult() {
     if (this._result) return this._result;
     this._result = {
@@ -105,14 +120,15 @@ class MappingBaseType {
   }
 
   createAndStoreResult() {
-    const result = this.createResult();
-    this.setResult(result);
-    const mappingResult = this.createMappingResult();
-    return mappingResult;
+    if (this.shouldSetResult(this)) {
+      const result = this.createResult();
+      this.setResult(result);
+    }
   }
 
   convert() {
-    return this.createAndStoreResult();
+    this.createAndStoreResult();
+    return this.createMappingResult();
   }
 
   get type() {
