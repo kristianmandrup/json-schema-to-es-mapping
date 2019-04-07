@@ -4,23 +4,35 @@ class ConvertMappingSchemaError extends Error {}
 
 const $default = {
   config: {
-    name: {
-      type: "text"
+    _meta_: {
+      types: {
+        string: "keyword",
+        number: "integer",
+        object: "object",
+        array: "nested",
+        boolean: "boolean",
+        date: "date"
+      }
     },
-    content: {
-      type: "text"
-    },
-    text: {
-      type: "text"
-    },
-    title: {
-      type: "text"
-    },
-    caption: {
-      type: "text"
-    },
-    label: {
-      type: "text"
+    fields: {
+      name: {
+        type: "text"
+      },
+      content: {
+        type: "text"
+      },
+      text: {
+        type: "text"
+      },
+      title: {
+        type: "text"
+      },
+      caption: {
+        type: "text"
+      },
+      label: {
+        type: "text"
+      }
     }
   }
 };
@@ -125,7 +137,12 @@ class MappingBaseType {
   }
 
   get configType() {
-    return this.configEntry.type;
+    return this.configEntry.type || this.metaType;
+  }
+
+  metaType(type) {
+    type = type || this.baseType;
+    return this._types[type];
   }
 
   shouldSetResult() {

@@ -330,10 +330,38 @@ The default type mappings are as follows:
 
 - `boolean` -> `boolean`
 - `object` -> `object`
-- `array` -> `nested` (should use type of array instead!)
+- `array` -> `nested`
 - `string` -> `keyword`
 - `number` -> `integer`
 - `date` -> `date`
+
+For `array` it will use `type` of first [array item](https://cswr.github.io/JsonSchema/spec/arrays/) if [basic type](https://cswr.github.io/JsonSchema/spec/basic_types/)
+
+```js
+{
+  "type": "array",
+  "items":{
+    "type": "integer"
+  }
+}
+```
+
+For the following array JSON schema entry the mapper will currently set the mapping type to `string` (by default). Please use the customization options outlined to define a more appropriate mapping strategy if needed.
+
+```js
+{
+ "type": "array",
+ "items" : [{
+    "type": "string"
+  },
+  {
+    "type": "integer"
+  },
+  {
+  "type": "boolean"
+  }]
+}
+```
 
 You can override the default type mappings by passing a `types` entry with type mappings in the `_meta_` entry of `config`
 
