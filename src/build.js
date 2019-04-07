@@ -15,13 +15,20 @@ function buildConfig(config) {
 }
 
 function build(schema, config = {}) {
-  config = buildConfig(config);
-  mapping = config.buildMapping(schema, config);
-  result = config.resultObj;
-  return {
-    mapping,
-    result
-  };
+  const { onComplete, onThrow } = config;
+  try {
+    config = buildConfig(config);
+    mapping = config.buildMapping(schema, config);
+    result = config.resultObj;
+    onComplete && onComplete(result);
+    return {
+      mapping,
+      result
+    };
+  } catch (err) {
+    onThrow && onThrow(err);
+    throw err;
+  }
 }
 
 module.exports = {

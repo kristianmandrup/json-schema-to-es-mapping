@@ -39,9 +39,26 @@ const onResult = result => {
   results.push(result);
 };
 
-const config = { onResult };
+// potentially use to call resolve callback of Promise
+const onComplete = fullResult => {
+  console.log("ES mapping done :)", {
+    fullResult, // 'internal" results
+    results // list built by onResult
+  });
+};
+
+// potentially use to call reject callback of Promise
+const onError = errMsg => {
+  console.error("ES mapping error", errMsg);
+  throw errMsg;
+};
+
+// potentially use to call reject callback of Promise
+const onThrow = err => throw err;
+
+const config = { onResult, onComplete, onError, onThrow };
 const { mapping, result } = build(schema, config);
-console.log({ mapping, result, results });
+console.log({ mapping, results });
 
 console.log({
   mapping
@@ -89,6 +106,13 @@ The `onResult` handler will populate the `results` array with the following:
   }
 ];
 ```
+
+You will also get notified on:
+
+- successful completion (`onComplete`)
+- aborted due to processing error (`onError`)
+
+Note that the event driven approach is entirely optional, but can be used for a more stream like approach and works well with async promises (ie. `reject` and `resolve` callbacks)
 
 ## Nested schemas
 

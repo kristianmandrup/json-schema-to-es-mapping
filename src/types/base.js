@@ -84,12 +84,11 @@ class MappingBaseType {
 
   onResult(result) {
     const onResult = this.config.onResult;
-    if (isFunction(onResult)) {
-      onResult({
-        ...this.lookupObj,
-        ...result
-      });
-    }
+    if (!isFunction(onResult)) return;
+    onResult({
+      ...this.lookupObj,
+      ...result
+    });
   }
 
   get baseType() {
@@ -171,9 +170,15 @@ class MappingBaseType {
   }
 
   error(name, msg) {
-    const errMSg = `[${name}] ${msg}`;
-    console.log(errMSg);
-    throw new ConvertMappingSchemaError(errMSg);
+    const errMsg = `[${name}] ${msg}`;
+    this.onError(errMsg);
+    throw new ConvertMappingSchemaError(errMsg);
+  }
+
+  onError(errMsg) {
+    const onError = this.config.onError;
+    if (!isFunction(onError)) return;
+    onError(errMsg);
   }
 }
 
