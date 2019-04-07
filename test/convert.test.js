@@ -1,7 +1,7 @@
 const { build } = require("../");
 
 describe("build", () => {
-  test("simple properties", () => {
+  test.skip("simple properties", () => {
     const json = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "http://example.com/person.schema.json",

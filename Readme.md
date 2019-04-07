@@ -55,9 +55,6 @@ Will output the following Elastic Search Mapping schema:
   "mappings": {
     "doc": {
       "properties": {
-        "_type_": {
-          "type": "keyword"
-        },
         "name": {
           "type": "text"
         },
@@ -82,14 +79,15 @@ The `result` will give:
 The `onResult` handler will populate the `results` array with the following:
 
 ```js
-[ { parentName: 'Person',
-    key: 'name',
-    resultKey: 'name',
-    type: 'text' },
-  { parentName: 'Person',
-    key: 'age',
-    resultKey: 'age',
-    type: 'integer' } ] }
+[
+  { parentName: "Person", key: "name", resultKey: "name", type: "text" },
+  {
+    parentName: "Person",
+    key: "age",
+    resultKey: "age",
+    type: "integer"
+  }
+];
 ```
 
 ## Nested schemas
@@ -133,26 +131,16 @@ It will generate an Elastic Search mapping as follows:
 mappings: {
   doc: {
     properties: {
-      _type_: {
-        type: "keyword"
-      },
       name: {
         type: "text"
       },
       dog: {
-        mappings: {
-          doc: {
-            properties: {
-              _type_: {
-                type: "keyword"
-              },
-              name: {
-                type: "text"
-              },
-              age: {
-                type: "integer"
-              }
-            }
+        properties: {
+          name: {
+            type: "text"
+          },
+          age: {
+            type: "integer"
           }
         }
       }
@@ -204,27 +192,34 @@ If you add an `onResult` handler to receive `results`, it will look as follows:
 
 ```js
 results:
-  [ { parentName: 'Person',
+  [
+    {
+      parentName: 'Person',
       key: 'name',
       resultKey: 'name',
-      type: 'text' },
-    { parentName: 'dog',
+      type: 'text'
+    },
+    {
+      parentName: 'dog',
       key: 'name',
       resultKey: 'dog_name',
-      type: 'text' },
+      type: 'text'
+    },
     { parentName: 'dog',
       key: 'age',
       resultKey: 'dog_age',
-      type: 'integer' },
+      type: 'integer'
+    },
     { parentName: 'Person',
       key: 'dog',
       resultKey: 'dog',
-      mappings:
-      { doc:
-          { properties:
-            { _type_: { type: 'keyword' },
-              name: { type: 'text' },
-              age: { type: 'integer' } } } } } ] }
+      properties: {
+        name: { type: 'text' },
+        age: { type: 'integer' }
+      }
+    }
+  ]
+}
 ```
 
 You can use the `onResult` handler or the to generate a more context specific mapping for Elastic Search context, given your requirements.
@@ -292,12 +287,42 @@ build(schema, myConfig)
 
 Depending on your requirements, you can post-process the generated mapping to better suit your specific needs and strategies for handling nested/complex data relationships.
 
-### Elastic Search nested objects and data
+## Elastic search types
 
-- [Elasticsearch: Nested datatype](https://www.elastic.co/guide/en/elasticsearch/reference/current/nested.html)
-- [Elasticsearch: Nested Objects](https://www.elastic.co/guide/en/elasticsearch/guide/current/nested-objects.html)
-- [Elasticsearch data schema for nested objects](https://stackoverflow.com/questions/43488166/elasticsearch-data-schema-for-nested-objects)
-- [Elasticsearch : Advanced search and nested objects](http://obtao.com/blog/2014/04/elasticsearch-advanced-search-and-nested-objects/)
+- [Elasticsearch: mapping types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
+
+Core:
+
+- String (`text`, `keyword`)
+- Numeric (`long`, `integer`, `short`, `byte`, `double`, `float`, `half_float`, `scaled_float`)
+- Date (`date`)
+- Boolean (`boolean`)
+- Binary (`binary`)
+- Range (`integer_range`, `float_range`, `long_range`, `double_range`, `date_range`)
+
+## Type mappings
+
+The default type mappings are as follows:
+
+- `boolean` -> `boolean`
+- `object` -> `object`
+- `array` -> `nested` (should use type of array instead!)
+- `string` -> `keyword`
+- `number` -> `integer`
+- `date` -> `date`
+
+You can override the default type mappings by passing a `types` entry with type mappings in the `_meta_` entry of `config`
+
+```js
+const config = {
+  _meta_: {
+    types: {
+      number: "long", // use "integer" for numbers
+      string: "text" // use "text" for strings
+    }
+  }
+}
+```
 
 ### Rules
 
@@ -307,17 +332,19 @@ You can pass an extra configuration object with specific rules for ES mapping pr
 const config = {
   _meta_: {
     types: {
-      number: "long", // to override default ES mapping data type: "integer" used for numbers
-      string: "text" // to override default ES mapping data type: 'keyword' used for strings
+      number: "long", // use "integer" for numbers
+      string: "text" // use "text" for strings
     }
   },
-  created: {
-    // add extra indexing field meta data for Elastic search
-    format: "strict_date_optional_time||epoch_millis"
-    // ...
-  },
-  firstName: {
-    type: "text" // make sure firstName will be a text field in ES mapping
+  fields: {
+    created: {
+      // add extra indexing field meta data for Elastic search
+      format: "strict_date_optional_time||epoch_millis"
+      // ...
+    },
+    firstName: {
+      type: "keyword" // make sure firstName will be a keyword field (exact match) in ES mapping
+    }
   }
 };
 
@@ -327,10 +354,171 @@ const mapping = build(schema, config);
 
 Also note that you can pass in many of the functions used internally, so that the internal mechanics themselves can easily be customized as needed or used as building blocks.
 
+### Elastic Search nested objects and data
+
+- [Elasticsearch: Nested datatype](https://www.elastic.co/guide/en/elasticsearch/reference/current/nested.html)
+- [Elasticsearch: Nested Objects](https://www.elastic.co/guide/en/elasticsearch/guide/current/nested-objects.html)
+- [Elasticsearch data schema for nested objects](https://stackoverflow.com/questions/43488166/elasticsearch-data-schema-for-nested-objects)
+- [Elasticsearch : Advanced search and nested objects](http://obtao.com/blog/2014/04/elasticsearch-advanced-search-and-nested-objects/)
+
+## Advanced customization
+
+To override the default mappings for certain fields, you can pass in a fields mapping entry in the `config` object as follows:
+
+```js
+const config = {
+  fields: {
+    timestamp: {
+      type: "date",
+      format: "dateOptionalTime"
+    }
+    // ... more custom field mappings
+  }
+};
+```
+
+For a more scalable customization, pass an `entryFor` function which returns custom mappings
+depending on the entry being processed.
+
+- `key`
+- `resultKey` (ie. potentially nested key name)
+- `parentName` name of parent entry if nested property
+- `schemaValue` (entry from JSON schema being mapped)
+
+You could f.ex use this to provide custom mappings for specific types of date fields.
+
+```js
+const config = {
+  entryFor: ({ key }) => {
+    if (key === "date" || key === "timestamp") {
+      return {
+        type: "date",
+        format: "dateOptionalTime"
+      };
+    }
+  }
+};
+```
+
+### resolve type maps
+
+You can use [resolve-type-maps](https://github.com/kristianmandrup/resolve-type-maps) to define mappings to be used across your application in various schema-like contexts:
+
+- GraphQL schema
+- Data storage (tables, colletions etc)
+- Validation
+- Forms
+- Data Display
+- Indexing (including Elastic Search)
+- Mocks and fake data
+
+```js
+const fieldMap = {
+  name: {
+    matches: ['title', 'caption', 'label'],
+    elastic: {
+      type: 'string',
+    }
+  }
+  tag: {
+    matches: ['tags'],
+    elastic: {
+      type: 'keyword',
+    }
+
+  },
+  text: {
+    matches: ['description', 'content'],
+    elastic: {
+      type: 'text',
+    }
+  },
+  date: {
+    matches: ['date', 'timestamp'],
+    elastic: {
+      type: 'text',
+      format: 'dateOptionalTime'
+    }
+  }
+}
+
+const typeMap = {
+  Person: {
+    matches: ['User'],
+    fields: {
+      dog: {
+        // ...
+        elastic: {
+          type: 'nested',
+          // ...
+        }
+      },
+      // ...
+    }
+  }
+}
+```
+
+Then pass an `entryFor` function in the config object to resolve the entry to be used for the ES mapping entry.
+
+```js
+import { createTypeMapResolver } from "resolve-type-maps";
+
+const map = {
+  typeMap,
+  fieldMap
+};
+
+const resolverConfig = {};
+
+const resolver = createTypeMapResolver(
+  { maps, name: "elastic" },
+  resolverConfig
+);
+
+const config = {
+  entryFor: converter => {
+    const type = capitalize(converter.parentName);
+    const name = converter.key;
+    return resolver.resolve({ type, name });
+  }
+};
+```
+
+For inner workings, see [TypeMapResolver.ts](https://github.com/kristianmandrup/resolve-type-maps/blob/master/src/lib/TypeMapResolver.ts)
+
+The above configuration should look up the elastic mapping entry to use, based on the type/field combination in the `typeMap` first and then fall back to the field name only in the `fieldMap` if not found. On a match, it will resolve by returning entry named `elastic` in the object matching.
+
+```js
+{
+  Person: {
+    matches: [/User/],
+    fields: {
+      dog: {
+        // ...
+        elastic: {
+          type: 'nested',
+          // ...
+        }
+      },
+    }
+  }
+}
+```
+
+It should match a schema (or nested schema entry) named `Person` or `User` on the `typeMap` entry `Person`. For the nested `dog` entry it should then match on the entry `dog` under `fields` and return the entry for elastic, ie:
+
+```js
+{
+  type: "nested";
+}
+```
+
+If no match is made in the `typeMap`, it will follow a similar strategy by lookup a match in the `fieldMap` (as per the `maps` entry passed in the `config` object when creating the `resolver`), matching only on the field name.
+
 ## ElasticSearch mapping resources
 
 - [mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html)
-- [mapping-types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
 - [removal of types](https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html)
 - [nested](https://www.elastic.co/guide/en/elasticsearch/reference/current/nested.html)
 
@@ -347,3 +535,7 @@ Currently not well tested. Please help add more test coverage :)
 ## License
 
 MIT
+
+```
+
+```

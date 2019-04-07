@@ -32,6 +32,15 @@ function buildMapping(schema, config = {}) {
     schema.name || schema.parentName || schema.title || config.name;
 
   const propMappings = propsToMapping({ parentName, properties }, config);
+  if (schema.parentName || config.nested) {
+    return {
+      type: "object",
+      properties: {
+        ...propMappings
+      }
+    };
+  }
+
   return {
     mappings: {
       doc: {

@@ -28,7 +28,7 @@ class MappingObject extends MappingBaseType {
 
   createResult() {
     const mapping = this.createMappingResult();
-    const props = mapping.mappings.doc.properties;
+    const props = mapping.properties;
     return Object.keys(props).reduce((acc, key) => {
       if (key === "_type_") return acc;
       acc[key] = props[key];

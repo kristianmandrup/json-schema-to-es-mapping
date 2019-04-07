@@ -69,8 +69,12 @@ class MappingBaseType {
     return this.result[key];
   }
 
+  get resultKeyName() {
+    return this.resultKey();
+  }
+
   setResultObj(result) {
-    this.result[this.resultKey] = result;
+    this.result[this.resultKeyName] = result;
   }
 
   setResult(result) {
@@ -82,9 +86,7 @@ class MappingBaseType {
     const onResult = this.config.onResult;
     if (isFunction(onResult)) {
       onResult({
-        parentName: this.parentName,
-        key: this.key,
-        resultKey: this.resultKey(),
+        ...this.lookupObj,
         ...result
       });
     }
@@ -94,8 +96,33 @@ class MappingBaseType {
     this.error("default mapping type must be specified by subclass");
   }
 
+  get fields() {
+    return this.config.fields || {};
+  }
+
+  get lookupObj() {
+    return {
+      key: this.key,
+      resultKey: this.resultKeyName,
+      parentName: this.parentName,
+      schemaValue: this.value
+    };
+  }
+
+  get entry() {
+    return this.config.entryFor(this.lookupObj) || {};
+  }
+
+  configEntryFn() {
+    return this.entry;
+  }
+
+  get configFieldEntry() {
+    return this.fields[this.key] || this.fields[this.nestedKey];
+  }
+
   get configEntry() {
-    return this.config[this.key] || {};
+    return this.configFieldEntry || this.configEntryFn || {};
   }
 
   get configType() {
@@ -109,8 +136,8 @@ class MappingBaseType {
   createResult() {
     if (this._result) return this._result;
     this._result = {
-      ...this.configEntry,
-      type: this.type
+      type: this.type,
+      ...this.configEntry
     };
     return this._result;
   }
