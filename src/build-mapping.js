@@ -45,9 +45,6 @@ function buildMapping(schema, config = {}) {
     mappings: {
       doc: {
         properties: {
-          _type_: {
-            type: "keyword"
-          },
           ...propMappings
         }
       }

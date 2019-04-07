@@ -1,7 +1,7 @@
 const { build } = require("../");
 
 describe("build", () => {
-  test.skip("simple properties", () => {
+  test("simple properties", () => {
     const json = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "http://example.com/person.schema.json",
@@ -37,9 +37,6 @@ describe("build", () => {
       mappings: {
         doc: {
           properties: {
-            _type_: {
-              type: "keyword"
-            },
             name: {
               type: "text"
             },
@@ -52,7 +49,7 @@ describe("build", () => {
     });
   });
 
-  test.skip("nested object", () => {
+  test("nested object", () => {
     const json = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "http://example.com/person.schema.json",
@@ -98,6 +95,11 @@ describe("build", () => {
       parentName: "dog",
       key: "name",
       resultKey: "dog_name",
+      schemaValue: {
+        description: "Name of the dog",
+        required: true,
+        type: "string"
+      },
       type: "text"
     });
 
@@ -105,26 +107,17 @@ describe("build", () => {
       mappings: {
         doc: {
           properties: {
-            _type_: {
-              type: "keyword"
-            },
             name: {
               type: "text"
             },
             dog: {
-              mappings: {
-                doc: {
-                  properties: {
-                    _type_: {
-                      type: "keyword"
-                    },
-                    name: {
-                      type: "text"
-                    },
-                    age: {
-                      type: "integer"
-                    }
-                  }
+              type: "object",
+              properties: {
+                name: {
+                  type: "text"
+                },
+                age: {
+                  type: "integer"
                 }
               }
             }

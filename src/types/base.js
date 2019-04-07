@@ -137,7 +137,7 @@ class MappingBaseType {
   }
 
   get configType() {
-    return this.configEntry.type || this.metaType;
+    return this.configEntry.type || this.metaType();
   }
 
   metaType(type) {

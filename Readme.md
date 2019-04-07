@@ -32,37 +32,8 @@ const schema = {
 };
 
 const { build } = require("json-schema-to-es-mapping");
-
-const results = [];
-const onResult = result => {
-  console.log("received", result);
-  results.push(result);
-};
-
-// potentially use to call resolve callback of Promise
-const onComplete = fullResult => {
-  console.log("ES mapping done :)", {
-    fullResult, // 'internal" results
-    results // list built by onResult
-  });
-};
-
-// potentially use to call reject callback of Promise
-const onError = errMsg => {
-  console.error("ES mapping error", errMsg);
-  throw errMsg;
-};
-
-// potentially use to call reject callback of Promise
-const onThrow = err => throw err;
-
-const config = { onResult, onComplete, onError, onThrow };
-const { mapping, result } = build(schema, config);
-console.log({ mapping, results });
-
-console.log({
-  mapping
-});
+const { mapping, result } = build(schema);
+console.log({ mapping, result });
 ```
 
 Will output the following Elastic Search Mapping schema:
@@ -93,6 +64,36 @@ The `result` will give:
 }
 ```
 
+## Event driven approach
+
+You can use the Event driven approach with the `onResult` and other calback handlers, to generate a more context specific mapping for Elastic Search context, given your requirements.
+
+```js
+const results = [];
+const onResult = result => {
+  console.log("received", result);
+  results.push(result);
+};
+
+// potentially use to call resolve callback of Promise
+const onComplete = fullResult => {
+  console.log("ES mapping done :)", {
+    fullResult, // 'internal" results
+    results // list built by onResult
+  });
+};
+
+// potentially use to call reject callback of Promise
+const onError = errMsg => {
+  console.error("ES mapping error", errMsg);
+  throw errMsg;
+};
+
+// potentially use to call reject callback of Promise
+const onThrow = err => throw err;
+const config = { onResult, onComplete, onError, onThrow };
+```
+
 The `onResult` handler will populate the `results` array with the following:
 
 ```js
@@ -109,10 +110,28 @@ The `onResult` handler will populate the `results` array with the following:
 
 You will also get notified on:
 
-- successful completion (`onComplete`)
+- successful completion of JSON schema mapping (`onComplete`)
 - aborted due to processing error (`onError`)
+- aborted due to throwing exception (`onThrow`)
 
-Note that the event driven approach is entirely optional, but can be used for a more stream like approach and works well with async promises (ie. `reject` and `resolve` callbacks)
+The Event driven approach is entirely optional, but can be used for a more "stream like" approach. This approach works well with async promises (ie. `reject` and `resolve` callbacks).
+
+On each result received you can then issue a command to the Elastic Search server (f.ex via the REST interface) to add a new mapping that reflects the result received.
+
+[Put mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html)
+
+```bash
+PUT person/_mapping/_doc
+{
+  "properties": {
+    "age": {
+      "type": "integer"
+    }
+  }
+}
+```
+
+Alternatively only submit the ES mapping after `onComplete` to make sure the full schema could be processed, so that you don't end up with a partial mapping.
 
 ## Nested schemas
 
@@ -187,6 +206,8 @@ The `result` will give:
 }
 ```
 
+### Customizing the result
+
 You can pass a custom function `shouldSetResult(converter)` which controls under which converter conditions the result should be set. You can also pass:
 
 - a custom name separator `nameSeparator`
@@ -226,12 +247,12 @@ results:
     {
       parentName: 'dog',
       key: 'name',
-      resultKey: 'dog_name',
+      resultKey: 'dog__name',
       type: 'text'
     },
     { parentName: 'dog',
       key: 'age',
-      resultKey: 'dog_age',
+      resultKey: 'dog__age',
       type: 'integer'
     },
     { parentName: 'Person',
@@ -245,8 +266,6 @@ results:
   ]
 }
 ```
-
-You can use the `onResult` handler or the to generate a more context specific mapping for Elastic Search context, given your requirements.
 
 ## Customization
 
@@ -580,6 +599,14 @@ Uses [jest](jestjs.io/) for unit testing.
 
 Currently not well tested. Please help add more test coverage :)
 
+## TODO
+
+### 0.3.0
+
+- Convert project to TypeScript
+- Add unit tests for ~80% test coverage
+- Test Array mapping type calculated correctly in various cases
+
 ## Author
 
 2018 Kristian Mandrup (CTO@Tecla5)
@@ -587,7 +614,3 @@ Currently not well tested. Please help add more test coverage :)
 ## License
 
 MIT
-
-```
-
-```
