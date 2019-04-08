@@ -2,6 +2,7 @@ const { MappingBaseType, ConvertMappingSchemaError } = require("./base");
 const { MappingArray, toArray } = require("./array");
 const { MappingBoolean, toBoolean } = require("./boolean");
 const { MappingNumber, toNumber } = require("./number");
+const { MappingNumericRange, toNumericRange } = require("./num_range");
 const { MappingObject, toObject } = require("./object");
 const { MappingString, toString } = require("./string");
 const { MappingDate, toDate } = require("./date");
@@ -12,6 +13,8 @@ module.exports = {
   toArray,
   MappingBoolean,
   toBoolean,
+  MappingNumericRange,
+  toNumericRange,
   MappingNumber,
   toNumber,
   MappingObject,

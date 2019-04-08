@@ -43,10 +43,10 @@ describe("build", () => {
         required: true,
         type: "number"
       },
-      type: "integer"
+      type: "float"
     });
     expect(results).toEqual({
-      age: { type: "integer" },
+      age: { type: "float" },
       name: { type: "keyword" }
     });
     expect(properties).toEqual({
@@ -54,7 +54,7 @@ describe("build", () => {
         type: "keyword"
       },
       age: {
-        type: "integer"
+        type: "float"
       }
     });
   });

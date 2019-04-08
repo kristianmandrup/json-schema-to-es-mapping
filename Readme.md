@@ -83,6 +83,20 @@ This will by default give the following mappings result:
 
 The function `buildMappingsFor` uses the `build` function to return the properties map and simply wraps them with a `mappings` object for the named index.
 
+## Supported mappings
+
+Currently all Elastic Search core data types, except for date ranges are supported.
+
+To make a number detect as a numeric range:
+
+- Set `range: true`
+- Set a minimum range value, either `minimum` or `exlusiveMinimum`
+- Set a maximum range value, either `maximum` or `exlusiveMaximum`
+
+If you leave out the `range: true` it will be resolved as a number, using the min and max values with the `multipleOf` (precision) to figure out the exact numeric type (`byte`, `short`, ... `double`) to be used in the Elastic Search mapping.
+
+## Fine grained control
+
 For more fine-grained control, use the `build` function directly.
 
 ```js
@@ -335,7 +349,7 @@ The default configuration is as follows.
   _meta_: {
     types: {
       string: "keyword",
-      number: "integer",
+      number: "float",
       object: "object",
       array: "nested",
       boolean: "boolean",
@@ -648,9 +662,12 @@ const map = {
 };
 
 const resolverConfig = {};
+const functions = {
+  resolveResult: (obj) => obj.elastic;
+}
 
 const resolver = createTypeMapResolver(
-  { maps, name: "elastic" },
+  { map, functions },
   resolverConfig
 );
 
@@ -716,9 +733,7 @@ Currently not well tested. Please help add more test coverage :)
 - Convert project to TypeScript
 - Add unit tests for ~80% test coverage
 - Improve mappings for:
-  - Numeric types
-  - Ranges
-  - Date
+  - Date range
 
 ## Author
 

@@ -17,12 +17,37 @@ function isDate(obj) {
   );
 }
 
+function safeToFloat(num, defaultValue = 1) {
+  try {
+    return Number.parseFloat(num);
+  } catch (err) {
+    return defaultValue;
+  }
+}
+
+function safeToInt(num, defaultValue = 1) {
+  try {
+    return Number.parseInt(num);
+  } catch (err) {
+    return defaultValue;
+  }
+}
+
 function isInteger(type) {
   return type === "integer";
 }
 
 function isNumber(type) {
   return type === "number" || isInteger(type);
+}
+
+function isNumericRange(obj) {
+  if (!obj.range === true) return false;
+  const min = obj.minimum || obj.exclusiveMinimum;
+  const max = obj.maximum || obj.exclusiveMaximum;
+  return (
+    isNumber(obj.type) && safeToFloat(min, false) && safeToFloat(max, false)
+  );
 }
 
 function isObjectType(obj) {
@@ -41,8 +66,11 @@ module.exports = {
   isObject,
   isObjectType,
   isDate,
+  isNumericRange,
   isNumber,
   isInteger,
   isBoolean,
-  isFunction
+  isFunction,
+  safeToFloat,
+  safeToInt
 };

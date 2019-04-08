@@ -45,8 +45,8 @@ describe("build", () => {
     console.log("NESTED", JSON.stringify(properties, null, 2));
 
     expect(results).toEqual({
-      dog: { age: { type: "integer" }, name: { type: "keyword" } },
-      dog_age: { type: "integer" },
+      dog: { age: { type: "float" }, name: { type: "keyword" } },
+      dog_age: { type: "float" },
       dog_name: { type: "keyword" },
       name: { type: "keyword" }
     });
@@ -74,7 +74,7 @@ describe("build", () => {
             type: "keyword"
           },
           age: {
-            type: "integer"
+            type: "float"
           }
         }
       }

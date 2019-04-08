@@ -7,7 +7,7 @@ const $default = {
     _meta_: {
       types: {
         string: "keyword",
-        number: "integer",
+        number: "float",
         object: "object",
         array: "nested",
         boolean: "boolean",
