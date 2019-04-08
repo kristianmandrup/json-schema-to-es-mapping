@@ -1,5 +1,5 @@
 const { normalizeRequired } = require("./normalize-required");
-const { buildMapping } = require("./build-mapping");
+const { buildProperties } = require("./build-properties");
 const { propsToMapping } = require("./props-to-mapping");
 const { propToSchemaEntry } = require("./prop-to-schema-entry");
 
@@ -7,7 +7,7 @@ function buildConfig(config) {
   return {
     resultObj: {},
     normalizeRequired,
-    buildMapping,
+    buildProperties,
     propsToMapping,
     propToSchemaEntry,
     ...config
@@ -18,12 +18,12 @@ function build(schema, config = {}) {
   const { onComplete, onThrow } = config;
   try {
     config = buildConfig(config);
-    mapping = config.buildMapping(schema, config);
-    result = config.resultObj;
-    onComplete && onComplete(result);
+    properties = config.buildProperties(schema, config);
+    results = config.resultObj;
+    onComplete && onComplete(results);
     return {
-      mapping,
-      result
+      properties,
+      results
     };
   } catch (err) {
     onThrow && onThrow(err);

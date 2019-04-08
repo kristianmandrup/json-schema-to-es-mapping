@@ -17,18 +17,12 @@ describe("array", () => {
     };
 
     const config = {};
-    const { mapping } = build(json, config);
+    const { properties } = build(json, config);
     // console.log({ mapping });
     // console.log("Array - no items", JSON.stringify(mapping, null, 2));
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            friendNames: {
-              type: "nested"
-            }
-          }
-        }
+    expect(properties).toEqual({
+      friendNames: {
+        type: "nested"
       }
     });
   });
@@ -50,19 +44,12 @@ describe("array", () => {
     };
 
     const config = {};
-    const { mapping } = build(json, config);
-    console.log({ mapping });
-
-    console.log("Array - no items", JSON.stringify(mapping, null, 2));
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            friendNames: {
-              type: "nested"
-            }
-          }
-        }
+    const { properties } = build(json, config);
+    // console.log({ properties });
+    // console.log("Array - no items", JSON.stringify(properties, null, 2));
+    expect(properties).toEqual({
+      friendNames: {
+        type: "nested"
       }
     });
   });
@@ -84,18 +71,12 @@ describe("array", () => {
     };
 
     const config = {};
-    const { mapping } = build(json, config);
-    // console.log({ mapping });
-    // console.log("Array - empty items", JSON.stringify(mapping, null, 2));
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            friendNames: {
-              type: "nested"
-            }
-          }
-        }
+    const { properties } = build(json, config);
+    // console.log({ properties });
+    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
+    expect(properties).toEqual({
+      friendNames: {
+        type: "nested"
       }
     });
   });
@@ -126,18 +107,12 @@ describe("array", () => {
       }
     };
 
-    const { mapping } = build(json, config);
-    // console.log({ mapping });
-    // console.log("Array - empty items", JSON.stringify(mapping, null, 2));
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            friendNames: {
-              type: "string"
-            }
-          }
-        }
+    const { properties } = build(json, config);
+    // console.log({ properties });
+    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
+    expect(properties).toEqual({
+      friendNames: {
+        type: "string"
       }
     });
   });
@@ -169,18 +144,12 @@ describe("array", () => {
         }
       }
     };
-    const { mapping } = build(json, config);
-    // console.log({ mapping });
-    // console.log("Array - empty items", JSON.stringify(mapping, null, 2));
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            friendNames: {
-              type: "text"
-            }
-          }
-        }
+    const { properties } = build(json, config);
+    // console.log({ properties });
+    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
+    expect(properties).toEqual({
+      friendNames: {
+        type: "text"
       }
     });
   });
@@ -209,18 +178,12 @@ describe("array", () => {
     };
 
     const config = {};
-    const { mapping } = build(json, config);
-    // console.log({ mapping });
-    // console.log("Array - empty items", JSON.stringify(mapping, null, 2));
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            friendNames: {
-              type: "keyword"
-            }
-          }
-        }
+    const { properties } = build(json, config);
+    // console.log({ properties });
+    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
+    expect(properties).toEqual({
+      friendNames: {
+        type: "keyword"
       }
     });
   });

@@ -32,19 +32,26 @@ describe("build", () => {
       required: ["name"]
     };
 
-    const results = [];
+    const received = [];
     const onResult = result => {
       console.log("received", result);
-      results.push(result);
+      received.push(result);
     };
 
     const config = { onResult };
-    const { mapping, result } = build(json, config);
-    console.log({ mapping, result, results });
+    const { properties, results } = build(json, config);
+    console.log({ properties, received, results });
 
-    console.log("NESTED", JSON.stringify(mapping, null, 2));
+    console.log("NESTED", JSON.stringify(properties, null, 2));
 
-    expect(results[1]).toEqual({
+    expect(results).toEqual({
+      dog: { age: { type: "integer" }, name: { type: "keyword" } },
+      dog_age: { type: "integer" },
+      dog_name: { type: "keyword" },
+      name: { type: "keyword" }
+    });
+
+    expect(received[1]).toEqual({
       parentName: "dog",
       key: "name",
       resultKey: "dog_name",
@@ -53,27 +60,21 @@ describe("build", () => {
         required: true,
         type: "string"
       },
-      type: "text"
+      type: "keyword"
     });
 
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            name: {
-              type: "text"
-            },
-            dog: {
-              type: "object",
-              properties: {
-                name: {
-                  type: "text"
-                },
-                age: {
-                  type: "integer"
-                }
-              }
-            }
+    expect(properties).toEqual({
+      name: {
+        type: "keyword"
+      },
+      dog: {
+        type: "object",
+        properties: {
+          name: {
+            type: "keyword"
+          },
+          age: {
+            type: "integer"
           }
         }
       }

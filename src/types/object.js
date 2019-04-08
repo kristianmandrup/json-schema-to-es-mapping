@@ -39,8 +39,8 @@ class MappingObject extends MappingBaseType {
   }
 
   buildObjectValueMapping() {
-    const { buildMapping } = this.config;
-    return buildMapping(this.objectValue, this.mappingConfig);
+    const { buildProperties } = this.config;
+    return buildProperties(this.objectValue, this.mappingConfig);
   }
 
   get incNestingLevel() {

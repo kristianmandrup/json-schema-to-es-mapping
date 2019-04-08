@@ -9,7 +9,7 @@ const defaults = {
   error
 };
 
-function buildMapping(schema, config = {}) {
+function buildProperties(schema, config = {}) {
   let { type, properties } = schema;
   const error = config.error || defaults.error;
 
@@ -40,18 +40,9 @@ function buildMapping(schema, config = {}) {
       }
     };
   }
-
-  return {
-    mappings: {
-      doc: {
-        properties: {
-          ...propMappings
-        }
-      }
-    }
-  };
+  return propMappings;
 }
 
 module.exports = {
-  buildMapping
+  buildProperties
 };

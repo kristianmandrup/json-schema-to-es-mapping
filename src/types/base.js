@@ -16,7 +16,7 @@ const $default = {
     },
     fields: {
       name: {
-        type: "text"
+        type: "keyword"
       },
       content: {
         type: "text"
@@ -204,6 +204,7 @@ class MappingBaseType {
 }
 
 module.exports = {
+  $default,
   MappingBaseType,
   ConvertMappingSchemaError
 };

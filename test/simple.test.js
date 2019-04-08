@@ -22,29 +22,39 @@ describe("build", () => {
       required: ["name"]
     };
 
-    const results = [];
+    const received = [];
     const onResult = result => {
       console.log("received", result);
-      results.push(result);
+      received.push(result);
     };
 
     const config = { onResult };
-    const { mapping, result } = build(json, config);
-    console.log({ mapping, result, results });
+    const { properties, results } = build(json, config);
+    console.log({ properties, received, results });
 
-    console.log("SIMPLE", JSON.stringify(mapping, null, 2));
-    expect(mapping).toEqual({
-      mappings: {
-        doc: {
-          properties: {
-            name: {
-              type: "text"
-            },
-            age: {
-              type: "integer"
-            }
-          }
-        }
+    console.log("SIMPLE", JSON.stringify(properties, null, 2));
+
+    expect(received[1]).toEqual({
+      key: "age",
+      parentName: "Person",
+      resultKey: "age",
+      schemaValue: {
+        description: "Age of person",
+        required: true,
+        type: "number"
+      },
+      type: "integer"
+    });
+    expect(results).toEqual({
+      age: { type: "integer" },
+      name: { type: "keyword" }
+    });
+    expect(properties).toEqual({
+      name: {
+        type: "keyword"
+      },
+      age: {
+        type: "integer"
       }
     });
   });
