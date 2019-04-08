@@ -548,13 +548,16 @@ const resolver = createTypeMapResolver(
 );
 
 const config = {
-  entryFor: converter => {
-    const type = capitalize(converter.parentName);
+  entryFor: ({ parentName, typeName }) => {
+    // ensure capitalized and camelized name
+    const type = classify(typeName || parentName);
     const name = converter.key;
     return resolver.resolve({ type, name });
   }
 };
 ```
+
+Note that for `typeName` to be set, either set a `className` or `typeName` property on the object entry in the JSON schema or alternatively provide a lookup function `typeNameFor(name)` on the config object passed to `build`.
 
 For inner workings, see [TypeMapResolver.ts](https://github.com/kristianmandrup/resolve-type-maps/blob/master/src/lib/TypeMapResolver.ts)
 
@@ -605,7 +608,6 @@ Currently not well tested. Please help add more test coverage :)
 
 - Convert project to TypeScript
 - Add unit tests for ~80% test coverage
-- Test Array mapping type calculated correctly in various cases
 
 ## Author
 

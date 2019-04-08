@@ -1,5 +1,5 @@
 const { MappingBaseType } = require("./base");
-const { isObject, isObjectType } = require("./util");
+const { isFunction, isObject, isObjectType } = require("./util");
 
 function toObject(obj) {
   return isObject(obj) && MappingObject.create(obj).convert();
@@ -14,6 +14,8 @@ class MappingObject extends MappingBaseType {
   constructor(obj) {
     super(obj);
     this.properties = this.value.properties;
+    this.typeNameFor = this.config.typeNameFor;
+    this.typeName = this.value.typeName || this.value.className;
   }
 
   static create(obj) {
@@ -56,9 +58,18 @@ class MappingObject extends MappingBaseType {
     };
   }
 
+  get resolvedTypeName() {
+    return this.typeName || this.resolveConfigTypeName(this.key);
+  }
+
+  resolveConfigTypeName(name) {
+    return isFunction(this.typeNameFor) && this.typeNameFor(name);
+  }
+
   get objectValue() {
     return {
       parentName: this.key,
+      typeName: this.resolvedTypeName,
       ...this.value
     };
   }

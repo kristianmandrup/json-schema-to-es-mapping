@@ -20,7 +20,7 @@ class MappingArray extends MappingBaseType {
 
   get firstItem() {
     if (!this.validItems) return {};
-    return Array.isArray(this.items) ? this.items[0] : [this.items];
+    return Array.isArray(this.items) ? this.items[0] : this.items;
   }
 
   get items() {
