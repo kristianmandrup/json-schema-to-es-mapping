@@ -5,7 +5,8 @@ const {
   toArray,
   toObject,
   toDate,
-  toNumericRange
+  toNumericRange,
+  toDateRange
 } = require("./types");
 
 class SchemaEntryError extends Error {}
@@ -47,6 +48,7 @@ class SchemaEntry {
     const config = this.obj;
     return (
       this.string(config) ||
+      this.dateRange(config) ||
       this.numericRange(config) ||
       this.number(config) ||
       this.boolean(config) ||
@@ -77,6 +79,10 @@ class SchemaEntry {
 
   numericRange(config) {
     return toNumericRange(config || this.obj);
+  }
+
+  dateRange(config) {
+    return toDateRange(config || this.obj);
   }
 
   boolean(config) {

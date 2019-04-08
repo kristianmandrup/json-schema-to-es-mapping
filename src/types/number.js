@@ -1,4 +1,4 @@
-const { MappingBaseType } = require("./base");
+const { MappingRange } = require("./range");
 const { isNumber, safeToFloat, safeToInt } = require("./util");
 
 function toNumber(obj) {
@@ -7,7 +7,7 @@ function toNumber(obj) {
 
 const INT_MAX = Math.pow(2, 31);
 
-class MappingNumber extends MappingBaseType {
+class MappingNumber extends MappingRange {
   get baseType() {
     return this._types.number || "float";
   }
@@ -25,22 +25,20 @@ class MappingNumber extends MappingBaseType {
     );
   }
 
-  get minValue() {
-    const obj = this.value;
-    return obj.minimum || (obj.exclusiveMinimum && obj.exclusiveMinimum + 1);
+  get maxExcl() {
+    return safeToInt(this.exclusiveMaximum, INT_MAX - 1);
   }
 
-  get maxValue() {
-    const obj = this.value;
-    return obj.maximum || (obj.exclusiveMaximum && obj.exclusiveMaximum - 1);
+  get maxIncl() {
+    return safeToInt(this.maximum, INT_MAX - 1);
   }
 
-  get max() {
-    return safeToInt(this.minValue, INT_MAX - 1);
+  get minExcl() {
+    return safeToInt(this.value.exclusiveMinimum, 0);
   }
 
-  get min() {
-    return safeToInt(this.maxValue, 0);
+  get minIncl() {
+    return safeToInt(this.value.minimum, 0);
   }
 
   get double() {
@@ -93,10 +91,6 @@ class MappingNumber extends MappingBaseType {
 
   get isHalfFloat() {
     return this.isFloating && this.numType === "half-float";
-  }
-
-  inRange(min, max) {
-    return this.max <= max && this.min >= min;
   }
 
   inPosNegRange(max) {

@@ -85,15 +85,32 @@ The function `buildMappingsFor` uses the `build` function to return the properti
 
 ## Supported mappings
 
-Currently all Elastic Search core data types, except for date ranges are supported.
+Currently all Elastic Search core data types are supported (except for binary).
 
-To make a number detect as a numeric range:
+- string
+- numeric
+- boolean
+- date
+- range
+
+### Ranges
+
+- Numeric
+- Date
+
+#### Numeric ranges
+
+To make a numeric field entry be mapped to an ES numeric range:
 
 - Set `range: true`
 - Set a minimum range value, either `minimum` or `exlusiveMinimum`
 - Set a maximum range value, either `maximum` or `exlusiveMaximum`
 
-If you leave out the `range: true` it will be resolved as a number, using the min and max values with the `multipleOf` (precision) to figure out the exact numeric type (`byte`, `short`, ... `double`) to be used in the Elastic Search mapping.
+If you leave out the `range: true` it will be resolved as a number, using the min and max values and the `multipleOf` (precision). These properties will in combination be used to determine the exact numeric type (`byte`, `short`, ... `double`) to be used in the Elastic Search numeric type mapping.
+
+#### Date ranges
+
+To make an entry detect as a date range, the same applies as for a number range but the entry must also resolve to a date type (see `types/util.js` function `isDate(obj)` for details)
 
 ## Fine grained control
 
@@ -264,10 +281,10 @@ The `results` will in this case give:
 {
   name: { type: 'keyword' },
   dog_name: { type: 'keyword' },
-  dog_age: { type: 'integer' },
+  dog_age: { type: 'float' },
   dog: {
     name: { type: 'keyword' },
-    age: { type: 'integer' }
+    age: { type: 'float' }
   }
 }
 ```
@@ -299,7 +316,7 @@ This configuration will result in results discarding the nested form, thus only 
 {
   name: { type: 'keyword' },
   dog__name: { type: 'keyword' },
-  dog__age: { type: 'integer' },
+  dog__age: { type: 'float' },
 }
 ```
 
@@ -323,7 +340,7 @@ results:
     { parentName: 'dog',
       key: 'age',
       resultKey: 'dog__age',
-      type: 'integer'
+      type: 'float'
     },
     { parentName: 'Person',
       typeName: 'Animal',
@@ -331,7 +348,7 @@ results:
       resultKey: 'dog',
       properties: {
         name: { type: 'keyword' },
-        age: { type: 'integer' }
+        age: { type: 'float' }
       }
     }
   ]
@@ -380,8 +397,8 @@ The default configuration is as follows.
 ```
 
 Pass in a custom configuration object (last argument) to override or extend it ;)
-Note that for convenience, we pass in some typical field mappings based on names.
-Please customize this further to your needs.
+
+Note that for convenience, we pass in some typical field mappings based on names. Please customize this further to your needs.
 
 ## Customization
 
@@ -510,11 +527,6 @@ const config = {
   }
 };
 ```
-
-Note that currently the mapping support for various numeric types is somewhat limited.
-Please feel free to make a PR to improve it.
-
-We could also provide support for ES range mappings and better date support as well.
 
 ### Rules
 

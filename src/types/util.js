@@ -7,13 +7,21 @@ function isFunction(fun) {
   return typeof fun === "function";
 }
 
-function hasDateType(type) {
+function isDateFormat(type) {
   return ["date", "date-time", "time"].find(t => t === type);
 }
 
 function isDate(obj) {
+  return isNumDate(obj) || isStrDate(obj);
+}
+
+function isNumDate(obj) {
+  return isInteger(obj.type) && (obj.date === true || isDateFormat(obj.format));
+}
+
+function isStrDate(obj) {
   return (
-    (obj.type === "string" && hasDateContraint(obj)) || hasDateType(obj.type)
+    (obj.type === "string" && hasDateContraint(obj)) || isDateFormat(obj.format)
   );
 }
 
@@ -50,6 +58,13 @@ function isNumericRange(obj) {
   );
 }
 
+function isDateRange(obj) {
+  if (!obj.range === true) return false;
+  const min = obj.minimum || obj.exclusiveMinimum;
+  const max = obj.maximum || obj.exclusiveMaximum;
+  return isDate(obj.type) && safeToFloat(min, false) && safeToFloat(max, false);
+}
+
 function isObjectType(obj) {
   return obj === Object(obj);
 }
@@ -66,6 +81,7 @@ module.exports = {
   isObject,
   isObjectType,
   isDate,
+  isDateRange,
   isNumericRange,
   isNumber,
   isInteger,

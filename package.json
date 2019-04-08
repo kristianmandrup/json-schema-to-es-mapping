@@ -1,6 +1,6 @@
 {
   "name": "json-schema-to-es-mapping",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "src/index.js",
   "description": "Generate Elastic Search mapping schema from JSON Schema",
   "license": "MIT",
