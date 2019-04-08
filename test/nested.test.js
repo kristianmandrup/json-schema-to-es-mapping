@@ -15,6 +15,7 @@ describe("build", () => {
         },
         dog: {
           type: "object",
+          typeName: "Animal",
           properties: {
             name: {
               description: "Name of the dog",

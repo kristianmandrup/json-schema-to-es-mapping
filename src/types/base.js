@@ -112,12 +112,16 @@ class MappingBaseType {
   }
 
   get lookupObj() {
-    return {
+    const obj = {
       key: this.key,
       resultKey: this.resultKeyName,
       parentName: this.parentName,
       schemaValue: this.value
     };
+    if (this.resolvedTypeName) {
+      obj.typeName = this.resolvedTypeName;
+    }
+    return obj;
   }
 
   get entry() {
