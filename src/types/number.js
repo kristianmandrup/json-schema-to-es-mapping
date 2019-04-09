@@ -69,48 +69,54 @@ class MappingNumber extends MappingRange {
     return this.isLong && "long";
   }
 
+  get isFloating() {
+    return this.precision < 1;
+  }
+
   get isDouble() {
-    return this.isFloating && this.numType === "double" && this.isLong;
+    return this.numType === "double" || (this.isFloating && this.isLong);
   }
 
   get isFloat() {
-    return this.isFloating;
+    return this.numType === "float" || this.isFloating;
+  }
+
+  get isHalfFloat() {
+    return this.numType === "half-float" || this.isFloating;
+  }
+
+  get isByte() {
+    return this.numType === "byte" || this.inPosNegRange(127);
+  }
+
+  get isShort() {
+    return this.numType === "short" || this.inPosNegRange(32767);
+  }
+
+  get isInteger() {
+    return (
+      this.numType === "int" ||
+      this.numType === "integer" ||
+      this.inPosNegRange(INT_MAX)
+    );
+  }
+
+  get isLong() {
+    return (
+      this.numType === "long" || this.outsideRange(-(INT_MAX + 1), INT_MAX)
+    );
   }
 
   get precision() {
     return safeToFloat(this.value.multipleOf, 1);
   }
 
-  get isFloating() {
-    return this.precision < 1;
-  }
-
   get numType() {
     return this.value.numType;
   }
 
-  get isHalfFloat() {
-    return this.isFloating && this.numType === "half-float";
-  }
-
   inPosNegRange(max) {
     return this.inRange(-(max + 1), max);
-  }
-
-  get isByte() {
-    return this.inPosNegRange(127);
-  }
-
-  get isShort() {
-    return this.inPosNegRange(32767);
-  }
-
-  get isInteger() {
-    return this.inPosNegRange(INT_MAX);
-  }
-
-  get isLong() {
-    return this.max >= INT_MAX || this.min <= -(INT_MAX + 1);
   }
 
   get type() {

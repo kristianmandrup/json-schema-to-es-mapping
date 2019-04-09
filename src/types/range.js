@@ -49,6 +49,10 @@ class MappingRange extends MappingBaseType {
   inRange(min, max) {
     return this.maxFn(max) && this.minFn(min);
   }
+
+  outsideRange(min, max) {
+    return this.max >= max || this.min <= min;
+  }
 }
 
 module.exports = {

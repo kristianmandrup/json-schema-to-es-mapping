@@ -1,6 +1,6 @@
-# JSON Schema to ElasticSearch mapping schema
+# JSON Schema to ElasticSearch mappings
 
-Convert JSON schema to [ElasticSearch mapping schema](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html)
+Convert JSON schema to [ElasticSearch mappings](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html)
 
 A mapping type has:
 
@@ -85,13 +85,19 @@ The function `buildMappingsFor` uses the `build` function to return the properti
 
 ## Supported mappings
 
-Currently all Elastic Search core data types are supported (except for binary).
+Currently all Elastic Search core data types are supported (except for `binary`).
 
 - string
 - numeric
 - boolean
 - date
-- range
+- range (numeric, date)
+
+### Numeric
+
+You can assist the numeric type mapper by supplying a `numType` for the field entry, such as `numType: "double"`
+
+See ES [number](https://www.elastic.co/guide/en/elasticsearch/reference/current/number.html#number) reference for list of valid `numType`s (except for `scaled_float`)
 
 ### Ranges
 
@@ -112,6 +118,18 @@ If you leave out the `range: true` it will be resolved as a number, using the mi
 
 To make an entry detect as a date range, the same applies as for a number range but the entry must also resolve to a date type (see `types/util.js` function `isDate(obj)` for details)
 
+## Limitations
+
+This library does not yet resolve:
+
+- Array items that are themselves object types
+- References to object definitions (ie. `$ref`)
+
+If you would like to add these capabilities, please see the [json-schema-model-builder]((https://github.com/kristianmandrup/json-schema-model-builder) for sample implementations:
+
+- Resolve [array](https://github.com/kristianmandrup/json-schema-model-builder/tree/master/src/schema/object/property/types/array)
+- Resolve [reference](https://github.com/kristianmandrup/json-schema-model-builder/tree/master/src/schema/object/property/reference)
+
 ## Fine grained control
 
 For more fine-grained control, use the `build` function directly.
@@ -130,7 +148,7 @@ Will output the following Elastic Search Mapping schema:
     "type": "text"
   },
   "age": {
-    "type": "integer"
+    "type": "float"
   }
 }
 ```
@@ -140,7 +158,7 @@ The `results` will in this (simple) case give the same results as the `mappings`
 ```js
 {
   name: { type: "keyword" },
-  age: { type: "integer" }
+  age: { type: "float" }
 }
 ```
 
@@ -183,7 +201,7 @@ The `onResult` handler will populate the `received` array with the following:
     parentName: "Person",
     key: "age",
     resultKey: "age",
-    type: "integer"
+    type: "float"
   }
 ];
 ```
@@ -205,7 +223,7 @@ PUT person/_mapping/_doc
 {
   "properties": {
     "age": {
-      "type": "integer"
+      "type": "float"
     }
   }
 }
@@ -264,7 +282,7 @@ mappings: {
             type: "keyword"
           },
           age: {
-            type: "integer"
+            type: "float"
           }
         }
       }
@@ -391,12 +409,18 @@ The default configuration is as follows.
     },
     label: {
       type: "text"
+    },
+    tag: {
+      type: "keyword",
+      index:    "not_analyzed"
     }
   }
 }
 ```
 
-Pass in a custom configuration object (last argument) to override or extend it ;)
+Note that some or all of these might benefit from being defined as multi fields, that are indexed and analyzed both as `text` and `keyword`.
+
+You can pass in a custom configuration object (last argument) to override or extend it ;)
 
 Note that for convenience, we pass in some typical field mappings based on names. Please customize this further to your needs.
 

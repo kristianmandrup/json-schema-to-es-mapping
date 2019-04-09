@@ -32,6 +32,10 @@ const $default = {
       },
       label: {
         type: "text"
+      },
+      tag: {
+        type: "keyword",
+        index: "not_analyzed"
       }
     }
   }
