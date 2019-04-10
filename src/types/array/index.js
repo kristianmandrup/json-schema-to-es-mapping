@@ -1,5 +1,5 @@
-const { MappingBaseType } = require("./base");
-const { isObjectType } = require("./util");
+const { MappingBaseType } = require("../base");
+const { isObjectType } = require("../util");
 
 function isArray(type) {
   return type === "array";

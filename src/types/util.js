@@ -73,12 +73,55 @@ function isObject(obj) {
   return obj.type === "object" || obj === "object"; // && isObjectType(obj.properties)
 }
 
+function isNestedObject(obj) {
+  return isObject(obj) && isNested(obj);
+}
+
+function isReferenceObject(obj) {
+  return isObject(obj) && isReference(obj);
+}
+
+function isNested(obj) {
+  return obj.nested === true;
+}
+
+function isReference(obj) {
+  return obj.reference === true;
+}
+
 function isBoolean(type) {
   return type === "boolean";
 }
 
+const camelcase = require("camelcase");
+
+// const assign = (variable, value) => {
+//   variable = value;
+// };
+
+// const createAssign = map => (pos, value) => {
+//   map[pos] = value;
+// };
+
+// const assignAt = (map, pos, value) => {
+//   map[pos] = value;
+// };
+
+/**
+ * string capitalization - first letter - capital, other - lowercase.
+ * @param {String} word - Word or sentence.
+ */
+const capitalize = word => {
+  if (!isStringType(word)) {
+    throw new Error(`capitalize: Invalid text ${word}`);
+  }
+  return `${word.slice(0, 1).toUpperCase()}${word.slice(1).toLowerCase()}`;
+};
+
 module.exports = {
   isObject,
+  isNestedObject,
+  isReferenceObject,
   isObjectType,
   isDate,
   isDateRange,
@@ -88,5 +131,7 @@ module.exports = {
   isBoolean,
   isFunction,
   safeToFloat,
-  safeToInt
+  safeToInt,
+  capitalize,
+  camelcase
 };

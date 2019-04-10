@@ -1,5 +1,6 @@
 const { MappingBaseType } = require("./base");
 const { isFunction, isObject, isObjectType } = require("./util");
+const { createDefinitionRefResolver } = require("./definition");
 
 function toObject(obj) {
   return isObject(obj) && MappingObject.create(obj).convert();
