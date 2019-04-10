@@ -18,9 +18,38 @@ class MappingArray extends MappingBaseType {
     return Array.isArray(this.items) || isObjectType(this.items);
   }
 
-  get firstItem() {
+  get resolveFirstItem() {
     if (!this.validItems) return {};
-    return Array.isArray(this.items) ? this.items[0] : this.items;
+    return Array.isArray(this.items) ? this.selectFirstItem : this.items;
+  }
+
+  get firstItem() {
+    return this.items[0];
+  }
+
+  get selectFirstItem() {
+    return this.hasValidItemTypes ? this.firstItem : this.invalidItemTypes();
+  }
+
+  invalidItemTypes() {
+    this.error(
+      `Invalid item types for ${
+        this.key
+      }. All array items must share the same type to be mappable to ElasticSearch`,
+      {
+        schema: this.schema,
+        items: this.items
+      }
+    );
+  }
+
+  get hasValidItemTypes() {
+    return this.hasSameItemTypes;
+  }
+
+  get hasSameItemTypes() {
+    const type = this.firstItem.type;
+    return this.items.every(item => item.type === type);
   }
 
   get items() {
@@ -28,7 +57,7 @@ class MappingArray extends MappingBaseType {
   }
 
   get arrayType() {
-    return this.firstItem.type;
+    return this.resolveFirstItem.type;
   }
 
   get resolvedArrayType() {

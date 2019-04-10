@@ -44,6 +44,7 @@ const $default = {
 class MappingBaseType {
   constructor({ parentName, key, value, result, config }) {
     this.parentName = parentName;
+    this.schema = config.schema;
     this.key = key;
     this.value = value;
     this.format = value.format;

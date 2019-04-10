@@ -3,8 +3,9 @@ const { buildProperties } = require("./build-properties");
 const { propsToMapping } = require("./props-to-mapping");
 const { propToSchemaEntry } = require("./prop-to-schema-entry");
 
-function buildConfig(config) {
+function buildConfig(config, schema) {
   return {
+    schema,
     resultObj: {},
     normalizeRequired,
     buildProperties,
@@ -17,7 +18,7 @@ function buildConfig(config) {
 function build(schema, config = {}) {
   const { onComplete, onThrow } = config;
   try {
-    config = buildConfig(config);
+    config = buildConfig(config, schema);
     properties = config.buildProperties(schema, config);
     results = config.resultObj;
     onComplete && onComplete(results);

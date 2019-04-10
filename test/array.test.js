@@ -154,7 +154,7 @@ describe("array", () => {
     });
   });
 
-  test("items array - two items string and number type", () => {
+  describe("items array - two items string and number type", () => {
     const json = {
       $schema: "http://json-schema.org/draft-07/schema#",
       $id: "http://example.com/person.schema.json",
@@ -178,13 +178,10 @@ describe("array", () => {
     };
 
     const config = {};
-    const { properties } = build(json, config);
-    // console.log({ properties });
-    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
-    expect(properties).toEqual({
-      friendNames: {
-        type: "keyword"
-      }
+
+    test("throws", () => {
+      const fn = () => build(json, config);
+      expect(fn).toThrow();
     });
   });
 });

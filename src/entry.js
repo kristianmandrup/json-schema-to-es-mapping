@@ -6,7 +6,9 @@ const {
   toObject,
   toDate,
   toNumericRange,
-  toDateRange
+  toDateRange,
+  toNestedObject,
+  toReferenceObject
 } = require("./types");
 
 class SchemaEntryError extends Error {}
@@ -94,7 +96,8 @@ class SchemaEntry {
   }
 
   object(config) {
-    return toObject(config || this.obj);
+    const obj = config || this.obj;
+    return toNestedObject(obj) || toReferenceObject(obj) || toObject(obj);
   }
 
   date(config) {
