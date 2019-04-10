@@ -130,6 +130,8 @@ If you would like to add these capabilities, please see the [json-schema-model-b
 - Resolve [array](https://github.com/kristianmandrup/json-schema-model-builder/tree/master/src/schema/object/property/types/array)
 - Resolve [reference](https://github.com/kristianmandrup/json-schema-model-builder/tree/master/src/schema/object/property/reference)
 
+Initial work to support these features have been started in the [dev](https://github.com/kristianmandrup/json-schema-to-es-mapping/tree/dev) branch and should land soon (0.4.0).
+
 ## Fine grained control
 
 For more fine-grained control, use the `build` function directly.
