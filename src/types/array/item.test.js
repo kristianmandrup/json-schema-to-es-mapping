@@ -12,11 +12,25 @@ describe.skip("MappingItem", () => {
   const intItem = {
     type: "integer"
   };
+  const config = {};
 
   describe("create", () => {
+    const mapper = create(strItem, config);
     describe("definitionResolver", () => {
-      describe("from config", () => {});
-      describe("default", () => {});
+      describe("set on config", () => {
+        const definitionResolver = () => 42;
+        const config = {
+          definitionResolver
+        };
+        test("is one from config", () => {
+          expect(mapper.definitionResolver).toBe(definitionResolver);
+        });
+      });
+      describe("default", () => {
+        test("is set", () => {
+          expect(mapper.definitionResolver).toBeDefined();
+        });
+      });
     });
   });
 
@@ -64,6 +78,9 @@ describe.skip("MappingItem", () => {
   });
 
   describe("itemEntryPayload", () => {
+    const config = {};
+    const mapper = create(strItem, config);
+
     const payload = mapper.itemEntryPayload;
     test("has parentName", () => {
       expect(payload.parentName).toBe(mapper.key);
@@ -75,10 +92,9 @@ describe.skip("MappingItem", () => {
   });
 
   describe("resolve", () => {
-    const items = [strItem, intItem];
     const config = {};
 
-    const mapper = create(items, config);
+    const mapper = create(intItem, config);
     describe("primitive type", () => {
       test("resolves string", () => {
         const resolved = mapper.resolve(strItem);
