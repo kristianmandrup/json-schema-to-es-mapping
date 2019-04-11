@@ -25,33 +25,6 @@ describe.skip("ItemsResolver", () => {
     });
   });
 
-  describe("resolveItem", () => {
-    describe("primitive type", () => {
-      test("resolves string", () => {
-        const resolved = resolver.resolveItem(strItem);
-        expect(resolved).toEqual("String");
-      });
-
-      test("resolves integer", () => {
-        const resolved = resolver.resolveItem(intItem);
-        expect(resolved).toEqual("Int");
-      });
-    });
-
-    describe("named object type", () => {
-      const resolved = resolver.resolveItem({
-        name: "account",
-        typeName: "MyAccount",
-        type: "object",
-        properties: {}
-      });
-
-      test("resolves to name", () => {
-        expect(resolved).toEqual("MyAccount");
-      });
-    });
-  });
-
   describe("resolve", () => {
     const resolved = resolver.resolve();
 

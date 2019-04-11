@@ -18,12 +18,12 @@ class MappingItem extends MappingBaseType {
       config.definitionResolver || createDefinitionRefResolver(config);
   }
 
-  get itemResolver() {
-    return this.config.createSchemaEntry;
+  get resolver() {
+    return this.config.itemResolver;
   }
 
-  get validItemResolver() {
-    return this.validatedResolver(this.itemResolver);
+  get validResolver() {
+    return this.validatedResolver(this.resolver);
   }
 
   validatedResolver(resolver) {
@@ -38,7 +38,7 @@ class MappingItem extends MappingBaseType {
 
   resolve() {
     const payload = this.itemEntryPayload(this.item);
-    return this.validItemResolver(payload, this.config);
+    return this.validResolver(payload, this.config);
   }
 
   itemEntryPayload() {
