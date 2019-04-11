@@ -1,12 +1,12 @@
 const { createItemsMapping } = require("./items");
-// const { arrays } = require("../data");
+const { arrays } = require("./data");
 const arrays = {};
 
 const create = (items, config) => {
   return new createItemsMapping(items, config);
 };
 
-describe.skip("ItemsResolver", () => {
+describe.skip("ItemsMapping", () => {
   const strItem = {
     type: "string"
   };

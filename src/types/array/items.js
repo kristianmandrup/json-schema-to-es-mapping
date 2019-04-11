@@ -14,7 +14,8 @@ class MappingItems extends MappingBaseType {
   }
 
   resolve() {
-    return this.items.map(this.resolveItem.bind(this));
+    const resolveItem = this.resolveItem.bind(this);
+    return this.items.map(resolveItem);
   }
 
   resolveItem(item) {

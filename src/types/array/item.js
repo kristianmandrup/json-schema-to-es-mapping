@@ -22,23 +22,19 @@ class MappingItem extends MappingBaseType {
     return this.config.itemResolver;
   }
 
-  get validResolver() {
-    return this.validatedResolver(this.resolver);
-  }
-
-  validatedResolver(resolver) {
-    if (!isFunction(resolver)) {
+  get validatedResolver() {
+    if (!isFunction(this.resolver)) {
       this.error(
         "typeResolver",
         "Missing createSchemaEntry (pass in config factories map)"
       );
     }
-    return resolver;
+    return this.resolver;
   }
 
   resolve() {
     const payload = this.itemEntryPayload(this.item);
-    return this.validResolver(payload, this.config);
+    return this.validatedResolver(payload, this.config);
   }
 
   itemEntryPayload() {

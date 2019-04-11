@@ -1,17 +1,24 @@
 const { createMappingItem } = require("./item");
-// const { arrays } = require("../data");
+const { arrays } = require("./data");
 
 const create = (items, config) => {
   return createMappingItem(items, config);
 };
 
-describe.skip("Item Resolver", () => {
+describe.skip("MappingItem", () => {
   const strItem = {
     type: "string"
   };
   const intItem = {
     type: "integer"
   };
+
+  describe("create", () => {
+    describe("definitionResolver", () => {
+      describe("from config", () => {});
+      describe("default", () => {});
+    });
+  });
 
   describe("resolver", () => {
     describe("no resolver in config", () => {
@@ -37,10 +44,10 @@ describe.skip("Item Resolver", () => {
         expect(mapper.resolver).toBeDefined();
       });
 
-      describe("validResolver", () => {
+      describe("validatedResolver", () => {
         describe("is a function", () => {
           test("is valid", () => {
-            expect(mapper.validResolver).toBeTruthy();
+            expect(mapper.validatedResolver).toBeTruthy();
           });
         });
         describe("is not a function", () => {
@@ -49,10 +56,21 @@ describe.skip("Item Resolver", () => {
           };
           const mapper = create(items, config);
           test("is invalid", () => {
-            expect(() => mapper.validResolver).toThrow();
+            expect(() => mapper.validatedResolver).toThrow();
           });
         });
       });
+    });
+  });
+
+  describe("itemEntryPayload", () => {
+    const payload = mapper.itemEntryPayload;
+    test("has parentName", () => {
+      expect(payload.parentName).toBe(mapper.key);
+    });
+
+    test("has item value", () => {
+      expect(payload.value).toBe(mapper.item);
     });
   });
 
