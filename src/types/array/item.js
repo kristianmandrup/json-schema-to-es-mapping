@@ -4,16 +4,16 @@ const { createDefinitionRefResolver } = require("../definition");
 
 const createMappingItem = config => {
   return item => {
-    return new MappingItem(item, config);
+    return new MappingItem({ item, config });
   };
 };
 
 class MappingItem extends MappingBaseType {
-  constructor(item, config = {}) {
+  constructor({ item, owner = {}, config = {} }) {
     super(config);
     this.item = item;
     this.config = config;
-    this.ownerName = owner.name.id;
+    this.ownerName = owner.name;
     this.definitionResolver =
       config.definitionResolver || createDefinitionRefResolver(config);
   }
@@ -26,7 +26,7 @@ class MappingItem extends MappingBaseType {
     if (!isFunction(this.resolver)) {
       this.error(
         "typeResolver",
-        "Missing createSchemaEntry (pass in config factories map)"
+        "Missing itemResolver (pass in config factories map)"
       );
     }
     return this.resolver;

@@ -1,16 +1,20 @@
 const { MappingBaseType } = require("../base");
-const { createItemResolver } = require("./item");
+const { createMappingItem } = require("./item");
 
 const createItemsMapping = (items, config) => {
-  return new MappingItems(items, config);
+  return new MappingItems({ items, config });
 };
 
 class MappingItems extends MappingBaseType {
   constructor({ items, owner = {}, config = {} }) {
     super(config);
     this.items = items;
-    this.ownerName = owner.name.id;
-    this.itemResolver = config.itemResolver || createItemResolver(config);
+    this.ownerName = owner.name;
+
+    const mapItem = createMappingItem(config).bind(this);
+    const itemResolver = item => mapItem(item).convert();
+
+    this.itemResolver = config.itemResolver || itemResolver;
   }
 
   resolve() {
@@ -24,8 +28,8 @@ class MappingItems extends MappingBaseType {
   }
 
   typeResolver(item) {
-    const payload = itemEntryPayload(item);
-    return this.validItemResolver(payload, this.config);
+    const payload = this.itemEntryPayload(item);
+    return this.itemResolver(payload, this.config);
   }
 
   itemEntryPayload(item) {

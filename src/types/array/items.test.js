@@ -1,12 +1,11 @@
 const { createItemsMapping } = require("./items");
 const { arrays } = require("./data");
-const arrays = {};
 
 const create = (items, config) => {
-  return new createItemsMapping(items, config);
+  return createItemsMapping(items, config);
 };
 
-describe.skip("ItemsMapping", () => {
+describe("ItemsMapping", () => {
   const strItem = {
     type: "string"
   };
@@ -21,7 +20,9 @@ describe.skip("ItemsMapping", () => {
   describe("typeResolver", () => {
     const resolved = resolver.typeResolver(strItem);
     test("resolves", () => {
-      expect(resolved).toEqual("String");
+      expect(resolved).toEqual({
+        type: "string"
+      });
     });
   });
 
@@ -29,7 +30,14 @@ describe.skip("ItemsMapping", () => {
     const resolved = resolver.resolve();
 
     test("resolves", () => {
-      expect(resolved).toEqual(["String", "Int"]);
+      expect(resolved).toEqual([
+        {
+          type: "string"
+        },
+        {
+          type: "integer"
+        }
+      ]);
     });
   });
 
@@ -41,14 +49,21 @@ describe.skip("ItemsMapping", () => {
     describe("resolveItem", () => {
       const resolved = resolver.resolveItem(numericEnum);
       test("single enum type resolved", () => {
-        expect(resolved).toEqual("Enum");
+        expect(resolved).toEqual({
+          type: "integer"
+        });
       });
     });
 
     describe("resolve", () => {
+      const resolver = create(items, config);
       const resolved = resolver.resolve();
       test("single enum type resolved", () => {
-        expect(resolved).toEqual(["Enum"]);
+        expect(resolved).toEqual([
+          {
+            type: "integer"
+          }
+        ]);
       });
     });
   });

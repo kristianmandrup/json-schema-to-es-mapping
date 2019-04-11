@@ -34,7 +34,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "camelcase": "^5.3.1",
-    "dot-prop": "^5.0.0"
+    "dot-prop": "^5.0.0",
+    "inflection": "^1.12.0"
   }
 }

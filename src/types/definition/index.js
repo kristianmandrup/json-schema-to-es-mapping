@@ -1,10 +1,10 @@
 // for resolving a type definition reference
 const dotProp = require("dot-prop");
-const { camelize } = require("../util");
+const { classify } = require("../util");
 const { MappingBaseType } = require("../base");
 
-const createDefinitionRefResolver = ({ reference, schema, config }) => {
-  return new DefinitionRefResolver({ reference, schema, config });
+const createDefinitionRefResolver = (opts = {}) => {
+  return new DefinitionRefResolver(opts);
 };
 
 function stringify(obj) {
@@ -12,11 +12,11 @@ function stringify(obj) {
 }
 
 class DefinitionRefResolver extends MappingBaseType {
-  constructor({ reference, schema, config }) {
+  constructor({ reference, schema, config = {} }) {
     super(config);
     this.reference = reference;
     this.schema = schema || {};
-    this.validate();
+    // this.validate();
   }
 
   validate() {
@@ -43,7 +43,9 @@ class DefinitionRefResolver extends MappingBaseType {
     return this._refObject;
   }
 
-  resolveRefObject() {
+  resolveRefObject(reference) {
+    this.reference = reference;
+    this.validate();
     const found = dotProp.has(this.schema, this.dotPath);
     !found &&
       this.error(
@@ -68,7 +70,7 @@ class DefinitionRefResolver extends MappingBaseType {
   }
 
   get typeName() {
-    return camelize(this.name, "_", true);
+    return classify(this.name, "_", true);
   }
 }
 

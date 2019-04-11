@@ -1,5 +1,4 @@
 const { createMappingItem } = require("./item");
-const { arrays } = require("./data");
 
 const create = (items, config) => {
   return createMappingItem(items, config);

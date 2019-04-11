@@ -1,6 +1,6 @@
 const { createDefinitionRefResolver } = require("./");
 
-describe.skip("DefinitionRefResolver", () => {
+describe.only("DefinitionRefResolver", () => {
   const reference = "#/definitions/car";
   const schema = {
     definitions: {
@@ -11,8 +11,11 @@ describe.skip("DefinitionRefResolver", () => {
       }
     }
   };
+  const config = {};
 
-  const resolver = createDefinitionRefResolver({ reference, schema });
+  const opts = { reference, schema, config };
+
+  const resolver = createDefinitionRefResolver(opts);
 
   describe("normalizedRef", () => {
     const { normalizedRef } = resolver;

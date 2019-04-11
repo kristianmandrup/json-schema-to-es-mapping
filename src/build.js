@@ -11,6 +11,7 @@ function buildConfig(config, schema) {
     buildProperties,
     propsToMapping,
     propToSchemaEntry,
+    itemResolver: propToSchemaEntry,
     ...config
   };
 }

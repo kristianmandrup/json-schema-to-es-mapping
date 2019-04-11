@@ -45,6 +45,10 @@ function isInteger(type) {
   return type === "integer";
 }
 
+function isStringType(val) {
+  return typeof val === "string";
+}
+
 function isNumber(type) {
   return type === "number" || isInteger(type);
 }
@@ -93,19 +97,17 @@ function isBoolean(type) {
   return type === "boolean";
 }
 
-const camelcase = require("camelcase");
+const assign = (variable, value) => {
+  variable = value;
+};
 
-// const assign = (variable, value) => {
-//   variable = value;
-// };
+const createAssign = map => (pos, value) => {
+  map[pos] = value;
+};
 
-// const createAssign = map => (pos, value) => {
-//   map[pos] = value;
-// };
-
-// const assignAt = (map, pos, value) => {
-//   map[pos] = value;
-// };
+const assignAt = (map, pos, value) => {
+  map[pos] = value;
+};
 
 /**
  * string capitalization - first letter - capital, other - lowercase.
@@ -117,6 +119,8 @@ const capitalize = word => {
   }
   return `${word.slice(0, 1).toUpperCase()}${word.slice(1).toLowerCase()}`;
 };
+
+const { classify, camelcase } = require("inflection");
 
 module.exports = {
   isObject,
@@ -133,5 +137,9 @@ module.exports = {
   safeToFloat,
   safeToInt,
   capitalize,
-  camelcase
+  camelcase,
+  classify,
+  assign,
+  createAssign,
+  assignAt
 };
