@@ -16,7 +16,7 @@ class DefinitionRefResolver extends InfoHandler {
     super(config);
     this.reference = reference;
     this.schema = schema || {};
-    // this.validate();
+    this.visitedPaths = config.visitedPaths || {};
   }
 
   validate() {
@@ -46,15 +46,24 @@ class DefinitionRefResolver extends InfoHandler {
   resolveRefObject(reference) {
     this.reference = reference || this.reference;
     this.validate();
-    const found = dotProp.has(this.schema, this.dotPath);
-    !found &&
-      this.error(
-        "resolveRefObject",
-        `No value found in schema at: ${this.dotPath} - ${stringify(
-          this.schema
-        )}`
-      );
+    this.handleFoundReference();
+
     const obj = dotProp.get(this.schema, this.dotPath);
+    this.referenceNotAnObject(obj);
+    this.referencePathResolvedAndVisited(obj);
+    return obj;
+  }
+
+  handleFoundReference() {
+    const found = dotProp.has(this.schema, this.dotPath);
+    if (found) return;
+    this.error(
+      "resolveRefObject",
+      `No value found in schema at: ${this.dotPath} - ${stringify(this.schema)}`
+    );
+  }
+
+  referenceNotAnObject(obj) {
     !typeof obj === "object" &&
       this.error(
         "resolveRefObject",
@@ -62,7 +71,14 @@ class DefinitionRefResolver extends InfoHandler {
           this.schema
         )}`
       );
-    return obj;
+  }
+
+  referencePathResolvedAndVisited(obj) {
+    this.visitedPaths[this.dotPath] = obj;
+  }
+
+  referenceFromCache() {
+    return this.visitedPaths[this.dotPath];
   }
 
   get name() {
