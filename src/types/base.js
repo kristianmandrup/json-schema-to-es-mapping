@@ -1,52 +1,25 @@
 const { isFunction } = require("util");
+const { InfoHandler } = require("./info");
+const { $default } = require("./default");
+const { createDefinitionRefResolver } = require("./definition");
 
 class ConvertMappingSchemaError extends Error {}
 
-const $default = {
-  config: {
-    _meta_: {
-      types: {
-        string: "keyword",
-        number: "float",
-        object: "object",
-        array: "nested",
-        boolean: "boolean",
-        date: "date"
-      }
-    },
-    fields: {
-      name: {
-        type: "keyword"
-      },
-      content: {
-        type: "text"
-      },
-      text: {
-        type: "text"
-      },
-      title: {
-        type: "text"
-      },
-      caption: {
-        type: "text"
-      },
-      label: {
-        type: "text"
-      },
-      tag: {
-        type: "keyword",
-        index: "not_analyzed"
-      }
-    }
-  }
-};
-
-class MappingBaseType {
-  constructor({ parentName, key, value = {}, result, config = {} }) {
+class MappingBaseType extends InfoHandler {
+  constructor(opts = {}) {
+    super(opts.config);
+    const { parentName, key, value = {}, result, config = {} } = opts;
     this.parentName = parentName;
     this.schema = config.schema;
     this.key = key;
-    this.value = value;
+
+    const defResolverInst = createDefinitionRefResolver(opts);
+    this.definitionResolver =
+      config.definitionResolver ||
+      defResolverInst.resolveRefObject.bind(defResolverInst);
+
+    this.value = this.resolveValueObject(value);
+
     this.format = value.format;
     this.result = result || config.resultObj || {};
     this.config = {
@@ -63,6 +36,21 @@ class MappingBaseType {
     this.nestingLv = config.nestingLv;
     this._meta = this.config._meta_ || {};
     this._types = this._meta.types || {};
+  }
+
+  // resolve using defintion ref
+  resolveValueObject(obj) {
+    if (!obj.$ref) return obj;
+    const { definitionResolver } = this;
+    if (!isFunction(definitionResolver)) {
+      this.error(
+        `Invalid definitionResolver, must be a function, was ${typeof definitionResolver}`,
+        {
+          definitionResolver
+        }
+      );
+    }
+    return definitionResolver(obj);
   }
 
   get defaultNameSeparator() {
@@ -189,22 +177,6 @@ class MappingBaseType {
 
   message() {
     return config.messages[this.key] || config.messages[this.type] || {};
-  }
-
-  errMessage(errKey = "default") {
-    return this.message[errKey] || "error";
-  }
-
-  error(name, msg) {
-    const errMsg = `[${name}] ${msg}`;
-    this.onError(errMsg);
-    throw new ConvertMappingSchemaError(errMsg);
-  }
-
-  onError(errMsg) {
-    const onError = this.config.onError;
-    if (!isFunction(onError)) return;
-    onError(errMsg);
   }
 }
 

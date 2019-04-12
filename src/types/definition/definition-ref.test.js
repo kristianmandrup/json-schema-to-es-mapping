@@ -1,6 +1,6 @@
 const { createDefinitionRefResolver } = require("./");
 
-describe.only("DefinitionRefResolver", () => {
+describe("DefinitionRefResolver", () => {
   const reference = "#/definitions/car";
   const schema = {
     definitions: {

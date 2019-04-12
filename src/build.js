@@ -1,20 +1,4 @@
-const { normalizeRequired } = require("./normalize-required");
-const { buildProperties } = require("./build-properties");
-const { propsToMapping } = require("./props-to-mapping");
-const { propToSchemaEntry } = require("./prop-to-schema-entry");
-
-function buildConfig(config, schema) {
-  return {
-    schema,
-    resultObj: {},
-    normalizeRequired,
-    buildProperties,
-    propsToMapping,
-    propToSchemaEntry,
-    itemResolver: propToSchemaEntry,
-    ...config
-  };
-}
+const { buildConfig } = require("./build-config");
 
 function build(schema, config = {}) {
   const { onComplete, onThrow } = config;

@@ -5,6 +5,7 @@ const arrays = {
     items: [
       {
         type: "number",
+        format: "integer",
         name: "childCount",
         enum: [0, 1, 2]
       }

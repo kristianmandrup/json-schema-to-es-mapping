@@ -46,7 +46,9 @@ class SchemaEntry {
   }
 
   toEntry() {
-    if (!this.isValidSchema()) this.error("Not a valid schema");
+    if (!this.isValidSchema()) {
+      this.error(`Not a valid schema: type ${this.type}`, this.value);
+    }
     const config = this.obj;
     return (
       this.string(config) ||

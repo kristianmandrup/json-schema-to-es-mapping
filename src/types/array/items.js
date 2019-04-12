@@ -1,8 +1,8 @@
 const { MappingBaseType } = require("../base");
-const { createMappingItem } = require("./item");
+const { createMappingItemFactory } = require("./item");
 
-const createItemsMapping = (items, config) => {
-  return new MappingItems({ items, config });
+const createItemsMapping = (opts, config) => {
+  return new MappingItems(opts, config);
 };
 
 class MappingItems extends MappingBaseType {
@@ -11,9 +11,10 @@ class MappingItems extends MappingBaseType {
     this.items = items;
     this.ownerName = owner.name;
 
-    const mapItem = createMappingItem(config).bind(this);
-    const itemResolver = item => mapItem(item).convert();
-
+    const createMappingItem = createMappingItemFactory(config);
+    const itemResolver = item => {
+      return createMappingItem(item).resolve();
+    };
     this.itemResolver = config.itemResolver || itemResolver;
   }
 
@@ -34,8 +35,8 @@ class MappingItems extends MappingBaseType {
 
   itemEntryPayload(item) {
     return {
-      parentName: this.key,
-      value: item
+      ownerName: this.key,
+      item
     };
   }
 }

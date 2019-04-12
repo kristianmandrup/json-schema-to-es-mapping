@@ -120,7 +120,24 @@ class MappingNumber extends MappingRange {
   }
 
   get type() {
-    return this.configType || this.calcNumericType || this.baseType;
+    return (
+      this.configType ||
+      this.formatType ||
+      this.calcNumericType ||
+      this.baseType
+    );
+  }
+
+  get formatType() {
+    return (
+      this.numericFormat[this.format] || this.numericFormat[this.value.type]
+    );
+  }
+
+  get numericFormat() {
+    return {
+      integer: "integer"
+    };
   }
 
   static create(obj) {

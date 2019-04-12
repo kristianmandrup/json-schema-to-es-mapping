@@ -1,7 +1,7 @@
 // for resolving a type definition reference
 const dotProp = require("dot-prop");
 const { classify } = require("../util");
-const { MappingBaseType } = require("../base");
+const { InfoHandler } = require("../info");
 
 const createDefinitionRefResolver = (opts = {}) => {
   return new DefinitionRefResolver(opts);
@@ -11,7 +11,7 @@ function stringify(obj) {
   return JSON.stringify(obj, null, 2);
 }
 
-class DefinitionRefResolver extends MappingBaseType {
+class DefinitionRefResolver extends InfoHandler {
   constructor({ reference, schema, config = {} }) {
     super(config);
     this.reference = reference;
@@ -44,7 +44,7 @@ class DefinitionRefResolver extends MappingBaseType {
   }
 
   resolveRefObject(reference) {
-    this.reference = reference;
+    this.reference = reference || this.reference;
     this.validate();
     const found = dotProp.has(this.schema, this.dotPath);
     !found &&

@@ -1,21 +1,20 @@
 const { MappingBaseType } = require("../base");
 const { isFunction } = require("../util");
-const { createDefinitionRefResolver } = require("../definition");
+const { buildConfig } = require("../../build-config");
 
-const createMappingItem = config => {
-  return item => {
-    return new MappingItem({ item, config });
+const createMappingItemFactory = (config = {}) => {
+  config = buildConfig(config);
+  return opts => {
+    return new MappingItem(opts, config);
   };
 };
 
 class MappingItem extends MappingBaseType {
-  constructor({ item, owner = {}, config = {} }) {
+  constructor({ item, owner = {} }, config = {}) {
     super(config);
     this.item = item;
     this.config = config;
     this.ownerName = owner.name;
-    this.definitionResolver =
-      config.definitionResolver || createDefinitionRefResolver(config);
   }
 
   get resolver() {
@@ -32,20 +31,21 @@ class MappingItem extends MappingBaseType {
     return this.resolver;
   }
 
-  resolve() {
-    const payload = this.itemEntryPayload(this.item);
+  resolve(item) {
+    this.item = item || this.item;
+    const payload = this.itemEntryPayload;
     return this.validatedResolver(payload, this.config);
   }
 
-  itemEntryPayload() {
+  get itemEntryPayload() {
     return {
-      parentName: this.key,
+      parentName: this.ownerName,
       value: this.item
     };
   }
 }
 
 module.exports = {
-  createMappingItem,
+  createMappingItemFactory,
   MappingItem
 };

@@ -1,10 +1,8 @@
-const { createMappingItem } = require("./item");
+const { createMappingItemFactory } = require("./item");
 
-const create = (items, config) => {
-  return createMappingItem(items, config);
-};
+const createFactory = createMappingItemFactory;
 
-describe.skip("MappingItem", () => {
+describe("MappingItem", () => {
   const strItem = {
     type: "string"
   };
@@ -13,38 +11,16 @@ describe.skip("MappingItem", () => {
   };
   const config = {};
 
-  describe("create", () => {
-    const mapper = create(strItem, config);
-    describe("definitionResolver", () => {
-      describe("set on config", () => {
-        const definitionResolver = () => 42;
-        const config = {
-          definitionResolver
-        };
-        test("is one from config", () => {
-          expect(mapper.definitionResolver).toBe(definitionResolver);
-        });
-      });
-      describe("default", () => {
-        test("is set", () => {
-          expect(mapper.definitionResolver).toBeDefined();
-        });
-      });
-    });
-  });
+  describe.skip("create", () => {});
 
   describe("resolver", () => {
     describe("no resolver in config", () => {
       const config = {};
-      const mapper = create(items, config);
+      const createMapper = createFactory(config);
+      const mapper = createMapper({ item: strItem });
+
       test("uses default resolver", () => {
         expect(mapper.resolver).toBeDefined();
-      });
-
-      describe("validResolver", () => {
-        test("is valid", () => {
-          expect(mapper.validResolver).toBeTruthy();
-        });
       });
     });
 
@@ -52,7 +28,9 @@ describe.skip("MappingItem", () => {
       const config = {
         itemResolver: () => 42
       };
-      const mapper = create(items, config);
+      const createMapper = createFactory(config);
+      const mapper = createMapper({ item: strItem });
+
       test("uses config itemResolver", () => {
         expect(mapper.resolver).toBeDefined();
       });
@@ -67,7 +45,9 @@ describe.skip("MappingItem", () => {
           const config = {
             itemResolver: 12
           };
-          const mapper = create(items, config);
+          const createMapper = createFactory(config);
+          const mapper = createMapper({ item: strItem });
+
           test("is invalid", () => {
             expect(() => mapper.validatedResolver).toThrow();
           });
@@ -78,7 +58,8 @@ describe.skip("MappingItem", () => {
 
   describe("itemEntryPayload", () => {
     const config = {};
-    const mapper = create(strItem, config);
+    const createMapper = createFactory(config);
+    const mapper = createMapper({ item: strItem });
 
     const payload = mapper.itemEntryPayload;
     test("has parentName", () => {
@@ -93,16 +74,18 @@ describe.skip("MappingItem", () => {
   describe("resolve", () => {
     const config = {};
 
-    const mapper = create(intItem, config);
+    const createMapper = createFactory(config);
+    const mapper = createMapper({ item: intItem });
+
     describe("primitive type", () => {
       test("resolves string", () => {
         const resolved = mapper.resolve(strItem);
-        expect(resolved).toEqual("String");
+        expect(resolved).toEqual({ type: "keyword" });
       });
 
       test("resolves integer", () => {
         const resolved = mapper.resolve(intItem);
-        expect(resolved).toEqual("Int");
+        expect(resolved).toEqual({ type: "integer" });
       });
     });
 
@@ -111,11 +94,18 @@ describe.skip("MappingItem", () => {
         name: "account",
         typeName: "MyAccount",
         type: "object",
-        properties: {}
+        properties: {
+          level: {
+            type: "integer"
+          }
+        }
       });
 
       test("resolves to name", () => {
-        expect(resolved).toEqual("MyAccount");
+        expect(resolved).toEqual({
+          properties: { level: { type: "integer" } },
+          type: "object"
+        });
       });
     });
   });
