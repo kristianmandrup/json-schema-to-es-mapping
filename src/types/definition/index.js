@@ -39,8 +39,12 @@ class DefinitionRefResolver extends InfoHandler {
   }
 
   get refObject() {
-    this._refObject = this._refObject || this.resolveRefObject();
+    this._refObject = this._refObject || this.resolvedRefObject;
     return this._refObject;
+  }
+
+  get resolvedRefObject() {
+    return this.referenceFromCache || this.resolveRefObject();
   }
 
   resolveRefObject(reference) {
@@ -77,7 +81,7 @@ class DefinitionRefResolver extends InfoHandler {
     this.visitedPaths[this.dotPath] = obj;
   }
 
-  referenceFromCache() {
+  get referenceFromCache() {
     return this.visitedPaths[this.dotPath];
   }
 
