@@ -1,10 +1,5 @@
 const { MappingBaseType } = require("../base");
-const {
-  isObjectType,
-  isArray,
-  isReferenceArray,
-  isNestedArray
-} = require("../util");
+const { isObjectType, isArray, isReferenceArray } = require("../util");
 
 function toArray(obj) {
   return isArray(obj.type) && MappingArray.create(obj).convert();

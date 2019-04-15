@@ -132,6 +132,15 @@ If you would like to add these capabilities, please see the [json-schema-model-b
 
 Initial work to support these features have been started in the [dev](https://github.com/kristianmandrup/json-schema-to-es-mapping/tree/dev) branch and should land soon (0.4.0).
 
+The `dev` branch also allows reference documents for arrays, by setting `reference: true` for the `array` object in the JSON schema.
+
+See:
+
+- [Nested datatype](https://www.elastic.co/guide/en/elasticsearch/reference/current/nested.html)
+- [Parent-child mapping](https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child-mapping.html)
+
+In the near future, support for Geo location mapping will be included.
+
 ## Fine grained control
 
 For more fine-grained control, use the `build` function directly.
@@ -540,7 +549,7 @@ The default type mappings are as follows:
 - `number` -> `integer`
 - `date` -> `date`
 
-For `array` it will use `type` of first [array item](https://cswr.github.io/JsonSchema/spec/arrays/) if [basic type](https://cswr.github.io/JsonSchema/spec/basic_types/)
+For `array` it will use `type` of first [array item](https://cswr.github.io/JsonSchema/spec/arrays/) if [basic type](https://cswr.github.io/JsonSchema/spec/basic_types/) and the type for all array items are the same.
 
 ```js
 {
@@ -551,6 +560,8 @@ For `array` it will use `type` of first [array item](https://cswr.github.io/Json
 }
 ```
 
+If array item types are note "uniform" it will throw an error.
+
 For the following array JSON schema entry the mapper will currently set the mapping type to `string` (by default). Please use the customization options outlined to define a more appropriate mapping strategy if needed.
 
 ```js
@@ -558,13 +569,13 @@ For the following array JSON schema entry the mapper will currently set the mapp
  "type": "array",
  "items" : [{
     "type": "string"
+    // ...
   },
   {
-    "type": "integer"
+    "type": "string"
+    // ...
   },
-  {
-  "type": "boolean"
-  }]
+ ]
 }
 ```
 

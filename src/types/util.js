@@ -81,16 +81,8 @@ function isObject(obj) {
   return obj.type === "object" || obj === "object"; // && isObjectType(obj.properties)
 }
 
-function isNestedArray(obj) {
-  return isArray(obj) && isNested(obj);
-}
-
 function isReferenceArray(obj) {
   return isArray(obj) && isReference(obj);
-}
-
-function isNested(obj) {
-  return obj.nested === true;
 }
 
 function isReference(obj) {
@@ -130,8 +122,6 @@ module.exports = {
   isObject,
   isArray,
   isReference,
-  isNested,
-  isNestedArray,
   isReferenceArray,
   isObjectType,
   isDate,
