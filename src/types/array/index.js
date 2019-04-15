@@ -1,9 +1,10 @@
 const { MappingBaseType } = require("../base");
-const { isObjectType } = require("../util");
-
-function isArray(type) {
-  return type === "array";
-}
+const {
+  isObjectType,
+  isArray,
+  isReferenceArray,
+  isNestedArray
+} = require("../util");
 
 function toArray(obj) {
   return isArray(obj.type) && MappingArray.create(obj).convert();
@@ -12,6 +13,47 @@ function toArray(obj) {
 class MappingArray extends MappingBaseType {
   get baseType() {
     return "nested";
+  }
+
+  get entry() {
+    return {
+      ...this.lookedUpEntry,
+      ...this.resolvedEntry
+    };
+  }
+
+  get resolvedResult() {
+    const result = this.createResult();
+    if (this.isReference) delete result.type;
+    return result;
+  }
+
+  get includeInParent() {
+    return true;
+  }
+
+  get resolvedEntry() {
+    return this.isReference ? this.referenceEntry : this.nestedEntry;
+  }
+
+  get nestedEntry() {
+    return this.includeInParent
+      ? {
+          include_in_parent: true
+        }
+      : {};
+  }
+
+  get isReference() {
+    return isReferenceArray(this.value);
+  }
+
+  get referenceEntry() {
+    return {
+      _parent: { type: this.parentName },
+      _source: { enabled: true },
+      _all: { enabled: false }
+    };
   }
 
   get validItems() {

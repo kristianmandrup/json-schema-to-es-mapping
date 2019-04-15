@@ -434,14 +434,41 @@ Note that for convenience, we pass in some typical field mappings based on names
 ### Type mappers
 
 You can pass in custom Type mapper factories if you want to override how specific types are mapped.
-Internally this is managed in the `SchemaEntry` constructor:
+
+Internally this is managed in the `SchemaEntry` constructor in `entry.js`:
 
 ```js
+this.defaults = {
+  types: {
+    string: toString,
+    number: toNumber,
+    boolean: toBoolean,
+    array: toArray,
+    object: toObject,
+    date: toDate,
+    dateRange: toDateRange,
+    numericRange: toNumericRange
+  },
+  typeOrder: [
+    "string",
+    "dateRange",
+    "numericRange",
+    "number",
+    "boolean",
+    "array",
+    "object",
+    "date"
+  ]
+};
+
 this.types = {
-  ...this.defaultTypes,
+  ...this.defaults.types,
   ...(config.types || {})
 };
+this.typeOrder = config.typeOrder || this.defaults.typeOrder;
 ```
+
+To override, simply pass in a custom `types` object and/or a custom `typeOrder` array of the precedence order they should be resolved in.
 
 #### Custom Type mapper example (object)
 

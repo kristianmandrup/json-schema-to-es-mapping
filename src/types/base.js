@@ -117,8 +117,12 @@ class MappingBaseType extends InfoHandler {
     return obj;
   }
 
-  get entry() {
+  get lookedUpEntry() {
     return this.config.entryFor(this.lookupObj) || {};
+  }
+
+  get entry() {
+    return this.lookedUpEntry || {};
   }
 
   configEntryFn() {
@@ -155,13 +159,17 @@ class MappingBaseType extends InfoHandler {
     return this._result;
   }
 
-  createMappingResult() {
+  get resolvedResult() {
     return this.createResult();
+  }
+
+  createMappingResult() {
+    return this.resolvedResult;
   }
 
   createAndStoreResult() {
     if (this.shouldSetResult(this)) {
-      const result = this.createResult();
+      const result = this.resolvedResult;
       this.setResult(result);
     }
   }

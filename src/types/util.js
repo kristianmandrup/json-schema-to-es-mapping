@@ -73,16 +73,20 @@ function isObjectType(obj) {
   return obj === Object(obj);
 }
 
+function isArray(type) {
+  return type === "array";
+}
+
 function isObject(obj) {
   return obj.type === "object" || obj === "object"; // && isObjectType(obj.properties)
 }
 
-function isNestedObject(obj) {
-  return isObject(obj) && isNested(obj);
+function isNestedArray(obj) {
+  return isArray(obj) && isNested(obj);
 }
 
-function isReferenceObject(obj) {
-  return isObject(obj) && isReference(obj);
+function isReferenceArray(obj) {
+  return isArray(obj) && isReference(obj);
 }
 
 function isNested(obj) {
@@ -124,8 +128,11 @@ const { classify, camelcase } = require("inflection");
 
 module.exports = {
   isObject,
-  isNestedObject,
-  isReferenceObject,
+  isArray,
+  isReference,
+  isNested,
+  isNestedArray,
+  isReferenceArray,
   isObjectType,
   isDate,
   isDateRange,
