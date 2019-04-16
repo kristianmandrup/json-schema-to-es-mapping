@@ -118,28 +118,19 @@ If you leave out the `range: true` it will be resolved as a number, using the mi
 
 To make an entry detect as a date range, the same applies as for a number range but the entry must also resolve to a date type (see `types/util.js` function `isDate(obj)` for details)
 
-## Limitations
+## Recent feature additions
 
-This library does not yet resolve:
+Now also resolves:
 
 - Array items that are themselves object types
 - References to object definitions (ie. `$ref`)
-
-If you would like to add these capabilities, please see the [json-schema-model-builder]((https://github.com/kristianmandrup/json-schema-model-builder) for sample implementations:
-
-- Resolve [array](https://github.com/kristianmandrup/json-schema-model-builder/tree/master/src/schema/object/property/types/array)
-- Resolve [reference](https://github.com/kristianmandrup/json-schema-model-builder/tree/master/src/schema/object/property/reference)
-
-Initial work to support these features have been started in the [dev](https://github.com/kristianmandrup/json-schema-to-es-mapping/tree/dev) branch and should land soon (0.4.0).
-
-The `dev` branch also allows reference documents for arrays, by setting `reference: true` for the `array` object in the JSON schema.
-
-See:
-
-- [Nested datatype](https://www.elastic.co/guide/en/elasticsearch/reference/current/nested.html)
 - [Parent-child mapping](https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child-mapping.html)
 
-In the near future, support for Geo location mapping will be included.
+## Limitations and coming features
+
+Support for Geo location mapping will likely be included in the near future. 
+
+Please Let me know any other features you'd like to include for a more feature complete library!
 
 ## Fine grained control
 
