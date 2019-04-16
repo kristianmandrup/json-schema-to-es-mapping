@@ -55,7 +55,8 @@ class SchemaEntry {
     return typeof this.type === "string";
   }
 
-  error(msg) {
+  error(msg, data) {
+    data ? console.error(msg, data) : console.error(msg);
     throw new SchemaEntryError(msg);
   }
 

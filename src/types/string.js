@@ -1,26 +1,24 @@
-const {MappingBaseType} = require('./base')
+const { MappingBaseType } = require("./base");
 
 function isString(type) {
-  return type === 'string'
+  return type === "string";
 }
 
 function toString(obj) {
-  return isString(obj.type) && MappingString
-    .create(obj)
-    .convert()
+  return isString(obj.type) && MappingString.create(obj).convert();
 }
 
 class MappingString extends MappingBaseType {
   get baseType() {
-    return this._types.string || 'keyword'
+    return this._types.string || "string";
   }
 
   static create(obj) {
-    return new MappingString(obj)
+    return new MappingString(obj);
   }
 }
 
 module.exports = {
   toString,
   MappingString
-}
+};

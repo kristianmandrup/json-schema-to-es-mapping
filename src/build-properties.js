@@ -31,7 +31,7 @@ function buildProperties(schema, config = {}) {
   const $parentName =
     schema.name || schema.parentName || schema.title || config.name;
 
-  const parentName = camelcase($parentName, true)
+  const parentName = $parentName ? camelcase($parentName, true) : "";
 
   const propMappings = propsToMapping({ parentName, properties }, config);
   if (schema.parentName || config.nested) {
