@@ -19,7 +19,9 @@ class MappingArray extends MappingBaseType {
 
   get resolvedResult() {
     const result = this.createResult();
-    if (this.isReference) delete result.type;
+    if (this.isReference) {
+      delete result.type
+    };
     return result;
   }
 

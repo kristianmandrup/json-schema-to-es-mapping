@@ -118,11 +118,12 @@ class MappingBaseType extends InfoHandler {
   }
 
   get lookedUpEntry() {
-    return this.config.entryFor(this.lookupObj) || {};
+    const { entryFor } = this.config
+    return entryFor && entryFor(this.lookupObj);
   }
 
   get entry() {
-    return this.lookedUpEntry || {};
+    return this.lookedUpEntry || this.configEntry || {};
   }
 
   configEntryFn() {
@@ -134,11 +135,11 @@ class MappingBaseType extends InfoHandler {
   }
 
   get configEntry() {
-    return this.configFieldEntry || this.configEntryFn || {};
+    return this.configFieldEntry
   }
 
   get configType() {
-    return this.configEntry.type || this.metaType();
+    return (this.entry || {}).type || this.metaType();
   }
 
   metaType(type) {
@@ -154,7 +155,7 @@ class MappingBaseType extends InfoHandler {
     if (this._result) return this._result;
     this._result = {
       type: this.type,
-      ...this.configEntry
+      ...this.entry
     };
     return this._result;
   }

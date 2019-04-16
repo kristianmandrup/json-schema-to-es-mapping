@@ -34,15 +34,15 @@ describe("build", () => {
 
     const received = [];
     const onResult = result => {
-      console.log("received", result);
+      // console.log("received", result);
       received.push(result);
     };
 
     const config = { onResult };
     const { properties, results } = build(json, config);
-    console.log({ properties, received, results });
+    // console.log({ properties, received, results });
 
-    console.log("NESTED", JSON.stringify(properties, null, 2));
+    // console.log("NESTED", JSON.stringify(properties, null, 2));
 
     expect(results).toEqual({
       dog: { age: { type: "float" }, name: { type: "keyword" } },

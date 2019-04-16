@@ -24,19 +24,19 @@ describe("build", () => {
 
     const received = [];
     const onResult = result => {
-      console.log("received", result);
+      // console.log("received", result);
       received.push(result);
     };
 
     const config = { onResult };
     const { properties, results } = build(json, config);
-    console.log({ properties, received, results });
+    // console.log({ properties, received, results });
 
-    console.log("SIMPLE", JSON.stringify(properties, null, 2));
+    // console.log("SIMPLE", JSON.stringify(properties, null, 2));
 
     expect(received[1]).toEqual({
       key: "age",
-      parentName: "Person",
+      parentName: "person",
       resultKey: "age",
       schemaValue: {
         description: "Age of person",

@@ -22,6 +22,7 @@ describe("array", () => {
     // console.log("Array - no items", JSON.stringify(mapping, null, 2));
     expect(properties).toEqual({
       friendNames: {
+        "include_in_parent": true,
         type: "nested"
       }
     });
@@ -49,6 +50,7 @@ describe("array", () => {
     // console.log("Array - no items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
+        "include_in_parent": true,
         type: "nested"
       }
     });
@@ -76,6 +78,7 @@ describe("array", () => {
     // console.log("Array - empty items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
+        "include_in_parent": true,
         type: "nested"
       }
     });
@@ -112,6 +115,7 @@ describe("array", () => {
     // console.log("Array - empty items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
+        "include_in_parent": true,
         type: "string"
       }
     });
@@ -149,6 +153,7 @@ describe("array", () => {
     // console.log("Array - empty items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
+        "include_in_parent": true,
         type: "text"
       }
     });

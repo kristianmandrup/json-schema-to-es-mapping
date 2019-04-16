@@ -1,4 +1,4 @@
-const { isObject, isFunction } = require("./types/util");
+const { isObject, isFunction, camelcase } = require("./types/util");
 
 function error(msg, data) {
   data ? console.error(msg, data) : console.error(msg);
@@ -28,8 +28,10 @@ function buildProperties(schema, config = {}) {
     error(`invalid schema, missing properties`, { schema, properties });
   }
   properties = normalizeRequired(schema);
-  const parentName =
+  const $parentName =
     schema.name || schema.parentName || schema.title || config.name;
+
+  const parentName = camelcase($parentName, true)
 
   const propMappings = propsToMapping({ parentName, properties }, config);
   if (schema.parentName || config.nested) {

@@ -82,7 +82,7 @@ function isObject(obj) {
 }
 
 function isReferenceArray(obj) {
-  return isArray(obj) && isReference(obj);
+  return isArray(obj.type) && isReference(obj);
 }
 
 function isReference(obj) {
@@ -116,7 +116,8 @@ const capitalize = word => {
   return `${word.slice(0, 1).toUpperCase()}${word.slice(1).toLowerCase()}`;
 };
 
-const { classify, camelcase } = require("inflection");
+const { classify, camelize } = require("inflection");
+const camelcase = camelize
 
 module.exports = {
   isObject,
@@ -134,6 +135,7 @@ module.exports = {
   safeToFloat,
   safeToInt,
   capitalize,
+  camelize,
   camelcase,
   classify,
   assign,
