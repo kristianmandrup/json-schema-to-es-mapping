@@ -132,6 +132,8 @@ Support for Geo location mapping will likely be included in the near future.
 
 Please Let me know any other features you'd like to include for a more feature complete library!
 
+Initial work to support these features have been started in the [dev](https://github.com/kristianmandrup/json-schema-to-es-mapping/tree/dev) branch and should land soon (0.4.0).
+
 ## Fine grained control
 
 For more fine-grained control, use the `build` function directly.
