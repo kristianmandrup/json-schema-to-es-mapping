@@ -1,6 +1,16 @@
 const { MappingBase } = require("./base");
 
-const isGeoLocation = (obj) => false
+const short = (props) =>
+  props.lat && (props.lng || props.long)
+
+const full = (props) =>
+  props.latitude && props.longitude
+
+const isGeoLocation = (obj = {}) => {
+  const { properties } = obj
+  if (!properties) return false
+  return short(properties) || full(properties)  
+}
 
 function toGeoLocation(obj) {
   return isGeoLocation(obj) && MappingGeoLocation.create(obj).convert();
