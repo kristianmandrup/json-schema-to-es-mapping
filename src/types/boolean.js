@@ -10,6 +10,10 @@ class MappingBoolean extends MappingBaseType {
     return "boolean";
   }
 
+  get typeName() {
+    return "boolean";
+  }
+
   static create(obj) {
     return new MappingBoolean(obj);
   }

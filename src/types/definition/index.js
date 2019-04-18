@@ -82,7 +82,7 @@ class DefinitionRefResolver extends InfoHandler {
   }
 
   get referenceFromCache() {
-    return this.visitedPaths[this.dotPath];
+    return this.visitedPaths[thisjest.dotPath];
   }
 
   get name() {

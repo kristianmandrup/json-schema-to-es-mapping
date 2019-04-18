@@ -128,7 +128,7 @@ Now also resolves:
 
 ## Limitations and coming features
 
-Support for Geo location mapping will likely be included in the near future. 
+Support for Geo location mapping will likely be included in the near future.
 
 Please Let me know any other features you'd like to include for a more feature complete library!
 
@@ -385,17 +385,15 @@ The default configuration is as follows.
 
 ```js
 {
-  _meta_: {
-    types: {
-      string: "keyword",
-      number: "float",
-      object: "object",
-      array: "nested",
-      boolean: "boolean",
-      date: "date"
-    }
-  },
-  fields: {
+  typeMap: {
+    string: "keyword",
+    number: "float",
+    object: "object",
+    array: "nested",
+    boolean: "boolean",
+    date: "date"
+  }
+  fieldMap: {
     name: {
       type: "keyword"
     },

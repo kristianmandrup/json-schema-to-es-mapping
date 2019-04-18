@@ -12,6 +12,10 @@ class MappingObject extends MappingBaseType {
     return "object";
   }
 
+  get typeName() {
+    return "object";
+  }
+
   constructor(obj) {
     super(obj);
     this.properties = this.value.properties;

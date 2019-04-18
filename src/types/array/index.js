@@ -10,6 +10,10 @@ class MappingArray extends MappingBaseType {
     return "nested";
   }
 
+  get typeName() {
+    return "array";
+  }
+
   get entry() {
     return {
       ...this.lookedUpEntry,
@@ -20,8 +24,8 @@ class MappingArray extends MappingBaseType {
   get resolvedResult() {
     const result = this.createResult();
     if (this.isReference) {
-      delete result.type
-    };
+      delete result.type;
+    }
     return result;
   }
 

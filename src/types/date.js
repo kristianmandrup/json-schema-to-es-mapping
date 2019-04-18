@@ -10,6 +10,10 @@ class MappingDate extends MappingBaseType {
     return "date";
   }
 
+  get typeName() {
+    return "date";
+  }
+
   static create(obj) {
     return new MappingDate(obj);
   }

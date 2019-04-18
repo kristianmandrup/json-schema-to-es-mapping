@@ -10,7 +10,11 @@ function toString(obj) {
 
 class MappingString extends MappingBaseType {
   get baseType() {
-    return this._types.string || "string";
+    return this._types.string || "keyword";
+  }
+
+  get typeName() {
+    return "string";
   }
 
   static create(obj) {

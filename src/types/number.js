@@ -12,6 +12,10 @@ class MappingNumber extends MappingRange {
     return this._types.number || "float";
   }
 
+  get typeName() {
+    return "number";
+  }
+
   get calcNumericType() {
     return (
       this.double ||

@@ -1,5 +1,4 @@
 const { MappingBaseType } = require("./base");
-const { safeToInt } = require("./util");
 
 class MappingRange extends MappingBaseType {
   constructor(opts) {
