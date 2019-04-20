@@ -1,6 +1,6 @@
 // for resolving a type definition reference
 const dotProp = require("dot-prop");
-const { classify } = require("../util");
+const { classify, isStringType } = require("../util");
 const { InfoHandler } = require("../info");
 
 const createDefinitionRefResolver = (opts = {}) => {
@@ -12,20 +12,33 @@ function stringify(obj) {
 }
 
 class DefinitionRefResolver extends InfoHandler {
-  constructor({ reference, schema, config = {} }) {
+  constructor({ reference, schema }, config = {}) {
     super(config);
     this.reference = reference;
     this.schema = schema || {};
     this.visitedPaths = config.visitedPaths || {};
   }
 
-  validate() {
+  validateSchema() {
     !this.schema && this.error("validate", "Missing schema");
+  }
+
+  validateRef() {
     !this.reference && this.error("validate", "Missing reference");
+    !isStringType(this.reference) &&
+      this.error("validate", "Reference invalid, must be a string", {
+        reference: this.reference
+      });
+  }
+
+  validate() {
+    this.validateSchema();
+    this.validateRef();
     return true;
   }
 
   get normalizedRef() {
+    this.validate();
     return this.reference.replace(/^#\//, "");
   }
 

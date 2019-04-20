@@ -1,5 +1,9 @@
+const { isFunction } = require("./util");
+
+class ConvertMappingSchemaError extends Error {}
+
 class InfoHandler {
-  contructor(config = {}) {
+  constructor(config = {}) {
     this.config = config || this.config;
   }
 

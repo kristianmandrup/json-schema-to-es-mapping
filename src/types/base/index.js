@@ -2,8 +2,6 @@ const { InfoHandler } = require("../info");
 const { $default } = require("../default");
 const { createKeyMaker, createDispatcher, createResultHandler } = require("./result"),
 
-class ConvertMappingSchemaError extends Error {}
-
 class MappingBaseType extends InfoHandler {
   constructor(opts = {}) {
     super(opts.config);

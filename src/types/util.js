@@ -117,7 +117,7 @@ const capitalize = word => {
 };
 
 const { classify, camelize } = require("inflection");
-const camelcase = camelize
+const camelcase = camelize;
 
 module.exports = {
   isObject,
@@ -125,6 +125,7 @@ module.exports = {
   isReference,
   isReferenceArray,
   isObjectType,
+  isStringType,
   isDate,
   isDateRange,
   isNumericRange,

@@ -1,10 +1,8 @@
 const createLookupObject = config => new LookupObject(config);
 
 class LookupObject {
-  constructor(
-    { key, value, parentName, resultKeyName, typeName },
-    config = {}
-  ) {
+  constructor(opts, config = {}) {
+    const { key, value, parentName, resultKeyName, typeName } = opts;
     this.key = key;
     this.resultKeyName = resultKeyName;
     this.parentName = parentName;
@@ -13,7 +11,7 @@ class LookupObject {
     this.typeName = typeName;
   }
 
-  get lookupObj() {
+  get object() {
     const obj = {
       key: this.key,
       resultKey: this.resultKeyName,
