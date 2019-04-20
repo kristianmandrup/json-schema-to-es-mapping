@@ -1,8 +1,9 @@
+const { isFunction } = require("../../util");
 const createResultDispatcher = config => new ResultDispatcher(config);
 
 class ResultDispatcher {
   constructor(config = {}) {
-    this.onResult = this.config.onResult;
+    this.onResult = config.onResult;
   }
 
   dispatch(payload) {

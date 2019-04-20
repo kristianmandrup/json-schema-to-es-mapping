@@ -1,14 +1,11 @@
-const { isFunction } = require("util");
+const { isFunction } = require("../util");
 const { createDefinitionRefResolver } = require("../definition");
 const createReferenceResolver = config => new ReferenceResolver(config);
 
 class ReferenceResolver {
   constructor(opts, config = {}) {
-    const { reference, schema } = opts;
-    const defResolverInst = createDefinitionRefResolver(
-      { reference, schema },
-      config
-    );
+    const { schema } = opts;
+    const defResolverInst = createDefinitionRefResolver({ schema }, config);
     this.definitionResolver =
       config.definitionResolver ||
       defResolverInst.resolveRefObject.bind(defResolverInst);
@@ -26,7 +23,8 @@ class ReferenceResolver {
         }
       );
     }
-    return definitionResolver(obj);
+    const reference = obj.$ref;
+    return definitionResolver(reference);
   }
 }
 

@@ -1,5 +1,5 @@
 module.exports = {
-  createKeyMaker: require("./key-maker"),
-  createDispatcher: require("./dispatcher"),
-  createResultHandler: require("./result-handler")
+  createKeyMaker: require("./key-maker").createKeyMaker,
+  createResultDispatcher: require("./result-dispatcher").createResultDispatcher,
+  createResultHandler: require("./result-handler").createResultHandler
 };

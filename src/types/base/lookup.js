@@ -1,4 +1,4 @@
-const createLookupObject = config => new LookupObject(config);
+const createLookupObject = (opts, config) => new LookupObject(opts, config);
 
 class LookupObject {
   constructor(opts, config = {}) {

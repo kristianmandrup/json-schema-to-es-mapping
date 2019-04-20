@@ -1,19 +1,22 @@
-const { createResultDispatcher } = require("./dispatcher");
-
-const createDispatcher = config => new Dispatcher(config);
+const { createResultDispatcher } = require("./result");
+const { createLookupObject } = require("./lookup");
+const createDispatcher = (opts, config) => new Dispatcher(opts, config);
 
 class Dispatcher {
-  constructor(config = {}) {
+  constructor(opts = {}, config = {}) {
     const $createResultDispatcher =
-      config.createResultDispatcher || createResultDispatcher(config);
+      config.createResultDispatcher || createResultDispatcher;
     this.dispatcher = $createResultDispatcher(config);
+    this.lookup = createLookupObject(opts, config);
   }
 
   dispatch(result) {
     this.dispatcher.dispatch(this.dispatchObjFor(result));
   }
 
-  get lookupObj() {}
+  get lookupObj() {
+    return this.lookup.object;
+  }
 
   dispatchObjFor(result) {
     return {
@@ -24,6 +27,6 @@ class Dispatcher {
 }
 
 module.exports = {
-  createResultDispatcher,
-  ResultDispatcher
+  createDispatcher,
+  Dispatcher
 };
