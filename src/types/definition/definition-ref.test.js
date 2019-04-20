@@ -13,9 +13,10 @@ describe("DefinitionRefResolver", () => {
   };
   const config = {};
 
-  const opts = { reference, schema, config };
+  const opts = { schema };
 
-  const resolver = createDefinitionRefResolver(opts);
+  const resolver = createDefinitionRefResolver(opts, config);
+  resolver.reference = reference;
 
   describe("normalizedRef", () => {
     const { normalizedRef } = resolver;
@@ -47,22 +48,6 @@ describe("DefinitionRefResolver", () => {
     test("is an object with name: superCar", () => {
       expect(typeof refObject).toEqual("object");
       expect(refObject.name).toEqual("superCar");
-    });
-  });
-
-  describe("name", () => {
-    const { name } = resolver;
-
-    test("is superCar", () => {
-      expect(name).toEqual("superCar");
-    });
-  });
-
-  describe("typeName", () => {
-    const { typeName } = resolver;
-
-    test("is SuperCar", () => {
-      expect(typeName).toEqual("SuperCar");
     });
   });
 });

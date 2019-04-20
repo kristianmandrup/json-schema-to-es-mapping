@@ -14,6 +14,7 @@ class MappingBaseType extends InfoHandler {
 
     this.format = value.format;
     this.result = result || config.resultObj || {};
+    this.visitedPaths = visitedPaths || config.visitedPaths || {};
     this.config = {
       ...$default.config,
       ...config
@@ -30,8 +31,6 @@ class MappingBaseType extends InfoHandler {
   dispatch() {
     this.dispatcher.dispatch(this.dispatchObj);
   }
-
-
 
   convert() {
     this.createAndStoreResult();

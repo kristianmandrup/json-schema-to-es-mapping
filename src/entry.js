@@ -8,7 +8,7 @@ const {
   toNumericRange,
   toDateRange
 } = require("./types");
-const { inspect } = require("util");
+// const { inspect } = require("util");
 
 class SchemaEntryError extends Error {}
 

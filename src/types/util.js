@@ -25,6 +25,10 @@ function isStrDate(obj) {
   );
 }
 
+function stringify(obj) {
+  return JSON.stringify(obj, null, 2);
+}
+
 function safeToFloat(num, defaultValue = 1) {
   try {
     return Number.parseFloat(num);
@@ -141,5 +145,6 @@ module.exports = {
   classify,
   assign,
   createAssign,
-  assignAt
+  assignAt,
+  stringify
 };
