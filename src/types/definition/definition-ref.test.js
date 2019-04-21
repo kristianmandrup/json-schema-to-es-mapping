@@ -1,4 +1,4 @@
-const { createDefinitionRefResolver } = require("./");
+const { createDefinitionRefResolver } = require("./definition-ref");
 
 describe("DefinitionRefResolver", () => {
   const reference = "#/definitions/car";
@@ -18,36 +18,53 @@ describe("DefinitionRefResolver", () => {
   const resolver = createDefinitionRefResolver(opts, config);
   resolver.reference = reference;
 
-  describe("normalizedRef", () => {
-    const { normalizedRef } = resolver;
+  describe("refObjectFor", () => {
+    const obj = resolver.refObjectFor(reference);
 
-    test("is car", () => {
-      expect(normalizedRef).toEqual("definitions/car");
+    test("resolves to referenced object", () => {
+      expect(obj).toEqual({});
     });
   });
 
-  describe("dotPath", () => {
-    const { dotPath } = resolver;
+  describe("validateSchema", () => {
+    describe("missing schema", () => {
+      test("is invalid", () => {
+        expect(() => resolver.validateSchema()).toThrow();
+      });
+    });
 
-    test("is car", () => {
-      expect(dotPath).toEqual("definitions.car");
+    describe("bad schema", () => {
+      resolver.schema = "x";
+      test("is invalid", () => {
+        expect(() => resolver.validateSchema()).toThrow();
+      });
+    });
+
+    describe("valid schema", () => {
+      test("is valid", () => {
+        resolver.schema = {};
+        expect(() => resolver.validateSchema()).toThrow();
+      });
     });
   });
-
-  describe("refName", () => {
-    const { refName } = resolver;
-
-    test("is car", () => {
-      expect(refName).toEqual("car");
+  describe("validateRef", () => {
+    describe("missing reference", () => {
+      test("is invalid", () => {
+        expect(() => resolver.validateRef()).toThrow();
+      });
     });
-  });
 
-  describe("refObject", () => {
-    const { refObject } = resolver;
+    describe("invalid reference", () => {
+      test("is invalid", () => {
+        expect(() => resolver.validateRef({})).toThrow();
+      });
+    });
 
-    test("is an object with name: superCar", () => {
-      expect(typeof refObject).toEqual("object");
-      expect(refObject.name).toEqual("superCar");
+    describe("valid reference", () => {
+      test("is valid", () => {
+        const valid = resolver.validateRef(reference);
+        expect(valid).toEqual(true);
+      });
     });
   });
 });
