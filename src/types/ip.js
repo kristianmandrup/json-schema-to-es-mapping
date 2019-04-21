@@ -1,12 +1,14 @@
 const { MappingBase } = require("./base");
 
-const isIp = (obj) => false
+const isIpKey = name => ["url", "uri"].includes(name);
+
+const isIp = (obj, key) => {
+  return isString(obj.type) && isIpKey(key);
+};
 
 function toIp(obj) {
   return isIp(obj) && MappingIp.create(obj).convert();
 }
-
-// integer_range, float_range, long_range, double_range
 
 class MappingIp extends MappingBase {
   get baseType() {
@@ -15,6 +17,7 @@ class MappingIp extends MappingBase {
 }
 
 module.exports = {
+  isIp,
   toIp,
   MappingIp
 };

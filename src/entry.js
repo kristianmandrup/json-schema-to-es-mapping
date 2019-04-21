@@ -66,7 +66,7 @@ class SchemaEntry {
     }
     let foundValue;
     this.typeOrder.find(type => {
-      foundValue = this.types[type](this.obj);
+      foundValue = this.types[type](this.obj, this.key);
       return foundValue;
     });
     return foundValue || this.defaultTypeHandler(config);

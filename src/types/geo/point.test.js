@@ -1,4 +1,4 @@
-const { build } = require("..");
+const { build } = require("../..");
 
 const create = () => ({
   type: "object",
@@ -19,7 +19,7 @@ describe("geo location type", () => {
     json = create({ lat: "lat", lng: "lng" });
     const { properties } = build(json);
     test("location", () => {
-      expec(properties.location.type).toEqual("geo");
+      expec(properties.location.type).toEqual("geo_point");
     });
   });
 });

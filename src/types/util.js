@@ -3,6 +3,10 @@ function hasDateContraint(obj) {
   return false;
 }
 
+function isString(type) {
+  return type === "string";
+}
+
 function isFunction(fun) {
   return typeof fun === "function";
 }
@@ -137,6 +141,7 @@ module.exports = {
   isInteger,
   isBoolean,
   isFunction,
+  isString,
   safeToFloat,
   safeToInt,
   capitalize,

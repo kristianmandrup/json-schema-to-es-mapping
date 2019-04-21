@@ -1,5 +1,5 @@
-const { MappingRange } = require("./range");
-const { isDateRange } = require("./util");
+const { MappingRange } = require("../range");
+const { isDateRange } = require("../util");
 
 function toDateRange(obj) {
   return isDateRange(obj) && MappingDateRange.create(obj).convert();

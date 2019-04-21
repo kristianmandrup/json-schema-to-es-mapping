@@ -3,9 +3,10 @@ const dotProp = require("dot-prop");
 const createReference = (reference, config) => new Reference(reference, config);
 
 class Reference {
-  constructor(reference, config = {}) {
+  constructor({ schema, reference }, config = {}) {
     this.config = config;
     this.reference = reference;
+    this.schema = schema;
     this.visitedPaths = config.visitedPaths || {};
   }
 

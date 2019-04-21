@@ -1,0 +1,1 @@
+const { GeoShape } = require("./shape");
