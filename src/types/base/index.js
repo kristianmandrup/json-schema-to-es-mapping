@@ -1,6 +1,10 @@
 const { InfoHandler } = require("../info");
 const { $default } = require("../default");
-const { createKeyMaker, createDispatcher, createResultHandler } = require("./result"),
+const {
+  createKeyMaker,
+  createDispatcher,
+  createResultHandler
+} = require("./result");
 
 class MappingBaseType extends InfoHandler {
   constructor(opts = {}) {
@@ -20,9 +24,9 @@ class MappingBaseType extends InfoHandler {
       ...config
     };
 
-    this.keyMaker = createKeyMaker({key, parentName}, config) 
-    this.dispatcher = createDispatcher(config)
-    this.resultHandler = createResultHandler(config)
+    this.keyMaker = createKeyMaker({ key, parentName }, config);
+    this.dispatcher = createDispatcher(config);
+    this.resultHandler = createResultHandler(config);
 
     this.nested = config.nested;
     this.nestingLv = config.nestingLv;
@@ -48,6 +52,5 @@ class MappingBaseType extends InfoHandler {
 
 module.exports = {
   $default,
-  MappingBaseType,
-  ConvertMappingSchemaError
+  MappingBaseType
 };

@@ -1,4 +1,5 @@
 // for resolving a type definition reference
+const { InfoHandler } = require("../info");
 const { createReference } = require("./reference");
 const {
   createSchemaValidator,
