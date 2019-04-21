@@ -14,6 +14,14 @@ class MappingIp extends MappingBase {
   get baseType() {
     return "ip";
   }
+
+  get typeName() {
+    return "ip";
+  }
+
+  static create(obj) {
+    return new MappingIp(obj);
+  }
 }
 
 module.exports = {
