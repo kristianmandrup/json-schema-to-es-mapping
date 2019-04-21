@@ -1,4 +1,4 @@
-const { createReference } = require("./");
+const { createReference } = require("./definition-ref");
 
 const reference = "#/definitions/car";
 const schema = {

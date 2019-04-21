@@ -1,7 +1,9 @@
 // for resolving a type definition reference
-const { isStringType, isObjectType, stringify } = require("../util");
-const { InfoHandler } = require("../info");
 const { createReference } = require("./reference");
+const {
+  createSchemaValidator,
+  createRefValidator
+} = require("./ref-validator");
 
 const createDefinitionRefResolver = (opts = {}) => {
   return new DefinitionRefResolver(opts);
@@ -10,38 +12,29 @@ const createDefinitionRefResolver = (opts = {}) => {
 class DefinitionRefResolver extends InfoHandler {
   constructor({ schema }, config = {}) {
     super(config);
+    this.schemaValidator = createSchemaValidator(config);
+    this.refValidator = createRefValidator(config);
+    this.visitedPaths = config.visitedPaths || {};
+    this.schema = schema;
+  }
+
+  set schema(schema) {
     this.validateSchema(schema);
     this.schema = schema;
-    this.visitedPaths = config.visitedPaths || {};
-  }
-
-  validateSchema(schema) {
-    !schema && this.error("validate", "Missing schema");
-    !isObjectType(schema) &&
-      this.error(
-        "validate",
-        `Invalid schema. Must be an Object, was: ${typeof schema}`
-      );
-    return true;
-  }
-
-  validateRef(reference) {
-    !reference && this.error("validate", "Missing reference");
-    !isStringType(reference) &&
-      this.error(
-        "validate",
-        `Reference invalid. Must be a string, was: ${typeof reference}`,
-        {
-          reference
-        }
-      );
-    return true;
   }
 
   refObjectFor(reference) {
     this.validateRef(reference);
     this.ref = createReference(reference);
     return this.ref.refObject;
+  }
+
+  validateSchema(schema) {
+    this.schemaValidator.validate(schema);
+  }
+
+  validateRef(ref) {
+    this.refValidator.validate(ref);
   }
 }
 
