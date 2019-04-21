@@ -1,6 +1,7 @@
 const dotProp = require("dot-prop");
+const { createRefValidator } = require("./ref-validator");
 
-const createReference = (reference, config) => new Reference(reference, config);
+const createReference = (opts, config) => new Reference(opts, config);
 
 class Reference {
   constructor({ schema, reference }, config = {}) {
@@ -8,10 +9,10 @@ class Reference {
     this.reference = reference;
     this.schema = schema;
     this.visitedPaths = config.visitedPaths || {};
+    this.refValidator = createRefValidator(config);
   }
 
   get normalizedRef() {
-    this.validate();
     return this.reference.replace(/^#\//, "");
   }
 
@@ -49,8 +50,12 @@ class Reference {
     return this.referenceFromCache || this.resolveRefObject;
   }
 
+  validateRef() {
+    this.refValidator.validate(this.reference);
+  }
+
   get resolveRefObject() {
-    this.validate();
+    this.validateRef();
     this.handleFoundReference();
 
     const obj = dotProp.get(this.schema, this.dotPath);

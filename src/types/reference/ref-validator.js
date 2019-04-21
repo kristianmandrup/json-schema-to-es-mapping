@@ -8,7 +8,7 @@ class RefValidator extends InfoHandler {
     super(config);
   }
 
-  validateRef(reference) {
+  validate(reference) {
     !reference && this.error("validate", "Missing reference");
     !isStringType(reference) &&
       this.error(
