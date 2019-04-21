@@ -10,6 +10,21 @@ class Reference {
     this.schema = schema;
     this.visitedPaths = config.visitedPaths || {};
     this.refValidator = createRefValidator(config);
+    this.hits = config.hits || {};
+  }
+
+  get state() {
+    return {
+      hits: this.hits,
+      visitedPaths: this.visitedPaths
+    };
+  }
+
+  get $config() {
+    return {
+      ...this.config,
+      ...this.state
+    };
   }
 
   get normalizedRef() {
@@ -17,11 +32,18 @@ class Reference {
   }
 
   referencePathResolvedAndVisited(obj) {
-    this.visitedPaths[this.dotPath] = obj;
+    this.visitedPaths[this.cacheKey] = obj;
+  }
+
+  get cacheKey() {
+    return this.dotPath;
   }
 
   get referenceFromCache() {
-    return this.visitedPaths[this.dotPath];
+    const hit = this.visitedPaths[this.cacheKey];
+    if (!hit) return;
+    this.hits[this.reference] = (this.hits[this.reference] || 0) + 1;
+    return hit;
   }
 
   get name() {

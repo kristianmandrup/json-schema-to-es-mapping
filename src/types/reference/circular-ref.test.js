@@ -45,37 +45,53 @@ describe("Reference", () => {
     logging: true
   };
 
-  const run = name => {
+  const run = (name, config) => {
     const reference = refs[name];
     const opts = { schema, reference };
     const ref = createReference(opts, config);
 
-    const obj = ref.resolveRefObject;
+    const obj = ref.resolvedRefObject;
     const expected = resolved[name];
-    return [obj, expected];
+    return [obj, expected, ref];
   };
 
   describe("car ref", () => {
-    const { obj, expected } = run("car");
+    const [obj, expected, ref] = run("car", config);
 
     test("resolved to car object def", () => {
       expect(obj).toEqual(expected);
     });
+
+    test("car ref has 0 hits", () => {
+      expect(ref.hits[refs.car]).toBeUndefined();
+    });
   });
   describe("driver ref", () => {
-    const [obj, expected] = run("driver");
+    const [obj, expected, ref] = run("driver");
     test("resolved to driver", () => {
       expect(obj).toEqual(expected);
+    });
+
+    test("driver ref has 0 hits", () => {
+      expect(ref.hits[refs.driver]).toBeUndefined();
     });
   });
 
   describe("driver, car, then driver ref again", () => {
-    const [driverObj, driver] = run("driver");
-    const [carObj, car] = run("car");
+    const [driverObj, driver, r1] = run("driver");
+    const [carObj, car, r2] = run("car", r1.$config);
 
-    const [driverAgainObj, driverAgain] = run("driver");
+    const [driverAgainObj, driverAgain, r3] = run("driver", r2.$config);
     test("resolved to driver", () => {
       expect(driverObj).toBe(driverAgainObj);
+    });
+
+    test("car ref has 0 hits", () => {
+      expect(r3.hits[refs.car]).toBeUndefined();
+    });
+
+    test("driver ref has 1 hits", () => {
+      expect(r3.hits[refs.driver]).toBe(1);
     });
   });
 });
