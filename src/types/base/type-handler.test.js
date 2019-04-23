@@ -29,12 +29,6 @@ describe("TypeHandler", () => {
   const handler = create({ typeName, entry }, config);
   describe("metaType", () => {
     test("string", () => {
-      expect(handler.metaType).toEqual("string");
-    });
-  });
-
-  describe("metaType", () => {
-    test("keyword", () => {
       expect(handler.metaType).toEqual("keyword");
     });
   });

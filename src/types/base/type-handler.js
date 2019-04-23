@@ -1,10 +1,11 @@
-const createReferenceResolver = config => new ReferenceResolver(config);
+const { InfoHandler } = require("../info");
+const createTypeHandler = (opts, config) => new TypeHandler(opts, config);
 
-class TypeHandler extends Info {
+class TypeHandler extends InfoHandler {
   constructor({ typeName, entry }, config) {
+    super(config);
     this.typeName = typeName;
     this.entry = entry || {};
-    super(config);
   }
 
   get baseType() {
@@ -19,7 +20,7 @@ class TypeHandler extends Info {
     return this.entry.type || this.metaType;
   }
 
-  metaType() {
+  get metaType() {
     return this.typeMap[this.typeName];
   }
 }
