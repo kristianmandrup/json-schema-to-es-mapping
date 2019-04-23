@@ -1,25 +1,24 @@
 const { createResultDispatcher } = require("./result-dispatcher");
-const create = createResultDispatcher;
 
 const create = (done, expectation) => {
   const config = {
+    logging: true,
     onResult: result => {
       expectation(result);
       done();
     }
   };
 
-  return createResultDispatcher($opts, config);
+  return createResultDispatcher(config);
 };
 
 const result = {
   done: true
 };
 describe("ResultDispatcher", () => {
-  const dispatcher = create();
   describe("dispatch", () => {
     test("payload dispatched", done => {
-      const expectation = res => expect(res).toEqual(expected);
+      const expectation = res => expect(res).toEqual(result);
       const dispatcher = create(done, expectation);
       dispatcher.dispatch(result);
     });

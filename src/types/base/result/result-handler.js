@@ -1,4 +1,4 @@
-const createResultHandler = config => new ResultHandler(config);
+const createResultHandler = (opts, config) => new ResultHandler(opts, config);
 const { createKeyMaker } = require("./key-maker");
 
 class ResultHandler {
@@ -9,7 +9,7 @@ class ResultHandler {
     this.resultKey = config.resultKey || this.calcResultKey.bind(this);
     this.entry = opts.entry;
     this.dispatcher = opts.dispatcher || config.dispatcher;
-    this.result = config.resultObj || {};
+    this.resultMap = config.resultMap || {};
   }
 
   calcResultKey() {
@@ -22,7 +22,7 @@ class ResultHandler {
 
   get resultObj() {
     const key = this.resultKey(this);
-    return this.result[key];
+    return this.resultMap[key];
   }
 
   get resultKeyName() {
@@ -43,7 +43,7 @@ class ResultHandler {
   }
 
   setResultObj(result) {
-    this.result[this.resultKeyName] = result;
+    this.resultMap[this.resultKeyName] = result;
   }
 
   setResult(result) {
