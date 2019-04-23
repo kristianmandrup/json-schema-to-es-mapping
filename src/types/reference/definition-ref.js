@@ -1,10 +1,8 @@
 // for resolving a type definition reference
 const { InfoHandler } = require("../info");
 const { createReference } = require("./reference");
-const {
-  createSchemaValidator,
-  createRefValidator
-} = require("./ref-validator");
+const { createRefValidator } = require("./ref-validator");
+const { createSchemaValidator } = require("./schema-validator");
 
 const createDefinitionRefResolver = (opts = {}) => {
   return new DefinitionRefResolver(opts);
@@ -21,7 +19,11 @@ class DefinitionRefResolver extends InfoHandler {
 
   set schema(schema) {
     this.validateSchema(schema);
-    this.schema = schema;
+    this._schema = schema;
+  }
+
+  get schema() {
+    return this._schema;
   }
 
   get wasCacheHit() {

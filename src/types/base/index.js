@@ -1,37 +1,41 @@
 const { InfoHandler } = require("../info");
 const { $default } = require("../default");
-const {
-  createKeyMaker,
-  createDispatcher,
-  createResultHandler
-} = require("./result");
+const { createKeyMaker, createResultHandler } = require("./result");
+const { createDispatcher } = require("./dispatcher");
 const { createReferenceResolver } = require("./reference");
 const { createTypeHandler } = require("./type-handler");
+const { createEntryObj } = require("./entry");
 
 class MappingBaseType extends InfoHandler {
   constructor(opts = {}) {
     super(opts.config);
-    const { parentName, key, value = {}, result, config = {} } = opts;
+    const { parentName, key, value = {} } = opts;
+    let { config } = opts;
     this.parentName = parentName;
     this.schema = config.schema;
     this.key = key;
-
-    this.value = this.resolveValueObject(value);
-
     this.format = value.format;
-    this.result = result || config.resultObj || {};
-    this.visitedPaths = visitedPaths || config.visitedPaths || {};
+    this.result = config.resultObj || {};
+    this.visitedPaths = config.visitedPaths || {};
     this.config = {
       ...$default.config,
       ...config
     };
-
+    config = this.config;
     // TODO: make configurable by passing via config
     this.keyMaker = createKeyMaker({ key, parentName }, config);
+    const nestedKey = this.keyMaker.nestedKey;
+    this.entryObj = createEntryObj({ key, nestedKey }, config);
+    const entry = this.entryObj.entry;
     this.dispatcher = createDispatcher(config);
-    this.resultHandler = createResultHandler(config);
+    this.resultHandler = createResultHandler(
+      { entry, keyMaker: this.keyMaker },
+      config
+    );
     this.referenceResolver = createReferenceResolver(config);
     this.typeHandler = createTypeHandler({ typeName: this.typeName }, config);
+
+    this.value = this.resolve(value);
 
     this.nested = config.nested;
     this.nestingLv = config.nestingLv;
@@ -48,6 +52,10 @@ class MappingBaseType extends InfoHandler {
   convert() {
     this.createAndStoreResult();
     return this.createMappingResult();
+  }
+
+  createAndStoreResult() {
+    this.resultHandler.createAndStoreResult();
   }
 
   resolve(obj) {

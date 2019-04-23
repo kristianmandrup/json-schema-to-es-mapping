@@ -1,5 +1,5 @@
 const { isFunction } = require("../util");
-const { createDefinitionRefResolver } = require("../definition");
+const { createDefinitionRefResolver } = require("../reference");
 const createReferenceResolver = config => new ReferenceResolver(config);
 
 class ReferenceResolver {
@@ -8,7 +8,7 @@ class ReferenceResolver {
     const defResolverInst = createDefinitionRefResolver({ schema }, config);
     this.definitionResolver =
       config.definitionResolver ||
-      defResolverInst.resolveRefObject.bind(defResolverInst);
+      defResolverInst.refObjectFor.bind(defResolverInst);
   }
 
   // resolve using defintion ref

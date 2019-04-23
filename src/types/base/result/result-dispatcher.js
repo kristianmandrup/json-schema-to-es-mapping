@@ -1,4 +1,5 @@
 const { isFunction } = require("../../util");
+
 const createResultDispatcher = config => new ResultDispatcher(config);
 
 class ResultDispatcher {

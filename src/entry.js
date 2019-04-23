@@ -1,3 +1,4 @@
+const types = require("./types");
 const {
   toString,
   toNumber,
@@ -7,13 +8,15 @@ const {
   toDate,
   toNumericRange,
   toDateRange
-} = require("./types");
-// const { inspect } = require("util");
+} = types;
+const { InfoHandler } = require("./types/info");
+const { isFunction } = require("util");
 
 class SchemaEntryError extends Error {}
 
-class SchemaEntry {
+class SchemaEntry extends InfoHandler {
   constructor(obj, config = {}) {
+    super(config);
     const { parentName, key, value } = obj;
     this.parentName = parentName;
     this.key = key;
@@ -66,7 +69,19 @@ class SchemaEntry {
     }
     let foundValue;
     this.typeOrder.find(type => {
-      foundValue = this.types[type](this.obj, this.key);
+      const typeFn = this.types[type];
+      if (!typeFn) {
+        this.info("toEntry", `skipped ${type}`);
+        return false;
+      }
+      if (!isFunction(typeFn)) {
+        this.error("toEntry", `Invalid type function ${type}`, {
+          typeFn,
+          type,
+          typeOrder: this.typeOrder
+        });
+      }
+      foundValue = typeFn(this.obj, this.key);
       return foundValue;
     });
     return foundValue || this.defaultTypeHandler(config);

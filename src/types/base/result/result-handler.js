@@ -1,9 +1,19 @@
 const createResultHandler = config => new ResultHandler(config);
+const { createKeyMaker } = require("./key-maker");
 
 class ResultHandler {
-  constructor(config = {}) {
+  constructor(opts = {}, config = {}) {
     this.shouldSetResult = config.shouldSetResult || this.shouldSetResult;
-    this.resultKey = config.resultKey || this.resultKey;
+    this.keyMaker =
+      opts.keyMaker || config.keyMaker || createKeyMaker(opts, config);
+    this.resultKey = config.resultKey || this.calcResultKey.bind(this);
+    this.entry = opts.entry;
+    this.dispatcher = opts.dispatcher || config.dispatcher;
+    this.result = config.resultObj || {};
+  }
+
+  calcResultKey() {
+    return this.keyMaker.resultKey;
   }
 
   shouldSetResult() {
@@ -41,12 +51,17 @@ class ResultHandler {
     this.dispatch();
   }
 
+  dispatch() {
+    if (!this.dispatcher) return;
+    this.dispatcher.dispatch(this.resolvedResult);
+  }
+
   createMappingResult() {
     return this.resolvedResult;
   }
 
   createAndStoreResult() {
-    if (this.shouldSetResult(this)) {
+    if (this.shouldSetResult(this.resolvedResult)) {
       const result = this.resolvedResult;
       this.setResult(result);
     }
