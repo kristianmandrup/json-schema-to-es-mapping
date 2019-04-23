@@ -1,4 +1,5 @@
 const { MappingBase } = require("../base");
+const { isString } = require("../util");
 
 const short = props => props.lat && (props.lng || props.long);
 
@@ -9,7 +10,7 @@ const hasNumericItem = (items, index) => items[index].type === "number";
 const isPointArray = obj =>
   obj.type === "array" && hasNumericItem(items, 0) && hasNumericItem(items, 1);
 
-const isPointType = obj => isPointArray(obj);
+const isPointType = obj => isPointArray(obj) || isString(obj.type);
 
 const location = props => props.location && isPointType(props.location);
 

@@ -11,6 +11,7 @@ class Reference {
     this.visitedPaths = config.visitedPaths || {};
     this.refValidator = createRefValidator(config);
     this.hits = config.hits || {};
+    this.wasCacheHit = false;
   }
 
   get state() {
@@ -42,6 +43,7 @@ class Reference {
   get referenceFromCache() {
     const hit = this.visitedPaths[this.cacheKey];
     if (!hit) return;
+    this.wasCacheHit = true;
     this.hits[this.reference] = (this.hits[this.reference] || 0) + 1;
     return hit;
   }

@@ -24,6 +24,16 @@ class DefinitionRefResolver extends InfoHandler {
     this.schema = schema;
   }
 
+  get wasCacheHit() {
+    if (!this.ref) {
+      this.error(
+        "wasCacheHit",
+        "No reference has been resolved. Call refObjectFor(reference)"
+      );
+    }
+    return this.ref.wasCacheHit;
+  }
+
   refObjectFor(reference) {
     this.validateRef(reference);
     this.ref = createReference(reference);

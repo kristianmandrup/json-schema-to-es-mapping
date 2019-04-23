@@ -86,12 +86,24 @@ describe("Reference", () => {
       expect(driverObj).toBe(driverAgainObj);
     });
 
+    test("first driver ref was not cache hit", () => {
+      expect(r1.wasCacheHit).toBeFalsy();
+    });
+
+    test("car ref was not cache hit", () => {
+      expect(r2.wasCacheHit).toBeFalsy();
+    });
+
     test("car ref has 0 hits", () => {
       expect(r3.hits[refs.car]).toBeUndefined();
     });
 
     test("driver ref has 1 hits", () => {
       expect(r3.hits[refs.driver]).toBe(1);
+    });
+
+    test("driver ref was cache hit", () => {
+      expect(r3.wasCacheHit).toBeTruthy();
     });
   });
 });

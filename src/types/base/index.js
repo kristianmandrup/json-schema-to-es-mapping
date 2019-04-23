@@ -5,6 +5,8 @@ const {
   createDispatcher,
   createResultHandler
 } = require("./result");
+const { createReferenceResolver } = require("./reference");
+const { createTypeHandler } = require("./type-handler");
 
 class MappingBaseType extends InfoHandler {
   constructor(opts = {}) {
@@ -24,12 +26,19 @@ class MappingBaseType extends InfoHandler {
       ...config
     };
 
+    // TODO: make configurable by passing via config
     this.keyMaker = createKeyMaker({ key, parentName }, config);
     this.dispatcher = createDispatcher(config);
     this.resultHandler = createResultHandler(config);
+    this.referenceResolver = createReferenceResolver(config);
+    this.typeHandler = createTypeHandler({ typeName: this.typeName }, config);
 
     this.nested = config.nested;
     this.nestingLv = config.nestingLv;
+  }
+
+  get typeName() {
+    this.error("typeName must be specified by subclass");
   }
 
   dispatch() {
@@ -41,8 +50,14 @@ class MappingBaseType extends InfoHandler {
     return this.createMappingResult();
   }
 
+  resolve(obj) {
+    const resolved = this.referenceResolver.resolve(obj);
+    this.wasCacheHit = this.referenceResolver.wasCacheHit;
+    return resolved;
+  }
+
   get type() {
-    return this.configType || this.baseType;
+    return this.typeHandler.type || this.baseType;
   }
 
   message() {

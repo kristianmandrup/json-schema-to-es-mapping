@@ -1,6 +1,5 @@
 const { MappingBaseType } = require("./base");
 const { isFunction, isObject, isObjectType } = require("./util");
-const { createDefinitionRefResolver } = require("./reference");
 
 function toObject(obj) {
   return isObject(obj) && MappingObject.create(obj).convert();
@@ -28,9 +27,13 @@ class MappingObject extends MappingBaseType {
   }
 
   createMappingResult() {
-    return this.hasProperties
+    return this.shouldBuildValueMapping
       ? this.buildObjectValueMapping()
       : this.defaultObjectValueMapping;
+  }
+
+  get shouldBuildValueMapping() {
+    return this.hasProperties && !this.wasCacheHit;
   }
 
   createResult() {
@@ -73,6 +76,7 @@ class MappingObject extends MappingBaseType {
 
   get objectValue() {
     return {
+      wasCacheHit: this.wasCacheHit,
       parentName: this.key,
       typeName: this.resolvedTypeName,
       ...this.value

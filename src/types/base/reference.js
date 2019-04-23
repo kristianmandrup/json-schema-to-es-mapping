@@ -24,7 +24,9 @@ class ReferenceResolver {
       );
     }
     const reference = obj.$ref;
-    return definitionResolver(reference);
+    const resolved = definitionResolver(reference);
+    this.wasCacheHit = resolved.wasCacheHit;
+    return resolved;
   }
 }
 

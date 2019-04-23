@@ -1,8 +1,9 @@
 const createReferenceResolver = config => new ReferenceResolver(config);
 
 class TypeHandler extends Info {
-  constructor({ typeName }, config) {
+  constructor({ typeName, entry }, config) {
     this.typeName = typeName;
+    this.entry = entry || {};
     super(config);
   }
 
@@ -10,18 +11,12 @@ class TypeHandler extends Info {
     this.error("default mapping type must be specified by subclass");
   }
 
-  get typeName() {
-    this.error("typeName must be specified by subclass");
-  }
-
-  get types() {
+  get typeMap() {
     return this.config.typeMap || {};
   }
 
-  get entry() {}
-
-  get configType() {
-    return (this.entry || {}).type || this.metaType;
+  get type() {
+    return this.entry.type || this.metaType;
   }
 
   metaType() {
