@@ -4,8 +4,8 @@ const { createReference } = require("./reference");
 const { createRefValidator } = require("./ref-validator");
 const { createSchemaValidator } = require("./schema-validator");
 
-const createDefinitionRefResolver = (opts = {}) => {
-  return new DefinitionRefResolver(opts);
+const createDefinitionRefResolver = (opts = {}, config) => {
+  return new DefinitionRefResolver(opts, config);
 };
 
 class DefinitionRefResolver extends InfoHandler {

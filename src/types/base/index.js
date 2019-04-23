@@ -25,6 +25,7 @@ class MappingBaseType extends InfoHandler {
     // TODO: make configurable by passing via config
     this.keyMaker = createKeyMaker({ key, parentName }, config);
     const nestedKey = this.keyMaker.nestedKey;
+
     this.entryObj = createEntryObj({ key, nestedKey }, config);
     const entry = this.entryObj.entry;
     this.dispatcher = createDispatcher(config);
@@ -32,11 +33,10 @@ class MappingBaseType extends InfoHandler {
       { entry, keyMaker: this.keyMaker },
       config
     );
-    this.referenceResolver = createReferenceResolver(config);
+    this.referenceResolver = createReferenceResolver(opts, config);
     this.typeHandler = createTypeHandler({ typeName: this.typeName }, config);
 
     this.value = this.resolve(value);
-
     this.nested = config.nested;
     this.nestingLv = config.nestingLv;
   }

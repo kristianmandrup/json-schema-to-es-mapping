@@ -1,11 +1,11 @@
 const { isFunction } = require("../util");
 const { createDefinitionRefResolver } = require("../reference");
-const createReferenceResolver = config => new ReferenceResolver(config);
+const createReferenceResolver = (opts, config) =>
+  new ReferenceResolver(opts, config);
 
 class ReferenceResolver {
   constructor(opts, config = {}) {
-    const { schema } = opts;
-    const defResolverInst = createDefinitionRefResolver({ schema }, config);
+    const defResolverInst = createDefinitionRefResolver(opts, config);
     this.definitionResolver =
       config.definitionResolver ||
       defResolverInst.refObjectFor.bind(defResolverInst);

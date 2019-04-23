@@ -13,17 +13,21 @@ describe("ResultHandler", () => {
   };
   const handler = create({ key }, config);
 
+  describe("resultKeyName", () => {
+    const keyName = key;
+    test("is key name", () => {
+      expect(handler.resultKeyName).toEqual(keyName);
+    });
+  });
+
   describe("calcResultKey", () => {
     const madeKey = key;
-    test("should set", () => {
+    test("is key name", () => {
       expect(handler.calcResultKey()).toEqual(madeKey);
     });
   });
 
   describe("resultMap", () => {
-    const obj = {
-      name: "x"
-    };
     test("should be resultMap", () => {
       expect(handler.resultMap).toEqual(resultMap);
     });
@@ -33,20 +37,21 @@ describe("ResultHandler", () => {
     const obj = {
       name: "x"
     };
-    test("should set", () => {
+    test("is expected obj", () => {
       expect(handler.resultObj).toEqual(obj);
     });
   });
 
   describe("shouldSetResult", () => {
-    test("should set", () => {
+    test("is true", () => {
       expect(handler.shouldSetResult).toBeTruthy();
     });
   });
 
   describe("createAndStoreResult", () => {
-    test("should store", () => {
+    test("should store resolvedResult", () => {
       handler.createAndStoreResult();
+      expect(this.resultObj).toEqual(this.resolvedResult);
     });
   });
 });

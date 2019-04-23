@@ -29,6 +29,7 @@ class Reference {
   }
 
   get normalizedRef() {
+    this.validateRef();
     return this.reference.replace(/^#\//, "");
   }
 
