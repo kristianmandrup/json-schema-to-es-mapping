@@ -1,18 +1,35 @@
+const { isStringType } = require("../../util");
 const { InfoHandler } = require("../../info");
-const createKeyMaker = config => new KeyMaker(config);
+const createKeyMaker = (opts, config) => new KeyMaker(opts, config);
 
 class KeyMaker extends InfoHandler {
-  constructor(opts, config = {}) {
+  constructor(opts = {}, config = {}) {
     super(config);
     const { key, parentName } = opts;
     this.nameSeparator = config.nameSeparator || this.defaultNameSeparator;
     this.parentName = parentName;
     this.key = key;
-    this.nestedKey = config.nestedKey || this.calcNestedKey.bind(this);
+  }
+
+  set key(key) {
+    if (!isStringType(key)) {
+      this.error("set key", `Invalid or missing key ${key}`);
+    }
+    this._key = key;
+  }
+
+  get key() {
+    return this._key;
   }
 
   get defaultNameSeparator() {
     return "_";
+  }
+
+  get nestedKey() {
+    return this.config.nestedKey
+      ? this.config.nestedKey()
+      : this.calcNestedKey();
   }
 
   get resultKey() {
@@ -20,7 +37,9 @@ class KeyMaker extends InfoHandler {
   }
 
   calcNestedKey() {
-    return [this.parentName, this.key].join(this.nameSeparator);
+    return this.parentName
+      ? [this.parentName, this.key].join(this.nameSeparator)
+      : this.key;
   }
 }
 
