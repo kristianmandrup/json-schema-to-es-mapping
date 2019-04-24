@@ -1,4 +1,7 @@
 const { MappingBaseType } = require("./base");
+const { safeToInt } = require("./util");
+
+const INT_MAX = Math.pow(2, 31);
 
 class MappingRange extends MappingBaseType {
   constructor(opts) {
@@ -27,6 +30,22 @@ class MappingRange extends MappingBaseType {
 
   get minimum() {
     return this.value.minimum;
+  }
+
+  get maxExcl() {
+    return safeToInt(this.exclusiveMaximum, INT_MAX - 1);
+  }
+
+  get maxIncl() {
+    return safeToInt(this.maximum, INT_MAX - 1);
+  }
+
+  get minExcl() {
+    return safeToInt(this.exclusiveMinimum, 0);
+  }
+
+  get minIncl() {
+    return safeToInt(this.minimum, 0);
   }
 
   inMinRangeExcl(min) {

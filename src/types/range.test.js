@@ -36,15 +36,23 @@ describe("MappingRange", () => {
     });
 
     test("inMinRangeIncl", () => {
-      expect(range.inMinRangeIncl(3)).toBeTruthy();
+      expect(range.inMinRangeIncl(3)).toBeFalsy();
     });
 
     test("inMaxRangeIncl", () => {
       expect(range.inMaxRangeIncl(3)).toBeTruthy();
     });
 
+    test("inMaxRangeExcl", () => {
+      expect(range.inMaxRangeExcl(3)).toBeFalsy();
+    });
+
+    test("inMinRangeExcl", () => {
+      expect(range.inMinRangeExcl(3)).toBeFalsy();
+    });
+
     test("minFn", () => {
-      expect(range.minFn(3)).toBeTruthy();
+      expect(range.minFn(3)).toBeFalsy();
     });
 
     test("maxFn", () => {

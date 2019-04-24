@@ -29,22 +29,6 @@ class MappingNumber extends MappingRange {
     );
   }
 
-  get maxExcl() {
-    return safeToInt(this.exclusiveMaximum, INT_MAX - 1);
-  }
-
-  get maxIncl() {
-    return safeToInt(this.maximum, INT_MAX - 1);
-  }
-
-  get minExcl() {
-    return safeToInt(this.value.exclusiveMinimum, 0);
-  }
-
-  get minIncl() {
-    return safeToInt(this.value.minimum, 0);
-  }
-
   get double() {
     return this.isDouble && "double";
   }
