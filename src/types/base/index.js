@@ -54,6 +54,10 @@ class MappingBaseType extends InfoHandler {
     return this.createMappingResult();
   }
 
+  createMappingResult() {
+    return this.resultHandler.createMappingResult();
+  }
+
   createAndStoreResult() {
     this.resultHandler.createAndStoreResult();
   }

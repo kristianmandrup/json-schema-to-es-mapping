@@ -9,7 +9,7 @@ const INT_MAX = Math.pow(2, 31);
 
 class MappingNumber extends MappingRange {
   get baseType() {
-    return this._types.number || "float";
+    return (this.typeMap || {}).number || "float";
   }
 
   get typeName() {
@@ -150,6 +150,7 @@ class MappingNumber extends MappingRange {
 }
 
 module.exports = {
+  isNumber,
   toNumber,
   MappingNumber
 };
