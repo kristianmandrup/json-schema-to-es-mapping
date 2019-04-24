@@ -20,6 +20,7 @@ class MappingBoolean extends MappingBaseType {
 }
 
 module.exports = {
+  isBoolean,
   toBoolean,
   MappingBoolean
 };
