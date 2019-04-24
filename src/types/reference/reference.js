@@ -1,10 +1,13 @@
+const { InfoHandler } = require("../info");
 const dotProp = require("dot-prop");
 const { createRefValidator } = require("./ref-validator");
 
 const createReference = (opts, config) => new Reference(opts, config);
 
-class Reference {
-  constructor({ schema, reference }, config = {}) {
+class Reference extends InfoHandler {
+  constructor(opts = {}, config = {}) {
+    super(config);
+    const { schema, reference } = opts;
     this.config = config;
     this.reference = reference;
     this.schema = schema;

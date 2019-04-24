@@ -13,15 +13,19 @@ class InfoHandler {
     return this.message[errKey] || "error";
   }
 
+  captionedMsg(name, msg) {
+    return `[${this.constructor.name}:${name}] ${msg}`;
+  }
+
   info(name, msg, data) {
     if (!this.logging) return;
-    const infoMsg = `[${name}] ${msg}`;
+    const infoMsg = this.captionedMsg(name, msg);
     const log = this.log;
     data ? log(infoMsg, data) : log(infoMsg);
   }
 
   error(name, msg, data) {
-    const errMsg = `[${name}] ${msg}`;
+    const errMsg = this.captionedMsg(name, msg);
     this.info(name, msg, data);
     this.onError(errMsg, data);
     throw new ConvertMappingSchemaError(errMsg);

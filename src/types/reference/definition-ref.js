@@ -38,7 +38,7 @@ class DefinitionRefResolver extends InfoHandler {
 
   refObjectFor(reference) {
     this.validateRef(reference);
-    this.ref = createReference(reference);
+    this.ref = createReference({ reference, schema: this.schema }, this.config);
     return this.ref.refObject;
   }
 

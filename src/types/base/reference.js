@@ -6,25 +6,24 @@ const createReferenceResolver = (opts, config) =>
 class ReferenceResolver {
   constructor(opts, config = {}) {
     const defResolverInst = createDefinitionRefResolver(opts, config);
-    this.definitionResolver =
-      config.definitionResolver ||
-      defResolverInst.refObjectFor.bind(defResolverInst);
+    this.refResolver =
+      config.refResolver || defResolverInst.refObjectFor.bind(defResolverInst);
   }
 
   // resolve using defintion ref
   resolve(obj) {
     if (!obj.$ref) return obj;
-    const { definitionResolver } = this;
-    if (!isFunction(definitionResolver)) {
+    const { refResolver } = this;
+    if (!isFunction(refResolver)) {
       this.error(
-        `Invalid definitionResolver, must be a function, was ${typeof definitionResolver}`,
+        `Invalid refResolver, must be a function, was ${typeof refResolver}`,
         {
-          definitionResolver
+          refResolver
         }
       );
     }
     const reference = obj.$ref;
-    const resolved = definitionResolver(reference);
+    const resolved = refResolver(reference);
     this.wasCacheHit = resolved.wasCacheHit;
     return resolved;
   }

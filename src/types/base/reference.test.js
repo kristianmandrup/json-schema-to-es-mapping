@@ -33,15 +33,19 @@ describe("ReferenceResolver", () => {
 
   describe("no schema", () => {
     const reference = "#/definitions/Project";
-    const opts = {};
-    const $reference = create(opts, config);
+    const opts = {
+      reference
+    };
 
     const obj = {
       $ref: "#/definitions/Project"
     };
 
     test("throws", () => {
-      expect(() => $reference.resolve(obj)).toThrow();
+      expect(() => {
+        const $reference = create(opts, config);
+        $reference.resolve(obj);
+      }).toThrow();
     });
   });
 
