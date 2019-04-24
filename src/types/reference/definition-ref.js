@@ -14,7 +14,7 @@ class DefinitionRefResolver extends InfoHandler {
     this.schemaValidator = createSchemaValidator(config);
     this.refValidator = createRefValidator(config);
     this.visitedPaths = config.visitedPaths || {};
-    this.schema = schema;
+    this.schema = schema || config.schema;
   }
 
   set schema(schema) {

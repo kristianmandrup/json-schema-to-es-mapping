@@ -117,6 +117,7 @@ class MappingArray extends MappingBaseType {
 }
 
 module.exports = {
+  isArray,
   toArray,
   MappingArray
 };

@@ -31,7 +31,7 @@ describe("isBoolean", () => {
   });
 });
 
-describe.only("Mappingboolean", () => {
+describe.only("MappingBoolean", () => {
   const obj = objFor();
   const mapper = MappingBoolean.create(obj);
 

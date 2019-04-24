@@ -1,6 +1,6 @@
 const { MappingBase } = require("./base");
 
-const isIpKey = name => ["url", "uri"].includes(name);
+const isIpKey = name => [/^ip/].find(expr => expr.test(name));
 
 const isIp = (obj, key) => {
   return isString(obj.type) && isIpKey(key);

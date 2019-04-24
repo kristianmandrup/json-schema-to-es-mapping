@@ -20,6 +20,7 @@ class MappingDate extends MappingBaseType {
 }
 
 module.exports = {
+  isDate,
   toDate,
   MappingDate
 };

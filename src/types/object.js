@@ -93,6 +93,7 @@ class MappingObject extends MappingBaseType {
 }
 
 module.exports = {
+  isObject,
   toObject,
   MappingObject
 };

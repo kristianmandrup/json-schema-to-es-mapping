@@ -31,7 +31,7 @@ describe("isString", () => {
   });
 });
 
-describe.only("Mappingstring", () => {
+describe.only("MappingString", () => {
   const obj = objFor();
   const mapper = MappingString.create(obj);
 

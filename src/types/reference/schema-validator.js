@@ -9,7 +9,7 @@ class SchemaValidator extends InfoHandler {
   }
 
   validate(schema) {
-    !schema && this.error("validate", "Missing schema");
+    !schema && this.error("validate", "Missing schema", { schema });
     !isObjectType(schema) &&
       this.error(
         "validate",
