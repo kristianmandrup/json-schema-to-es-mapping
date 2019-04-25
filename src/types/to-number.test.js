@@ -41,8 +41,52 @@ describe("isNumber", () => {
 });
 
 describe.only("MappingNumber", () => {
-  const obj = objFor({ min: -127 });
+  const obj = objFor({ min: -126 });
   const mapper = MappingNumber.create(obj);
+
+  describe("numType is byte", () => {
+    test("false", () => {
+      expect(mapper.numType === "byte").toBeFalsy();
+    });
+  });
+
+  describe("minFn(-128)", () => {
+    test("true", () => {
+      expect(mapper.minFn(-128)).toBeTruthy();
+    });
+  });
+
+  describe("maxFn(127)", () => {
+    test("true", () => {
+      expect(mapper.maxFn(127)).toBeTruthy();
+    });
+  });
+
+  describe("inRange -128, 127", () => {
+    test("true", () => {
+      const min = -(127 + 1);
+      const max = 127;
+      expect(mapper.inRange(min, max)).toBeTruthy();
+    });
+  });
+
+  describe("inPosNegRange(127)", () => {
+    test("true", () => {
+      expect(mapper.inPosNegRange(127)).toBeTruthy();
+    });
+  });
+
+  describe("isByte", () => {
+    test("- min: -127", () => {
+      expect(mapper.isByte).toBeTruthy();
+    });
+  });
+
+  describe("byte", () => {
+    test("- min: -127", () => {
+      expect(mapper.byte).toEqual("byte");
+    });
+  });
 
   describe("byte", () => {
     test("- min: -127", () => {

@@ -35,7 +35,8 @@ function stringify(obj) {
 
 function safeToFloat(num, defaultValue = 1) {
   try {
-    return Number.parseFloat(num);
+    const parsed = Number.parseFloat(num);
+    return Number.isNaN(parsed) ? defaultValue : parsed;
   } catch (err) {
     return defaultValue;
   }
@@ -43,7 +44,8 @@ function safeToFloat(num, defaultValue = 1) {
 
 function safeToInt(num, defaultValue = 1) {
   try {
-    return Number.parseInt(num);
+    const parsed = Number.parseInt(num);
+    return Number.isNaN(parsed) ? defaultValue : parsed;
   } catch (err) {
     return defaultValue;
   }
