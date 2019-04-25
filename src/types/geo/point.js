@@ -31,6 +31,10 @@ class MappingGeoLocation extends MappingBase {
   get baseType() {
     return "geo_point";
   }
+
+  create(obj) {
+    return new MappingGeoLocation(obj).init();
+  }
 }
 
 module.exports = {

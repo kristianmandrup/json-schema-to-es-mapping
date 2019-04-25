@@ -15,7 +15,7 @@ class MappingDate extends MappingBaseType {
   }
 
   static create(obj) {
-    return new MappingDate(obj);
+    return new MappingDate(obj).init();
   }
 }
 

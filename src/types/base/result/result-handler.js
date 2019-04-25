@@ -6,10 +6,15 @@ class ResultHandler {
     this.shouldSetResult = config.shouldSetResult || this.shouldSetResult;
     this.keyMaker =
       opts.keyMaker || config.keyMaker || createKeyMaker(opts, config);
+    this.typeHandler = opts.typeHandler || config.typeHandler;
     this.resultKey = config.resultKey || this.calcResultKey.bind(this);
     this.entry = opts.entry;
     this.dispatcher = opts.dispatcher || config.dispatcher;
     this.resultMap = config.resultMap || {};
+  }
+
+  get type() {
+    return this.typeHandler.type;
   }
 
   calcResultKey() {

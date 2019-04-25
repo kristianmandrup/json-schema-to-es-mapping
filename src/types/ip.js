@@ -20,7 +20,7 @@ class MappingIp extends MappingBase {
   }
 
   static create(obj) {
-    return new MappingIp(obj);
+    return new MappingIp(obj).init();
   }
 }
 

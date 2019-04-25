@@ -11,6 +11,7 @@ class MappingBaseType extends InfoHandler {
     super(opts.config);
     const { parentName, key, value = {} } = opts;
     let { config } = opts;
+    this.opts = opts;
     this.parentName = parentName;
     this.schema = config.schema;
     this.key = key;
@@ -22,23 +23,33 @@ class MappingBaseType extends InfoHandler {
       ...config
     };
     config = this.config;
+    this.value = value;
     // TODO: make configurable by passing via config
+    this.nested = config.nested;
+    this.nestingLv = config.nestingLv;
+  }
+
+  init() {
+    const { key, parentName, config, opts, value } = this;
     this.keyMaker = createKeyMaker({ key, parentName }, config);
     const nestedKey = this.keyMaker.nestedKey;
 
     this.entryObj = createEntryObj({ key, nestedKey }, config);
     const entry = this.entryObj.entry;
     this.dispatcher = createDispatcher(config);
+
+    const calcType = () => this.type;
+    const typeName = this.typeName;
+    this.typeHandler = createTypeHandler({ typeName, calcType }, config);
+
     this.resultHandler = createResultHandler(
-      { entry, keyMaker: this.keyMaker },
+      { entry, keyMaker: this.keyMaker, typeHandler: this.typeHandler },
       config
     );
     this.referenceResolver = createReferenceResolver(opts, config);
-    this.typeHandler = createTypeHandler({ typeName: this.typeName }, config);
 
     this.value = this.resolve(value);
-    this.nested = config.nested;
-    this.nestingLv = config.nestingLv;
+    return this;
   }
 
   get typeName() {

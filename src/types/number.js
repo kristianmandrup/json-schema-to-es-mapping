@@ -129,7 +129,7 @@ class MappingNumber extends MappingRange {
   }
 
   static create(obj) {
-    return new MappingNumber(obj);
+    return new MappingNumber(obj).init();
   }
 }
 

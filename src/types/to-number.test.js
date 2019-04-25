@@ -15,6 +15,7 @@ const objFor = opts => {
 
 const number = opts => {
   const $opts = objFor(opts);
+  console.log({ $opts });
   return toNumber($opts);
 };
 
@@ -41,7 +42,7 @@ describe("isNumber", () => {
 });
 
 describe.only("MappingNumber", () => {
-  const obj = objFor({ min: -126 });
+  const obj = objFor({ min: -127 });
   const mapper = MappingNumber.create(obj);
 
   describe("numType is byte", () => {
@@ -85,6 +86,29 @@ describe.only("MappingNumber", () => {
   describe("byte", () => {
     test("- min: -127", () => {
       expect(mapper.byte).toEqual("byte");
+    });
+  });
+
+  describe("configType", () => {
+    test("- min: -127", () => {
+      expect(mapper.configType).toBeUndefined();
+    });
+  });
+
+  describe("formatType", () => {
+    test("- min: -127", () => {
+      expect(mapper.formatType).toBeUndefined();
+    });
+  });
+
+  describe("calcNumericType", () => {
+    test("- min: -127", () => {
+      expect(mapper.calcNumericType).toEqual("byte");
+    });
+  });
+  describe("baseType", () => {
+    test("- min: -127", () => {
+      expect(mapper.baseType).toEqual("float");
     });
   });
 

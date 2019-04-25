@@ -15,7 +15,7 @@ class MappingString extends MappingBaseType {
   }
 
   static create(obj) {
-    return new MappingString(obj);
+    return new MappingString(obj).init();
   }
 }
 

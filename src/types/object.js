@@ -23,7 +23,7 @@ class MappingObject extends MappingBaseType {
   }
 
   static create(obj) {
-    return new MappingObject(obj);
+    return new MappingObject(obj).init();
   }
 
   createMappingResult() {

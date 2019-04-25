@@ -15,7 +15,7 @@ class MappingBoolean extends MappingBaseType {
   }
 
   static create(obj) {
-    return new MappingBoolean(obj);
+    return new MappingBoolean(obj).init();
   }
 }
 
