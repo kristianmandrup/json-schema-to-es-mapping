@@ -14,16 +14,16 @@ class TypeHandler extends InfoHandler {
     this.error("default mapping type must be specified by subclass");
   }
 
+  get typeMapValue() {
+    return (this.typeMap || {})[this.typeName];
+  }
+
   get typeMap() {
     return this.config.typeMap || {};
   }
 
   get type() {
-    return this.entry.type || this.metaType;
-  }
-
-  get metaType() {
-    return this.typeMap[this.typeName];
+    return this.entry.type || this.typeMapValue;
   }
 }
 

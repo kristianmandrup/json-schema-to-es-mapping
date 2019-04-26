@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "dot-prop": "^5.0.0",
-    "inflection": "^1.12.0"
+    "inflection": "^1.12.0",
+    "merge": "^1.2.1"
   }
 }

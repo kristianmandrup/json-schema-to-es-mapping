@@ -1,3 +1,4 @@
+const merge = require("merge");
 const { InfoHandler } = require("../info");
 const { $default } = require("../default");
 const { createKeyMaker, createResultHandler } = require("./result");
@@ -18,10 +19,7 @@ class MappingBaseType extends InfoHandler {
     this.format = value.format;
     this.result = config.resultObj || {};
     this.visitedPaths = config.visitedPaths || {};
-    this.config = {
-      ...$default.config,
-      ...config
-    };
+    this.config = merge.recursive(true, $default.config, config);
     config = this.config;
     this.value = value;
     // TODO: make configurable by passing via config
@@ -52,6 +50,14 @@ class MappingBaseType extends InfoHandler {
     return this;
   }
 
+  get type() {
+    return this.typeHandler.type || this.baseType;
+  }
+
+  get typeMap() {
+    return this.typeHandler.typeMap || {};
+  }
+
   get typeName() {
     this.error("typeName must be specified by subclass");
   }
@@ -77,10 +83,6 @@ class MappingBaseType extends InfoHandler {
     const resolved = this.referenceResolver.resolve(obj);
     this.wasCacheHit = this.referenceResolver.wasCacheHit;
     return resolved;
-  }
-
-  get type() {
-    return this.baseType;
   }
 
   message() {

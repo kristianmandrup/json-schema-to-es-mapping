@@ -7,7 +7,7 @@ function toString(obj) {
 
 class MappingString extends MappingBaseType {
   get baseType() {
-    return (this.typeMap || {}).string || "keyword";
+    return "keyword";
   }
 
   get typeName() {

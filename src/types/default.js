@@ -1,16 +1,14 @@
 const $default = {
   config: {
-    _meta_: {
-      types: {
-        string: "keyword",
-        number: "float",
-        object: "object",
-        array: "nested",
-        boolean: "boolean",
-        date: "date"
-      }
+    typeMap: {
+      string: "keyword",
+      number: "float",
+      object: "object",
+      array: "nested",
+      boolean: "boolean",
+      date: "date"
     },
-    fields: {
+    fieldMap: {
       name: {
         type: "keyword"
       },
