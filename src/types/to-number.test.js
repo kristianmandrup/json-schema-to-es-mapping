@@ -5,6 +5,9 @@ const create = opts => ({
   ...opts
 });
 
+const INT_MAX = Math.pow(2, 31);
+const NEG_INT_MAX = -(INT_MAX + 1);
+
 const config = {};
 const schema = {};
 
@@ -15,17 +18,7 @@ const objFor = opts => {
 
 const number = opts => {
   const $opts = objFor(opts);
-  console.log({ $opts });
   return toNumber($opts);
-};
-
-const result = {
-  byte: {
-    type: "byte"
-  },
-  shirt: {
-    type: "short"
-  }
 };
 
 describe("isNumber", () => {
@@ -41,158 +34,240 @@ describe("isNumber", () => {
   });
 });
 
-describe.only("MappingNumber", () => {
-  const obj = objFor({ min: -127 });
-  const mapper = MappingNumber.create(obj);
+describe("MappingNumber", () => {
+  describe("min: -127", () => {
+    const obj = objFor({ min: -127 });
+    const mapper = MappingNumber.create(obj);
 
-  describe("numType is byte", () => {
-    test("false", () => {
-      expect(mapper.numType === "byte").toBeFalsy();
+    describe("numType", () => {
+      test("is not byte", () => {
+        expect(mapper.numType === "byte").toBeFalsy();
+      });
     });
-  });
 
-  describe("minFn(-128)", () => {
-    test("true", () => {
-      expect(mapper.minFn(-128)).toBeTruthy();
+    describe("minFn(-128)", () => {
+      test("true", () => {
+        expect(mapper.minFn(-128)).toBeTruthy();
+      });
     });
-  });
 
-  describe("maxFn(127)", () => {
-    test("true", () => {
-      expect(mapper.maxFn(127)).toBeTruthy();
+    describe("maxExcl", () => {
+      test("is INT_MAX", () => {
+        expect(mapper.maxExcl).toBe(INT_MAX - 1);
+      });
     });
-  });
 
-  describe("inRange -128, 127", () => {
-    test("true", () => {
-      const min = -(127 + 1);
-      const max = 127;
-      expect(mapper.inRange(min, max)).toBeTruthy();
+    describe("minExcl", () => {
+      test("is 0", () => {
+        expect(mapper.minExcl).toBe(-INT_MAX);
+      });
     });
-  });
 
-  describe("inPosNegRange(127)", () => {
-    test("true", () => {
-      expect(mapper.inPosNegRange(127)).toBeTruthy();
+    describe("maxFn(127)", () => {
+      test("true", () => {
+        expect(mapper.maxFn(127)).toBeFalsy();
+      });
     });
-  });
 
-  describe("isByte", () => {
-    test("- min: -127", () => {
-      expect(mapper.isByte).toBeTruthy();
+    describe("inMaxRangeIncl(127)", () => {
+      test("false", () => {
+        expect(mapper.inMaxRangeIncl(127)).toBeFalsy();
+      });
     });
-  });
 
-  describe("byte", () => {
-    test("- min: -127", () => {
-      expect(mapper.byte).toEqual("byte");
+    describe("inRange -128, 127", () => {
+      test("false", () => {
+        const min = -(127 + 1);
+        const max = 127;
+        expect(mapper.inRange(min, max)).toBeFalsy();
+      });
     });
-  });
 
-  describe("configType", () => {
-    test("- min: -127", () => {
-      expect(mapper.configType).toBeUndefined();
+    describe("inPosNegRange(127)", () => {
+      test("false", () => {
+        expect(mapper.inPosNegRange(127)).toBeFalsy();
+      });
     });
-  });
 
-  describe("formatType", () => {
-    test("- min: -127", () => {
-      expect(mapper.formatType).toBeUndefined();
+    describe("isByte", () => {
+      test("false", () => {
+        expect(mapper.isByte).toBeFalsy();
+      });
     });
-  });
 
-  describe("calcNumericType", () => {
-    test("- min: -127", () => {
-      expect(mapper.calcNumericType).toEqual("byte");
-    });
-  });
-  describe("baseType", () => {
-    test("- min: -127", () => {
-      expect(mapper.baseType).toEqual("float");
-    });
-  });
-
-  describe("byte", () => {
-    test("- min: -127", () => {
-      expect(mapper.type).toEqual("byte");
-    });
-  });
-});
-
-describe("number", () => {
-  describe("whole", () => {
     describe("byte", () => {
-      test.only("min: -127", () => {
-        expect(number({ min: -127 })).toEqual(result.byte);
-      });
-
-      test("max: 127", () => {
-        expect(number({ max: -127 })).toEqual(result.byte);
-      });
-
-      test("min: -127, max 128", () => {
-        expect(number({ min: -127, max: 128 })).toEqual(result.byte);
-      });
-      test("min: -128, max 127", () => {
-        expect(number({ min: -128, max: 127 })).not.toEqual(result.byte);
+      test("is false", () => {
+        expect(mapper.byte).toBeFalsy();
       });
     });
 
-    describe("short", () => {
-      test("min: -32767", () => {
-        expect(number({ min: -32767 })).toEqual(result.short);
-      });
-
-      test("max: 32767", () => {
-        expect(number({ max: -32767 })).toEqual(result.short);
-      });
-
-      test("min: -32767, max: 32768", () => {
-        expect(number({ min: -32767, max: 32768 })).toEqual(result.short);
-      });
-      test("min: -32768, max: 32767", () => {
-        expect(number({ min: -32768, max: 32767 })).not.toEqual(result.short);
+    describe("configType", () => {
+      test("is undefined", () => {
+        expect(mapper.configType).toBeUndefined();
       });
     });
 
-    describe("long", () => {
-      test("min: -99999", () => {
-        expect(number({ min: -99999 })).toEqual(result.long);
+    describe("formatType", () => {
+      test("is undefined", () => {
+        expect(mapper.formatType).toBeUndefined();
       });
-      test("max: 99999", () => {
-        expect(number({ max: 99999 })).toEqual(result.long);
+    });
+
+    describe("calcNumericType", () => {
+      test("is byte", () => {
+        expect(mapper.calcNumericType).toEqual("integer");
       });
-      test("min: -99999, max: 99999", () => {
-        expect(number({ min: -99999, max: 99999 })).toEqual(result.long);
+    });
+    describe("baseType", () => {
+      test("is float", () => {
+        expect(mapper.baseType).toEqual("float");
       });
     });
   });
 
-  describe("floating", () => {
-    describe("half-float", () => {
-      test("min: -99999", () => {
-        expect(number({ min: -99999 })).toEqual(result.halfFloat);
-      });
-      test("max: 99999", () => {
-        expect(number({ max: 99999 })).toEqual(result.halfFloat);
+  describe("max: 128", () => {
+    const obj = objFor({ max: 128 });
+    const mapper = MappingNumber.create(obj);
+
+    describe("minFn(-128)", () => {
+      test("true", () => {
+        expect(mapper.minFn(-128)).toBeFalsy();
       });
     });
 
-    describe("float", () => {
-      test("min: -99999", () => {
-        expect(number({ min: -99999 })).toEqual(result.float);
-      });
-      test("max: 99999", () => {
-        expect(number({ max: 99999 })).toEqual(result.float);
+    describe("maxFn(127)", () => {
+      test("false", () => {
+        expect(mapper.maxFn(127)).toBeFalsy();
       });
     });
 
-    describe("double", () => {
-      test("min: -99999", () => {
-        expect(number({ min: -99999 })).toEqual(result.double);
+    describe("inMaxRangeIncl(127)", () => {
+      test("false", () => {
+        expect(mapper.inMaxRangeIncl(127)).toBeFalsy();
       });
-      test("max: 99999", () => {
-        expect(number({ max: 99999 })).toEqual(result.double);
+    });
+
+    describe("inRange -128, 127", () => {
+      test("false", () => {
+        const min = -(127 + 1);
+        const max = 127;
+        expect(mapper.inRange(min, max)).toBeFalsy();
+      });
+    });
+
+    describe("inPosNegRange(127)", () => {
+      test("false", () => {
+        expect(mapper.inPosNegRange(127)).toBeFalsy();
+      });
+    });
+
+    describe("isByte", () => {
+      test("false", () => {
+        expect(mapper.isByte).toBeFalsy();
+      });
+    });
+
+    describe("type", () => {
+      test("not a byte", () => {
+        expect(mapper.type).not.toEqual("byte");
+      });
+    });
+  });
+
+  describe("min: -127, max: 127", () => {
+    const obj = objFor({ min: -127, max: 127 });
+    const mapper = MappingNumber.create(obj);
+
+    describe("minFn(-128)", () => {
+      test("true", () => {
+        expect(mapper.minFn(-128)).toBeTruthy();
+      });
+    });
+
+    describe("maxFn(127)", () => {
+      test("false", () => {
+        expect(mapper.maxFn(127)).toBeTruthy();
+      });
+    });
+
+    describe("inMaxRangeIncl(127)", () => {
+      test("true", () => {
+        expect(mapper.inMaxRangeIncl(127)).toBeTruthy();
+      });
+    });
+
+    describe("inRange -128, 127", () => {
+      test("true", () => {
+        const min = -(127 + 1);
+        const max = 127;
+        expect(mapper.inRange(min, max)).toBeTruthy();
+      });
+    });
+
+    describe("inPosNegRange(127)", () => {
+      test("true", () => {
+        expect(mapper.inPosNegRange(127)).toBeTruthy();
+      });
+    });
+
+    describe("isByte", () => {
+      test("true", () => {
+        expect(mapper.isByte).toBeTruthy();
+      });
+    });
+
+    describe("type", () => {
+      test("is a byte", () => {
+        expect(mapper.type).toEqual("byte");
+      });
+    });
+  });
+
+  describe("min: INT_MAX - 2", () => {
+    const obj = objFor({ min: INT_MAX - 2 });
+    const mapper = MappingNumber.create(obj);
+
+    describe("minFn(NEG_INT_MAX)", () => {
+      test("true", () => {
+        expect(mapper.minFn(NEG_INT_MAX)).toBeTruthy();
+      });
+    });
+
+    describe("maxFn(INT_MAX)", () => {
+      test("false", () => {
+        expect(mapper.maxFn(INT_MAX)).toBeTruthy();
+      });
+    });
+
+    describe("inMaxRangeIncl(INT_MAX)", () => {
+      test("true", () => {
+        expect(mapper.inMaxRangeIncl(INT_MAX)).toBeTruthy();
+      });
+    });
+
+    describe("inRange NEG_INT_MAX, INT_MAX", () => {
+      test("true", () => {
+        const min = NEG_INT_MAX;
+        const max = INT_MAX;
+        expect(mapper.inRange(min, max)).toBeTruthy();
+      });
+    });
+
+    describe("inPosNegRange(INT_MAX)", () => {
+      test("true", () => {
+        expect(mapper.inPosNegRange(INT_MAX)).toBeTruthy();
+      });
+    });
+
+    describe("isInteger", () => {
+      test("true", () => {
+        expect(mapper.isInteger).toBeTruthy();
+      });
+    });
+
+    describe("type", () => {
+      test("is a byte", () => {
+        expect(mapper.type).toEqual("integer");
       });
     });
   });

@@ -10,7 +10,13 @@ const schema = {};
 
 const objFor = (opts = {}) => {
   const value = create(opts);
-  return { key: "name", type: value.type, value, schema, config };
+  return {
+    key: "name",
+    type: value.type,
+    value,
+    schema,
+    config: opts.config || config
+  };
 };
 
 const string = opts => {
@@ -32,12 +38,28 @@ describe("isString", () => {
 });
 
 describe.only("MappingString", () => {
-  const obj = objFor();
-  const mapper = MappingString.create(obj);
-
   describe("type", () => {
-    test("default: is string", () => {
-      expect(mapper.type).toEqual("keyword");
+    describe("default", () => {
+      const obj = objFor();
+      const mapper = MappingString.create(obj);
+
+      test("is keyword", () => {
+        expect(mapper.type).toEqual("keyword");
+      });
+    });
+
+    describe("typeMap override: string -> text", () => {
+      const config = {
+        typeMap: {
+          string: "text"
+        }
+      };
+      const obj = objFor({ config });
+      const mapper = MappingString.create(obj);
+
+      test("is text", () => {
+        expect(mapper.type).toEqual("text");
+      });
     });
   });
 });

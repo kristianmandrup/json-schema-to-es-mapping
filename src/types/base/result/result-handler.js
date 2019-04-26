@@ -14,7 +14,7 @@ class ResultHandler {
   }
 
   get type() {
-    return this.typeHandler.type;
+    return this.typeHandler.calcType();
   }
 
   calcResultKey() {

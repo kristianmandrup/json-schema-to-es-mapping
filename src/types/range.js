@@ -17,19 +17,19 @@ class MappingRange extends MappingBaseType {
   }
 
   get exclusiveMaximum() {
-    return this.value.exclusiveMaximum;
+    return this.value.exclusiveMaximum || this.value.exclMax;
   }
 
   get maximum() {
-    return this.value.maximum;
+    return this.value.maximum || this.value.max;
   }
 
   get exclusiveMinimum() {
-    return this.value.exclusiveMinimum;
+    return this.value.exclusiveMinimum || this.value.exclMin;
   }
 
   get minimum() {
-    return this.value.minimum;
+    return this.value.minimum || this.value.min;
   }
 
   get maxExcl() {
@@ -41,11 +41,11 @@ class MappingRange extends MappingBaseType {
   }
 
   get minExcl() {
-    return safeToInt(this.exclusiveMinimum, 0);
+    return safeToInt(this.exclusiveMinimum, -INT_MAX);
   }
 
   get minIncl() {
-    return safeToInt(this.minimum, 0);
+    return safeToInt(this.minimum, -INT_MAX);
   }
 
   inMinRangeExcl(min) {
@@ -57,19 +57,19 @@ class MappingRange extends MappingBaseType {
   }
 
   inMaxRangeExcl(max) {
-    return this.maxExcl > max;
+    return this.maxExcl < max;
   }
 
   inMaxRangeIncl(max) {
-    return this.maxIncl >= max;
+    return this.maxIncl <= max;
   }
 
   inRange(min, max) {
-    return this.maxFn(max) && this.minFn(min);
+    return this.minFn(min) && this.maxFn(max);
   }
 
   outsideRange(min, max) {
-    return this.max >= max || this.min <= min;
+    return !this.inRange(min, max);
   }
 }
 

@@ -23,13 +23,22 @@ describe("TypeHandler", () => {
     }
   };
   const typeName = "string";
+
+  const calcType = () => "text";
+
   const entry = {
     type: "string"
   };
-  const handler = create({ typeName, entry }, config);
+  const handler = create({ typeName, entry, calcType }, config);
   describe("metaType", () => {
     test("string", () => {
       expect(handler.metaType).toEqual("keyword");
+    });
+  });
+
+  describe("calcType", () => {
+    test("string", () => {
+      expect(handler.calcType()).toEqual("text");
     });
   });
 

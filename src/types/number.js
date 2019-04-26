@@ -6,6 +6,7 @@ function toNumber(obj) {
 }
 
 const INT_MAX = Math.pow(2, 31);
+const NEG_INT_MAX = -(INT_MAX + 1);
 
 class MappingNumber extends MappingRange {
   get baseType() {
@@ -70,7 +71,7 @@ class MappingNumber extends MappingRange {
   }
 
   get isHalfFloat() {
-    return this.numType === "half-float" || this.isFloating;
+    return this.numType === "half-float" && this.isFloating;
   }
 
   get isByte() {
@@ -104,7 +105,8 @@ class MappingNumber extends MappingRange {
   }
 
   inPosNegRange(max) {
-    return this.inRange(-(max + 1), max);
+    const min = -(max + 1);
+    return this.inRange(min, max);
   }
 
   get type() {
@@ -134,6 +136,8 @@ class MappingNumber extends MappingRange {
 }
 
 module.exports = {
+  INT_MAX,
+  NEG_INT_MAX,
   isNumber,
   toNumber,
   MappingNumber

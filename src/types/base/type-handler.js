@@ -2,11 +2,12 @@ const { InfoHandler } = require("../info");
 const createTypeHandler = (opts, config) => new TypeHandler(opts, config);
 
 class TypeHandler extends InfoHandler {
-  constructor({ typeName, entry, type }, config) {
+  constructor({ typeName, entry, calcType }, config) {
     super(config);
     this.typeName = typeName;
     this.entry = entry || {};
-    this.type = type || this.calcType;
+    const $calcType = () => this.type;
+    this.calcType = calcType || $calcType;
   }
 
   get baseType() {
@@ -17,7 +18,7 @@ class TypeHandler extends InfoHandler {
     return this.config.typeMap || {};
   }
 
-  get calcType() {
+  get type() {
     return this.entry.type || this.metaType;
   }
 

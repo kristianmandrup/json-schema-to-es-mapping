@@ -80,7 +80,7 @@ class MappingBaseType extends InfoHandler {
   }
 
   get type() {
-    return this.typeHandler.type || this.baseType;
+    return this.baseType;
   }
 
   message() {
