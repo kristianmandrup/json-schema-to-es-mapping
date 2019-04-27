@@ -1,16 +1,17 @@
-const { MappingBase } = require("./base");
+const { MappingBaseType } = require("./base");
+const { isString } = require("./util");
 
 const isIpKey = name => [/^ip/].find(expr => expr.test(name));
 
 const isIp = (obj, key) => {
-  return isString(obj.type) && isIpKey(key);
+  return isString(obj.type) && isIpKey(obj.key || key);
 };
 
 function toIp(obj) {
   return isIp(obj) && MappingIp.create(obj).convert();
 }
 
-class MappingIp extends MappingBase {
+class MappingIp extends MappingBaseType {
   get baseType() {
     return "ip";
   }
@@ -25,6 +26,7 @@ class MappingIp extends MappingBase {
 }
 
 module.exports = {
+  isIpKey,
   isIp,
   toIp,
   MappingIp

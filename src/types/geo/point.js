@@ -1,4 +1,4 @@
-const { MappingBase } = require("../base");
+const { MappingBaseType } = require("../base");
 const { isString } = require("../util");
 
 const short = props => props.lat && (props.lng || props.long);
@@ -15,29 +15,34 @@ const isPointType = obj => isPointArray(obj) || isString(obj.type);
 const location = props => props.location && isPointType(props.location);
 
 // See: https://www.elastic.co/guide/en/elasticsearch/guide/current/lat-lon-formats.html
-const isGeoLocation = (obj = {}) => {
+const isGeoPoint = (obj = {}) => {
   const { properties } = obj;
   if (!properties) return false;
   return short(properties) || full(properties) || location(properties);
 };
 
-function toGeoLocation(obj) {
-  return isGeoLocation(obj) && MappingGeoLocation.create(obj).convert();
+function toGeoPoint(obj) {
+  return toGeoPoint(obj) && MappingGeoPoint.create(obj).convert();
 }
 
 // integer_range, float_range, long_range, double_range
 
-class MappingGeoLocation extends MappingBase {
+class MappingGeoPoint extends MappingBaseType {
   get baseType() {
     return "geo_point";
   }
 
-  create(obj) {
-    return new MappingGeoLocation(obj).init();
+  get typeName() {
+    return "geo_point";
+  }
+
+  static create(obj) {
+    return new MappingGeoPoint(obj).init();
   }
 }
 
 module.exports = {
-  toGeoLocation,
-  MappingGeoLocation
+  isGeoPoint,
+  toGeoPoint,
+  MappingGeoPoint
 };

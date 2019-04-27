@@ -1,4 +1,4 @@
-const { isGeoLocation, toGeoLocation, MappingGeoLocation } = require("./point");
+const { isGeoPoint, toGeoPoint, MappingGeoPoint } = require("./point");
 
 const create = opts => ({
   type: "string",
@@ -19,36 +19,36 @@ const objFor = (opts = {}) => {
   };
 };
 
-const location = opts => {
+const point = opts => {
   const $opts = objFor(opts);
-  return toIp($opts);
+  return toGeoPoint($opts);
 };
 
-describe("isGeoLocation", () => {
+describe("isGeoPoint", () => {
   test("type: string, key: location - true", () => {
-    expect(isGeoLocation({ type: "string" })).toBeTruthy();
+    expect(isGeoPoint({ type: "string" })).toBeTruthy();
   });
 
   test("type: string, key: location - true", () => {
-    expect(isGeoLocation({ type: "string", key: "locationAdr" })).toBeTruthy();
+    expect(isGeoPoint({ type: "string", key: "locationAdr" })).toBeTruthy();
   });
 
   test("type: string, key: myIp - false", () => {
-    expect(isGeoLocation({ type: "string", key: "myIp" })).toBeFalsy();
+    expect(isGeoPoint({ type: "string", key: "myIp" })).toBeFalsy();
   });
 
   test("type: integer - false", () => {
-    expect(isGeoLocation({ type: "integer" })).toBeFalsy();
+    expect(isGeoPoint({ type: "integer" })).toBeFalsy();
   });
 
   test("type: location - false", () => {
-    expect(isGeoLocation({ type: "location" })).toBeFalsy();
+    expect(isGeoPoint({ type: "location" })).toBeFalsy();
   });
 });
 
-describe.only("MappingGeoLocation", () => {
+describe("MappingGeoPoint", () => {
   const obj = objFor();
-  const mapper = MappingGeoLocation.create(obj);
+  const mapper = MappingGeoPoint.create(obj);
 
   describe("type", () => {
     test("default: is location", () => {

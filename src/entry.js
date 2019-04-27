@@ -6,6 +6,7 @@ const {
   toArray,
   toObject,
   toDate,
+  toIp,
   toNumericRange,
   toDateRange
 } = types;
@@ -26,6 +27,7 @@ class SchemaEntry extends InfoHandler {
 
     this.defaults = {
       types: {
+        ip: toIp,
         string: toString,
         number: toNumber,
         boolean: toBoolean,
@@ -36,6 +38,7 @@ class SchemaEntry extends InfoHandler {
         numericRange: toNumericRange
       },
       typeOrder: [
+        "ip",
         "string",
         "dateRange",
         "numericRange",

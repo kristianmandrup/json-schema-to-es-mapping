@@ -91,6 +91,5 @@ class MappingBaseType extends InfoHandler {
 }
 
 module.exports = {
-  $default,
   MappingBaseType
 };
