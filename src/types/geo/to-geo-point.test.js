@@ -1,10 +1,12 @@
 const {
   isPointType,
   isPointArray,
+  isPointArrayItem,
+  isPointArrayItems,
   hasNumericItem,
   short,
   full,
-  location,
+  isLocationKey,
   isGeoPoint,
   toGeoPoint,
   MappingGeoPoint
@@ -43,49 +45,115 @@ describe("isPointType,", () => {
 describe("isPointArray", () => {
   test("type: array, items: integer", () => {
     const items = {
-      type: "integer",
-      minItems: 2,
-      maxItems: 2
+      type: "integer"
     };
+    expect(
+      isPointArray({ type: "array", minItems: 2, maxItems: 2, items })
+    ).toBeTruthy();
+  });
+
+  test("type: array, items: integer", () => {
+    const items = [
+      {
+        type: "integer"
+      },
+      {
+        type: "integer"
+      }
+    ];
     expect(isPointArray({ type: "array", items })).toBeTruthy();
   });
 });
 
+describe("isPointArrayItem", () => {
+  test("type: array, items: integer", () => {
+    const obj = { type: "array", minItems: 2, maxItems: 2 };
+    const item = {
+      type: "integer"
+    };
+    expect(isPointArrayItem(obj, item)).toBeTruthy();
+  });
+});
+
+describe("isPointArrayItems", () => {
+  test("type: array, items: integer", () => {
+    const items = [
+      {
+        type: "integer"
+      },
+      {
+        type: "integer"
+      }
+    ];
+    expect(isPointArrayItems(items)).toBeTruthy();
+  });
+});
+
 describe("hasNumericItem", () => {
+  const items = [
+    {
+      type: "integer"
+    },
+    {
+      type: "integer"
+    }
+  ];
   test("type: number", () => {
-    expect(hasNumericItem({ type: "number" })).toBeTruthy();
+    expect(hasNumericItem(items, 0)).toBeTruthy();
   });
 });
 
 describe("short", () => {
-  test("lat", () => {
+  test("lat - false", () => {
     expect(
       short({
         lat: {
           type: "number"
         }
       })
-    ).toBeTruthy();
+    ).toBeFalsy();
   });
 
-  test("lng", () => {
-    expect(short({ lng: { type: "number" } })).toBeTruthy();
+  test("lng - false", () => {
+    expect(short({ lng: { type: "number" } })).toBeFalsy();
+  });
+
+  test("lat and lng", () => {
+    expect(
+      short({
+        lat: {
+          type: "number"
+        },
+        lng: { type: "number" }
+      })
+    ).toBeTruthy();
   });
 });
 
 describe("full", () => {
-  test("latitude", () => {
+  test("latitude - false", () => {
     expect(
       full({
-        lat: {
+        latitude: {
           type: "number"
         }
       })
-    ).toBeTruthy();
+    ).toBeFalsy();
   });
 
-  test("lng", () => {
-    expect(full({ longitude: { type: "number" } })).toBeTruthy();
+  test("longitude  - false", () => {
+    expect(full({ longitude: { type: "number" } })).toBeFalsy();
+  });
+
+  test("latitude and longitude - true", () => {
+    expect(
+      full({
+        latitude: {
+          type: "number"
+        },
+        longitude: { type: "number" }
+      })
+    ).toBeTruthy();
   });
 });
 
@@ -93,11 +161,7 @@ describe("full", () => {
 
 describe("isGeoPoint", () => {
   test("type: string, key: location - true", () => {
-    expect(isGeoPoint({ type: "string" })).toBeTruthy();
-  });
-
-  test("type: string, key: location - true", () => {
-    expect(isGeoPoint({ type: "string", key: "locationAdr" })).toBeTruthy();
+    expect(isGeoPoint({ type: "string" }, "location")).toBeTruthy();
   });
 
   test("type: string, key: myIp - false", () => {

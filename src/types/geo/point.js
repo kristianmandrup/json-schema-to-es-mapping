@@ -1,24 +1,47 @@
 const { MappingBaseType } = require("../base");
-const { isString } = require("../util");
+const { isString, isNumber } = require("../util");
 
-const short = props => props.lat && (props.lng || props.long);
+const short = props =>
+  props.lat &&
+  isNumber(props.lat.type) &&
+  props.lng &&
+  isNumber(props.lng.type);
 
-const full = props => props.latitude && props.longitude;
+const full = props =>
+  props.latitude &&
+  isNumber(props.latitude.type) &&
+  props.longitude &&
+  isNumber(props.longitude.type);
 
-const hasNumericItem = (items, index) => items[index].type === "number";
+const hasNumericItem = (items, index) => isNumber((items[index] || {}).type);
 
-const isPointArray = obj =>
-  obj.type === "array" && hasNumericItem(items, 0) && hasNumericItem(items, 1);
+const isPointArray = obj => {
+  if (!obj) return;
+  if (obj.type !== "array") return;
+  let { items } = obj;
+  console.log({ items });
+  return Array.isArray(items)
+    ? isPointArrayItems(items)
+    : isPointArrayItem(obj, items);
+};
 
-const isPointType = obj => isPointArray(obj) || isString(obj.type);
+const isPointArrayItems = (items = []) => {
+  return hasNumericItem(items, 0) && hasNumericItem(items, 1);
+};
 
-const location = props => props.location && isPointType(props.location);
+const isPointArrayItem = (obj = {}, items = {}) => {
+  return isNumber(items.type) && obj.minItems == 2 && obj.maxItems == 2;
+};
+
+const isPointType = (obj = {}) => isPointArray(obj) || isString(obj.type);
+
+const isLocationKey = (key, obj) => key === "location" && isPointType(obj);
 
 // See: https://www.elastic.co/guide/en/elasticsearch/guide/current/lat-lon-formats.html
-const isGeoPoint = (obj = {}) => {
+const isGeoPoint = (obj = {}, key) => {
   const { properties } = obj;
   if (!properties) return false;
-  return short(properties) || full(properties) || location(properties);
+  return short(properties) || full(properties) || isLocationKey(key, obj);
 };
 
 function toGeoPoint(obj) {
@@ -45,10 +68,12 @@ module.exports = {
   isGeoPoint,
   isPointType,
   isPointArray,
+  isPointArrayItem,
+  isPointArrayItems,
   hasNumericItem,
   short,
   full,
-  location,
+  isLocationKey,
   toGeoPoint,
   MappingGeoPoint
 };
