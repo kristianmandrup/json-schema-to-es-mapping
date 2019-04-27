@@ -43,6 +43,12 @@ class MappingGeoPoint extends MappingBaseType {
 
 module.exports = {
   isGeoPoint,
+  isPointType,
+  isPointArray,
+  hasNumericItem,
+  short,
+  full,
+  location,
   toGeoPoint,
   MappingGeoPoint
 };
