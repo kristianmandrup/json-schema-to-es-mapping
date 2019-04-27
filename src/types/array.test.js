@@ -22,7 +22,7 @@ describe("array", () => {
     // console.log("Array - no items", JSON.stringify(mapping, null, 2));
     expect(properties).toEqual({
       friendNames: {
-        include_in_parent: true,
+        // include_in_parent: true,
         type: "nested"
       }
     });
@@ -50,7 +50,7 @@ describe("array", () => {
     // console.log("Array - no items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
-        include_in_parent: true,
+        // include_in_parent: true,
         type: "nested"
       }
     });
@@ -78,7 +78,7 @@ describe("array", () => {
     // console.log("Array - empty items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
-        include_in_parent: true,
+        // include_in_parent: true,
         type: "nested"
       }
     });
@@ -103,10 +103,8 @@ describe("array", () => {
     };
 
     const config = {
-      _meta_: {
-        types: {
-          string: "string"
-        }
+      typeMap: {
+        string: "string"
       }
     };
 
@@ -115,7 +113,7 @@ describe("array", () => {
     // console.log("Array - empty items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
-        include_in_parent: true,
+        // include_in_parent: true,
         type: "string"
       }
     });
@@ -142,10 +140,8 @@ describe("array", () => {
     };
 
     const config = {
-      _meta_: {
-        types: {
-          string: "text"
-        }
+      typeMap: {
+        string: "text"
       }
     };
     const { properties } = build(json, config);
@@ -153,7 +149,7 @@ describe("array", () => {
     // console.log("Array - empty items", JSON.stringify(properties, null, 2));
     expect(properties).toEqual({
       friendNames: {
-        include_in_parent: true,
+        // include_in_parent: true,
         type: "text"
       }
     });
