@@ -37,7 +37,7 @@ describe.only("MappingArray", () => {
 
   describe("type", () => {
     test("default: is array", () => {
-      expect(mapper.type).toEqual("array");
+      expect(mapper.type).toEqual("nested");
     });
   });
 });

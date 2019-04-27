@@ -104,7 +104,7 @@ class MappingArray extends MappingBaseType {
   }
 
   get resolvedArrayType() {
-    return this.metaType(this.arrayType);
+    return this.typeMap[this.arrayType];
   }
 
   get type() {
@@ -112,7 +112,7 @@ class MappingArray extends MappingBaseType {
   }
 
   static create(obj) {
-    return new MappingArray(obj);
+    return new MappingArray(obj).init();
   }
 }
 
