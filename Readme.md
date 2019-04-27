@@ -70,7 +70,7 @@ This will by default give the following mappings result:
     "people": {
       "properties": {
         "name": {
-          "type": "text"
+          "type": "keyword"
         },
         "age": {
           "type": "integer"
