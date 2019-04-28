@@ -102,27 +102,26 @@ describe("SchemaEntry", () => {
       });
     });
 
-    
     describe("obj", () => {
       describe("type: number, key: age, parent: person", () => {
         const value = {
           type: "number"
-        },
+        };
 
         const opts = {
           key: "name",
           value,
-          parentName: 'person'
+          parentName: "person"
         };
         const entry = createSchemaEntry(opts, config);
 
         test("as expected", () => {
           expect(entry.obj).toEqual({
-            parentName: 'person',
+            parentName: "person",
             key: name,
             value,
-            type: 'number',
-            config        
+            type: "number",
+            config
           });
         });
       });
@@ -130,8 +129,20 @@ describe("SchemaEntry", () => {
 
     describe("typeOrder", () => {
       describe("default", () => {
+        const order = [
+          "ip",
+          "point",
+          "string",
+          "dateRange",
+          "numericRange",
+          "number",
+          "boolean",
+          "array",
+          "object",
+          "date"
+        ];
         test("is expected order", () => {
-          expect(entry.typeOrder).toEqual([]);
+          expect(entry.typeOrder).toEqual(order);
         });
       });
 
@@ -149,6 +160,20 @@ describe("SchemaEntry", () => {
 
         test("as passed", () => {
           expect(entry.typeOrder).toEqual(typeOrder);
+        });
+
+        describe("use order on string entry", () => {
+          const opts = {
+            key: "ip",
+            value: {}
+          };
+          const entry = createSchemaEntry(opts, config);
+          const result = entry.toEntryStringType();
+          test("type: ip", () => {
+            expect(result).toEqual({
+              type: "ip"
+            });
+          });
         });
       });
     });
