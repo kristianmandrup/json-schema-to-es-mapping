@@ -30,39 +30,54 @@ class SchemaEntry extends InfoHandler {
     this.value = value;
     this.config = config;
     this.type = value.type;
-    this.defaults = {
-      types: {
-        ip: toIp,
-        point: toGeoPoint,
-        string: toString,
-        number: toNumber,
-        boolean: toBoolean,
-        array: toArray,
-        object: toObject,
-        date: toDate,
-        dateRange: toDateRange,
-        numericRange: toNumericRange
-      },
-      typeOrder: [
-        "ip",
-        "point",
-        "string",
-        "dateRange",
-        "numericRange",
-        "number",
-        "boolean",
-        "array",
-        "object",
-        "date"
-      ]
-    };
 
-    this.types = {
-      ...this.defaults.types,
-      ...(config.types || {})
+    this.typeMap = {
+      ...this.defaults.typeMap,
+      ...(config.typeMap || {})
     };
     this.typeOrder = config.typeOrder || this.defaults.typeOrder;
     this.typeObjMapperFor = config.typeObjMapperFor || chooseObjMapper;
+  }
+
+  typeMapperFor(type) {
+    return this.typeMap[type];
+  }
+
+  get defaults() {
+    return {
+      typeMap: this.defaultTypeMap,
+      typeOrder: this.defaultTypeOrder
+    };
+  }
+
+  get defaultTypeMap() {
+    return {
+      ip: toIp,
+      point: toGeoPoint,
+      string: toString,
+      number: toNumber,
+      boolean: toBoolean,
+      array: toArray,
+      object: toObject,
+      date: toDate,
+      dateRange: toDateRange,
+      numericRange: toNumericRange
+    };
+  }
+
+  get defaultTypeOrder() {
+    return [
+      "ip",
+      "point",
+      "string",
+      "dateRange",
+      "numericRange",
+      "number",
+      "boolean",
+      "array",
+      "object",
+      "date"
+    ];
   }
 
   get isValidSchema() {
@@ -119,7 +134,7 @@ class SchemaEntry extends InfoHandler {
     }
     let foundValue;
     this.typeOrder.find(type => {
-      const typeFn = this.types[type];
+      const typeFn = this.typeMapperFor(type);
       if (!typeFn) {
         this.info("toEntryStringType", `skipped ${type}`);
         return false;

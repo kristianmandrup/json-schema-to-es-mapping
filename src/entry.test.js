@@ -102,6 +102,78 @@ describe("SchemaEntry", () => {
       });
     });
 
+    
+    describe("obj", () => {
+      describe("type: number, key: age, parent: person", () => {
+        const value = {
+          type: "number"
+        },
+
+        const opts = {
+          key: "name",
+          value,
+          parentName: 'person'
+        };
+        const entry = createSchemaEntry(opts, config);
+
+        test("as expected", () => {
+          expect(entry.obj).toEqual({
+            parentName: 'person',
+            key: name,
+            value,
+            type: 'number',
+            config        
+          });
+        });
+      });
+    });
+
+    describe("typeOrder", () => {
+      describe("default", () => {
+        test("is expected order", () => {
+          expect(entry.typeOrder).toEqual([]);
+        });
+      });
+
+      describe("passed", () => {
+        const opts = {
+          key: "name",
+          value: {}
+        };
+        const typeOrder = ["ip", "string"];
+
+        const config = {
+          typeOrder
+        };
+        const entry = createSchemaEntry(opts, config);
+
+        test("as passed", () => {
+          expect(entry.typeOrder).toEqual(typeOrder);
+        });
+      });
+    });
+    describe("typeMapperFor", () => {
+      describe("number", () => {
+        const opts = {
+          key: "name",
+          value: {
+            type: "number"
+          }
+        };
+        const entry = createSchemaEntry(opts, config);
+
+        test("is a function", () => {
+          expect(typeof entry.typeMapperFor("number")).toEqual("function");
+        });
+      });
+
+      describe("unknown", () => {
+        test("undefined", () => {
+          expect(entry.typeMapperFor("unknown")).toBeUndefined();
+        });
+      });
+    });
+
     describe("toEntryObjType", () => {
       describe("type is a string: number", () => {
         const type = "number";
