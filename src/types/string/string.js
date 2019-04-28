@@ -1,5 +1,5 @@
-const { MappingBaseType } = require("./base");
-const { isString } = require("./util");
+const { MappingBaseType } = require("../base");
+const { isString } = require("../util");
 
 function toString(obj) {
   return isString(obj.type) && MappingString.create(obj).convert();

@@ -12,7 +12,7 @@ const {
   toNumericRange
 } = require("./range");
 const { MappingObject, toObject } = require("./object");
-const { MappingString, toString } = require("./string");
+const { MappingString, toString } = require("./string/string");
 const { MappingDate, toDate } = require("./date");
 const { MappingIp, toIp } = require("./ip");
 const { MappingGeoPoint, toGeoPoint } = require("./geo/point");
