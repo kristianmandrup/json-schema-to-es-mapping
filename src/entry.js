@@ -12,7 +12,7 @@ const {
   toDateRange
 } = types;
 const { InfoHandler } = require("./types/info");
-const { isFunction } = require("util");
+const { isFunction, isStringType } = require("./types/util");
 
 class SchemaEntryError extends Error {}
 
@@ -64,14 +64,32 @@ class SchemaEntry extends InfoHandler {
     return typeof this.type === "string";
   }
 
-  error(msg, data) {
-    data ? console.error(msg, data) : console.error(msg);
-    throw new SchemaEntryError(msg);
+  toEntry() {
+    const type = this.type;
+    return isStringType(type)
+      ? this.toEntryStringType(type)
+      : toEntryObjType(type);
   }
 
-  toEntry() {
+  toEntryObjType() {
+    const keys = Object.keys(this.type);
+    const key = keys[0];
+    const mapperFn = this.typeObj[key];
+    if (!isFunction(mapperFn)) {
+      this.error("toEntryObjType", `Invalid type obj key ${key}`, {
+        mapperFn,
+        key,
+        typeObj: this.typeObj
+      });
+    }
+    foundValue = mapperFn(this.obj, { key: this.key, type: this.type });
+    return foundValue;
+  }
+
+  toEntryStringType(type) {
+    type = type || this.type;
     if (!this.isValidSchema()) {
-      this.error(`Not a valid schema: type ${this.type}`, {
+      this.error("toEntryStringType", `Not a valid schema: type ${type}`, {
         value: this.value
       });
     }
@@ -79,11 +97,11 @@ class SchemaEntry extends InfoHandler {
     this.typeOrder.find(type => {
       const typeFn = this.types[type];
       if (!typeFn) {
-        this.info("toEntry", `skipped ${type}`);
+        this.info("toEntryStringType", `skipped ${type}`);
         return false;
       }
       if (!isFunction(typeFn)) {
-        this.error("toEntry", `Invalid type function ${type}`, {
+        this.error("toEntryStringType", `Invalid type function ${type}`, {
           typeFn,
           type,
           typeOrder: this.typeOrder
