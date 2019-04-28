@@ -5,7 +5,7 @@ describe("geo_point", () => {
     const location = {
       type: "string"
     };
-    const point = createPoint({ location });
+    const point = createPoint(location, "location");
     test("location is geo_point", () => {
       expect(point.type).toEqual("geo_point");
     });

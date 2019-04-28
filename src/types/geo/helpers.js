@@ -1,22 +1,27 @@
 const { build } = require("../..");
 const { toGeoPoint } = require("./point");
 
-const createLatLng = ({ lat, lng }) => ({
-  type: "object",
-  properties: {
-    location: {
-      type: "object",
-      properties: {
-        [lat]: {
-          type: "number"
-        },
-        [lng]: {
-          type: "number"
-        }
+const isStr = val => typeof val !== "string";
+
+const createLatLng = ({ lat = "lat", lng = "lng" }) => {
+  if (isStr(lat)) {
+    throw `Missing or invalid lat ${lat}`;
+  }
+  if (isStr(lng)) {
+    throw `Missing or invalid lng ${lng}`;
+  }
+  return {
+    type: "object",
+    properties: {
+      [lat]: {
+        type: "number"
+      },
+      [lng]: {
+        type: "number"
       }
     }
-  }
-});
+  };
+};
 
 const create = opts => ({
   type: "string",
@@ -32,7 +37,7 @@ const config = {};
 const schema = {};
 
 const objFor = (opts = {}) => {
-  const value = create(opts);
+  const value = opts.value || create(opts);
   return {
     key: opts.key || "location",
     type: value.type,
@@ -42,10 +47,9 @@ const objFor = (opts = {}) => {
   };
 };
 
-const createPoint = opts => {
+const createPoint = (opts, key) => {
   const $opts = objFor(opts);
-  console.log("createPoint", { opts, $opts });
-  return toGeoPoint($opts);
+  return toGeoPoint($opts, key);
 };
 
 module.exports = {

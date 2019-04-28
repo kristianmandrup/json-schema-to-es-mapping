@@ -1,19 +1,20 @@
-const { build, create, createLoc } = require("./helpers");
+const { createLatLng, createPoint } = require("./helpers");
+// const { toGeoPoint } = require("./point");
 
 describe("geo location type", () => {
-  describe.only("lat and lng props", () => {
-    json = create({ lat: "lat", lng: "lng" });
-    const { properties } = build(json);
+  describe("lat and lng props", () => {
+    const location = createLatLng({ lat: "lat", lng: "lng" });
+    const point = createPoint(location, "location");
     test("location is geo_point", () => {
-      expect(properties.location.type).toEqual("geo_point");
+      expect(point.type).toEqual("geo_point");
     });
   });
 
   describe("latitude and longitude props", () => {
-    json = create({ lat: "latitude", lng: "longitude" });
-    const { properties } = build(json);
+    const location = createLatLng({ lat: "latitude", lng: "longitude" });
+    const point = createPoint(location, "location");
     test("location is geo_point", () => {
-      expect(properties.location.type).toEqual("geo_point");
+      expect(point.type).toEqual("geo_point");
     });
   });
 });

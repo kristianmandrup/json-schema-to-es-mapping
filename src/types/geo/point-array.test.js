@@ -10,7 +10,6 @@ describe("geo_point", () => {
       }
     };
     json = createLoc({ location });
-    console.log({ json });
     const { properties } = build(json);
     test("location is geo_point", () => {
       expect(properties.location.type).toEqual("geo_point");
