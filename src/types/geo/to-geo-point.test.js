@@ -6,7 +6,7 @@ const {
   hasNumericItem,
   short,
   full,
-  isLocationKey,
+  isLocationKeyAndObj,
   isGeoPoint,
   toGeoPoint,
   MappingGeoPoint
@@ -157,8 +157,16 @@ describe("full", () => {
   });
 });
 
-// location
+//
+describe("isLocationKeyAndObj", () => {
+  test("type: string, key: location - true", () => {
+    expect(isLocationKeyAndObj("location", { type: "string" })).toBeTruthy();
+  });
 
+  test("type: string, key: myIp - false", () => {
+    expect(isLocationKeyAndObj("loc", { type: "string" })).toBeFalsy();
+  });
+});
 describe("isGeoPoint", () => {
   test("type: string, key: location - true", () => {
     expect(isGeoPoint({ type: "string" }, "location")).toBeTruthy();

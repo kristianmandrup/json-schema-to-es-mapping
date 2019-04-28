@@ -7,6 +7,7 @@ const {
   toObject,
   toDate,
   toIp,
+  toGeoPoint,
   toNumericRange,
   toDateRange
 } = types;
@@ -28,6 +29,7 @@ class SchemaEntry extends InfoHandler {
     this.defaults = {
       types: {
         ip: toIp,
+        point: toGeoPoint,
         string: toString,
         number: toNumber,
         boolean: toBoolean,
@@ -39,6 +41,7 @@ class SchemaEntry extends InfoHandler {
       },
       typeOrder: [
         "ip",
+        "point",
         "string",
         "dateRange",
         "numericRange",
@@ -68,7 +71,9 @@ class SchemaEntry extends InfoHandler {
 
   toEntry() {
     if (!this.isValidSchema()) {
-      this.error(`Not a valid schema: type ${this.type}`, this.value);
+      this.error(`Not a valid schema: type ${this.type}`, {
+        value: this.value
+      });
     }
     let foundValue;
     this.typeOrder.find(type => {

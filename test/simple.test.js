@@ -43,13 +43,13 @@ describe("build - simple properties", () => {
         required: true,
         type: "number"
       },
-      type: "float"
+      type: "integer"
     });
   });
 
   test("results", () => {
     expect(results).toEqual({
-      age: { type: "float" },
+      age: { type: "integer" },
       name: { type: "keyword" }
     });
   });
@@ -60,7 +60,7 @@ describe("build - simple properties", () => {
         type: "keyword"
       },
       age: {
-        type: "float"
+        type: "integer"
       }
     });
   });

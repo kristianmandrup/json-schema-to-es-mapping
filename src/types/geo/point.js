@@ -1,5 +1,5 @@
 const { MappingBaseType } = require("../base");
-const { isString, isNumber } = require("../util");
+const { isStringType, isString, isNumber } = require("../util");
 
 const short = props =>
   props.lat &&
@@ -16,10 +16,9 @@ const full = props =>
 const hasNumericItem = (items, index) => isNumber((items[index] || {}).type);
 
 const isPointArray = obj => {
-  if (!obj) return;
-  if (obj.type !== "array") return;
+  if (!obj) return false;
+  if (obj.type !== "array") return false;
   let { items } = obj;
-  console.log({ items });
   return Array.isArray(items)
     ? isPointArrayItems(items)
     : isPointArrayItem(obj, items);
@@ -33,19 +32,23 @@ const isPointArrayItem = (obj = {}, items = {}) => {
   return isNumber(items.type) && obj.minItems == 2 && obj.maxItems == 2;
 };
 
-const isPointType = (obj = {}) => isPointArray(obj) || isString(obj.type);
+const isPointType = (obj = {}) => isString(obj.type) || isPointArray(obj);
 
-const isLocationKey = (key, obj) => key === "location" && isPointType(obj);
+const isLocationKey = key => key.match(/location/);
+
+const isLocationKeyAndObj = (key, obj) =>
+  isLocationKey(key) && isPointType(obj);
 
 // See: https://www.elastic.co/guide/en/elasticsearch/guide/current/lat-lon-formats.html
 const isGeoPoint = (obj = {}, key) => {
+  if (isStringType(key) && isLocationKeyAndObj(key, obj)) return true;
   const { properties } = obj;
   if (!properties) return false;
-  return short(properties) || full(properties) || isLocationKey(key, obj);
+  return short(properties) || full(properties);
 };
 
 function toGeoPoint(obj) {
-  return toGeoPoint(obj) && MappingGeoPoint.create(obj).convert();
+  return isGeoPoint(obj) && MappingGeoPoint.create(obj).convert();
 }
 
 // integer_range, float_range, long_range, double_range
@@ -73,7 +76,7 @@ module.exports = {
   hasNumericItem,
   short,
   full,
-  isLocationKey,
+  isLocationKeyAndObj,
   toGeoPoint,
   MappingGeoPoint
 };
