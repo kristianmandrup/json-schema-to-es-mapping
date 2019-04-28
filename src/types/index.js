@@ -1,3 +1,6 @@
+const obj = require("./obj");
+const { AnyOfMapper } = obj;
+
 const { MappingBaseType, ConvertMappingSchemaError } = require("./base");
 const { MappingArray, toArray } = require("./array");
 const { MappingBoolean, toBoolean } = require("./boolean");
@@ -39,5 +42,7 @@ module.exports = {
   toDate,
   MappingBaseType,
   ConvertMappingSchemaError,
+  obj,
+  AnyOfMapper,
   util
 };

@@ -9,7 +9,10 @@ const {
   toIp,
   toGeoPoint,
   toNumericRange,
-  toDateRange
+  toDateRange,
+  obj,
+  chooseObjMapper,
+  AnyOfMapper
 } = types;
 const { InfoHandler } = require("./types/info");
 const { isFunction, isStringType } = require("./types/util");
@@ -25,7 +28,6 @@ class SchemaEntry extends InfoHandler {
     this.value = value;
     this.config = config;
     this.type = value.type;
-
     this.defaults = {
       types: {
         ip: toIp,
@@ -60,6 +62,10 @@ class SchemaEntry extends InfoHandler {
     this.typeOrder = config.typeOrder || this.defaults.typeOrder;
   }
 
+  get typeObjMapperFor() {
+    return chooseObjMapper;
+  }
+
   isValidSchema() {
     return typeof this.type === "string";
   }
@@ -68,13 +74,13 @@ class SchemaEntry extends InfoHandler {
     const type = this.type;
     return isStringType(type)
       ? this.toEntryStringType(type)
-      : toEntryObjType(type);
+      : this.toEntryObjType(type);
   }
 
   toEntryObjType() {
     const keys = Object.keys(this.type);
     const key = keys[0];
-    const mapperFn = this.typeObj[key];
+    const mapperFn = this.typeObjMapperFor(key);
     if (!isFunction(mapperFn)) {
       this.error("toEntryObjType", `Invalid type obj key ${key}`, {
         mapperFn,
