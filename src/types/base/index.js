@@ -8,18 +8,18 @@ const { createTypeHandler } = require("./type-handler");
 const { createEntryObj } = require("./entry");
 
 class MappingBaseType extends InfoHandler {
-  constructor(opts = {}) {
-    super(opts.config);
-    const { parentName, key, value = {} } = opts;
-    let { config } = opts;
+  constructor(opts = {}, config) {
+    super(config || opts.config);
+    const { parentName, schema, key, value = {} } = opts;
+    config = config || opts.config;
     this.opts = opts;
     this.parentName = parentName;
-    this.schema = config.schema;
+    this.schema = schema || config.schema;
     this.key = key;
     this.format = value.format;
     this.result = config.resultObj || {};
     this.visitedPaths = config.visitedPaths || {};
-    this.config = merge.recursive(true, $default.config, config);
+    this.config = merge.recursive($default.config, config);
     config = this.config;
     this.value = value;
     // TODO: make configurable by passing via config

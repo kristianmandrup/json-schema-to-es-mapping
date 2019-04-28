@@ -1,5 +1,5 @@
 const obj = require("./obj");
-const { AnyOfMapper } = obj;
+const { AnyOfMapper, chooseObjMapper } = obj;
 
 const { MappingBaseType, ConvertMappingSchemaError } = require("./base");
 const { MappingArray, toArray } = require("./array");
@@ -43,6 +43,7 @@ module.exports = {
   MappingBaseType,
   ConvertMappingSchemaError,
   obj,
+  chooseObjMapper,
   AnyOfMapper,
   util
 };

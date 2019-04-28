@@ -9,12 +9,14 @@ const createDefinitionRefResolver = (opts = {}, config) => {
 };
 
 class DefinitionRefResolver extends InfoHandler {
-  constructor({ schema }, config = {}) {
+  constructor(opts, config = {}) {
     super(config);
+    const { schema } = opts;
     this.schemaValidator = createSchemaValidator(config);
     this.refValidator = createRefValidator(config);
     this.visitedPaths = config.visitedPaths || {};
-    this.schema = schema || config.schema;
+    const $schema = schema || config.schema;
+    this.schema = $schema;
   }
 
   set schema(schema) {

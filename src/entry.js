@@ -15,9 +15,11 @@ const {
   AnyOfMapper
 } = types;
 const { InfoHandler } = require("./types/info");
-const { isFunction, isStringType } = require("./types/util");
+const { isFunction, isStringType, isObjectType } = require("./types/util");
 
 class SchemaEntryError extends Error {}
+
+const createSchemaEntry = (obj, config) => new SchemaEntry(obj, config);
 
 class SchemaEntry extends InfoHandler {
   constructor(obj, config = {}) {
@@ -60,25 +62,41 @@ class SchemaEntry extends InfoHandler {
       ...(config.types || {})
     };
     this.typeOrder = config.typeOrder || this.defaults.typeOrder;
+    this.typeObjMapperFor = config.typeObjMapperFor || chooseObjMapper;
   }
 
-  get typeObjMapperFor() {
-    return chooseObjMapper;
+  get isValidSchema() {
+    return this.isValidStringSchemaType || this.isValidObjSchemaType;
   }
 
-  isValidSchema() {
-    return typeof this.type === "string";
+  get isValidStringSchemaType() {
+    return isStringType(this.type);
+  }
+
+  get isValidObjSchemaType() {
+    return isObjectType(this.type);
   }
 
   toEntry() {
     const type = this.type;
+    if (!this.isValidSchema) {
+      this.error("toEntry", `Not a valid schema: type ${type}`, {
+        value: this.value
+      });
+    }
     return isStringType(type)
       ? this.toEntryStringType(type)
       : this.toEntryObjType(type);
   }
 
-  toEntryObjType() {
-    const keys = Object.keys(this.type);
+  toEntryObjType(type) {
+    type = type || this.type;
+    if (!this.isValidObjSchemaType) {
+      this.error("toEntryObjType", `Not a valid schema: type ${type}`, {
+        value: this.value
+      });
+    }
+    const keys = Object.keys(type);
     const key = keys[0];
     const mapperFn = this.typeObjMapperFor(key);
     if (!isFunction(mapperFn)) {
@@ -88,13 +106,13 @@ class SchemaEntry extends InfoHandler {
         typeObj: this.typeObj
       });
     }
-    foundValue = mapperFn(this.obj, { key: this.key, type: this.type });
+    foundValue = mapperFn(this.obj, { key: this.key, type });
     return foundValue;
   }
 
   toEntryStringType(type) {
     type = type || this.type;
-    if (!this.isValidSchema()) {
+    if (!this.isValidStringSchemaType) {
       this.error("toEntryStringType", `Not a valid schema: type ${type}`, {
         value: this.value
       });
@@ -139,5 +157,6 @@ class SchemaEntry extends InfoHandler {
 
 module.exports = {
   SchemaEntryError,
+  createSchemaEntry,
   SchemaEntry
 };
