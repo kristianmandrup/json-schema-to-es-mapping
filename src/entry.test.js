@@ -104,23 +104,26 @@ describe("SchemaEntry", () => {
 
     describe("obj", () => {
       describe("type: number, key: age, parent: person", () => {
+        const type = "number";
         const value = {
-          type: "number"
+          type
         };
 
+        const key = "name";
+        const parentName = "person";
         const opts = {
-          key: "name",
+          key,
           value,
-          parentName: "person"
+          parentName
         };
         const entry = createSchemaEntry(opts, config);
 
         test("as expected", () => {
           expect(entry.obj).toEqual({
-            parentName: "person",
-            key: name,
+            parentName,
+            key,
             value,
-            type: "number",
+            type,
             config
           });
         });

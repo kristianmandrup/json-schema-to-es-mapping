@@ -31,26 +31,26 @@ class SchemaEntry extends InfoHandler {
     this.config = config;
     this.type = value.type;
 
-    this.typeMap = {
-      ...this.defaults.typeMap,
-      ...(config.typeMap || {})
+    this.typeMappers = {
+      ...this.defaults.typeMappers,
+      ...(config.typeMappers || {})
     };
     this.typeOrder = config.typeOrder || this.defaults.typeOrder;
     this.typeObjMapperFor = config.typeObjMapperFor || chooseObjMapper;
   }
 
   typeMapperFor(type) {
-    return this.typeMap[type];
+    return this.typeMappers[type];
   }
 
   get defaults() {
     return {
-      typeMap: this.defaultTypeMap,
+      typeMappers: this.defaultTypeMappers,
       typeOrder: this.defaultTypeOrder
     };
   }
 
-  get defaultTypeMap() {
+  get defaultTypeMappers() {
     return {
       ip: toIp,
       point: toGeoPoint,

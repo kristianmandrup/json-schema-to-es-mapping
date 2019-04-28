@@ -21,7 +21,6 @@ class MappingBaseType extends InfoHandler {
     this.visitedPaths = config.visitedPaths || {};
     this.config = merge.recursive($default.config, config);
     config = this.config;
-    console.log({ config });
     this.value = value;
     // TODO: make configurable by passing via config
     this.nested = config.nested;
@@ -52,7 +51,9 @@ class MappingBaseType extends InfoHandler {
   }
 
   get type() {
-    return this.typeHandler.type || this.baseType;
+    const calculatedType = this.typeHandler.type;
+    console.log({ calculatedType });
+    return calculatedType || this.baseType;
   }
 
   get typeMap() {

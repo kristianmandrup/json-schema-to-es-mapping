@@ -23,12 +23,10 @@ describe("string", () => {
     });
   });
 
-  describe("meta types: string: text", () => {
+  describe("typeMap: string: text", () => {
     const config = {
-      _meta: {
-        types: {
-          string: "text"
-        }
+      typeMap: {
+        string: "text"
       }
     };
     json = create();

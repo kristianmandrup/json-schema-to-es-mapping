@@ -30,9 +30,9 @@ describe("TypeHandler", () => {
     type: "string"
   };
   const handler = create({ typeName, entry, calcType }, config);
-  describe("metaType", () => {
+  describe("typeMapValue", () => {
     test("string", () => {
-      expect(handler.metaType).toEqual("keyword");
+      expect(handler.typeMapValue).toEqual("keyword");
     });
   });
 

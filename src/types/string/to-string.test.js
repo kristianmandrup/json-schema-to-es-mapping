@@ -1,36 +1,5 @@
 const { toString, MappingString } = require("./string");
-const { string } = require("./helpers");
-
-const create = opts => ({
-  type: "string",
-  ...opts
-});
-
-const config = {};
-const schema = {};
-
-const objFor = (opts = {}) => {
-  const value = create(opts);
-  console.log({ value });
-  return {
-    key: "name",
-    type: value.type,
-    value,
-    schema,
-    config: opts.config || config
-  };
-};
-
-const toStr = opts => {
-  const $opts = objFor(opts);
-  return toString($opts);
-};
-
-const string = opts => {
-  const $opts = objFor(opts);
-  console.log({ $opts });
-  return MappingString.create($opts);
-};
+const { string, objFor } = require("./helpers");
 
 describe("MappingString", () => {
   describe("typeMap override: string -> text", () => {

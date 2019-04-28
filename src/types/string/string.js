@@ -2,7 +2,11 @@ const { MappingBaseType } = require("../base");
 const { isString } = require("../util");
 
 function toString(obj) {
-  return isString(obj.type) && MappingString.create(obj).convert();
+  if (!isString(obj.type)) return;
+  const mapper = MappingString.create(obj);
+  const mapping = mapper.convert();
+  console.log({ mapping });
+  return mapping;
 }
 
 class MappingString extends MappingBaseType {
