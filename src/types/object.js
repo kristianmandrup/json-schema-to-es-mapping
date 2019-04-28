@@ -11,15 +11,15 @@ class MappingObject extends MappingBaseType {
     return "object";
   }
 
-  // get typeName() {
-  //   return "object";
-  // }
+  get typeName() {
+    return "object";
+  }
 
   constructor(obj) {
     super(obj);
     this.properties = this.value.properties;
     this.typeNameFor = this.config.typeNameFor;
-    this.typeName = this.value.typeName || this.value.className;
+    this.objTypeName = this.value.typeName || this.value.className;
   }
 
   static create(obj) {
@@ -67,7 +67,7 @@ class MappingObject extends MappingBaseType {
   }
 
   get resolvedTypeName() {
-    return this.typeName || this.resolveConfigTypeName(this.key);
+    return this.objTypeName || this.resolveConfigTypeName(this.key);
   }
 
   resolveConfigTypeName(name) {

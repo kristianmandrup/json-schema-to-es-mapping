@@ -41,14 +41,18 @@ const isLocationKeyAndObj = (key, obj) =>
 
 // See: https://www.elastic.co/guide/en/elasticsearch/guide/current/lat-lon-formats.html
 const isGeoPoint = (obj = {}, key) => {
-  if (isStringType(key) && isLocationKeyAndObj(key, obj)) return true;
+  const isValidLocationKey = isStringType(key) && isLocationKeyAndObj(key, obj);
+  console.log({ isValidLocationKey });
+  if (isValidLocationKey) return true;
   const { properties } = obj;
   if (!properties) return false;
   return short(properties) || full(properties);
 };
 
 function toGeoPoint(obj) {
-  return isGeoPoint(obj) && MappingGeoPoint.create(obj).convert();
+  const typeMatch = isGeoPoint(obj);
+  console.log("toGeoPoint", typeMatch, obj);
+  return typeMatch && MappingGeoPoint.create(obj).convert();
 }
 
 // integer_range, float_range, long_range, double_range
@@ -76,6 +80,7 @@ module.exports = {
   hasNumericItem,
   short,
   full,
+  isLocationKey,
   isLocationKeyAndObj,
   toGeoPoint,
   MappingGeoPoint
