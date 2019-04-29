@@ -28,26 +28,55 @@ class MappingBaseType extends InfoHandler {
   }
 
   init() {
-    const { key, parentName, config, opts, value } = this;
+    this.initKeyMaker();
+    this.initEntryObj();
+    this.initDispatcher();
+    this.initTypeHandler();
+    this.initResultHandler();
+    this.initReferenceResolver();
+    this.resolveValue();
+    return this;
+  }
+
+  initKeyMaker() {
+    const { key, parentName, config } = this;
     this.keyMaker = createKeyMaker({ key, parentName }, config);
-    const nestedKey = this.keyMaker.nestedKey;
+    this.nestedKey = this.keyMaker.nestedKey;
+    return this;
+  }
 
+  initEntryObj() {
+    const { key, nestedKey } = this;
     this.entryObj = createEntryObj({ key, nestedKey }, config);
-    const entry = this.entryObj.entry;
-    this.dispatcher = createDispatcher(config);
+    this.entry = this.entryObj.entry;
+    return this;
+  }
 
-    const calcType = () => this.type;
-    const typeName = this.typeName;
+  initDispatcher() {
+    this.dispatcher = createDispatcher(this.config);
+  }
+
+  initTypeHandler() {
+    const { type, typeName } = this;
+    const calcType = () => type;
     this.typeHandler = createTypeHandler({ typeName, calcType }, config);
+  }
 
+  initResultHandler() {
+    const { entry, keyMaker, typeHandler, config } = this;
     this.resultHandler = createResultHandler(
-      { entry, keyMaker: this.keyMaker, typeHandler: this.typeHandler },
+      { entry, keyMaker, typeHandler },
       config
     );
-    this.referenceResolver = createReferenceResolver(opts, config);
+  }
 
+  initReferenceResolver() {
+    const { opts, config } = this;
+    this.referenceResolver = createReferenceResolver(opts, config);
+  }
+
+  resolveValue() {
     this.value = this.resolve(value);
-    return this;
   }
 
   get type() {
