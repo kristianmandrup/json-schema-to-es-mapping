@@ -6,18 +6,20 @@ const { createDispatcher } = require("./dispatcher");
 const { createReferenceResolver } = require("./reference");
 const { createTypeHandler } = require("./type-handler");
 const { createEntryObj } = require("./entry");
+const { isObjectType, isStringType } = require("../util");
 
 class MappingBaseType extends InfoHandler {
   constructor(opts = {}, config) {
     super(config || opts.config);
+
     const { parentName, schema, key, value = {} } = opts;
-    config = config || opts.config;
+    config = config || opts.config || {};
     this.opts = opts;
     this.parentName = parentName;
     this.schema = schema || config.schema;
     this.key = key;
     this.format = value.format;
-    this.result = config.resultObj || {};
+    this.result = config.result || {};
     this.visitedPaths = config.visitedPaths || {};
     this.config = merge.recursive($default.config, config);
     config = this.config;
@@ -27,7 +29,24 @@ class MappingBaseType extends InfoHandler {
     this.nestingLv = config.nestingLv;
   }
 
+  validateInit() {
+    const { opts, config, key, value, schema } = this;
+    if (!isObjectType(value)) {
+      this.error("validateInit", "Missing or invalid value", { opts });
+    }
+    if (!isStringType(key)) {
+      this.error("validateInit", "Missing or invalid key", { opts });
+    }
+    if (!isObjectType(schema)) {
+      this.error("validateInit", "Missing or invalid schema", {
+        config,
+        schema
+      });
+    }
+  }
+
   init() {
+    this.validateInit();
     this.initKeyMaker();
     this.initEntryObj();
     this.initDispatcher();
@@ -46,18 +65,19 @@ class MappingBaseType extends InfoHandler {
   }
 
   initEntryObj() {
-    const { key, nestedKey } = this;
+    const { key, nestedKey, config } = this;
     this.entryObj = createEntryObj({ key, nestedKey }, config);
     this.entry = this.entryObj.entry;
     return this;
   }
 
   initDispatcher() {
-    this.dispatcher = createDispatcher(this.config);
+    const { config } = this;
+    this.dispatcher = createDispatcher(config);
   }
 
   initTypeHandler() {
-    const { type, typeName } = this;
+    const { type, typeName, config } = this;
     const calcType = () => type;
     this.typeHandler = createTypeHandler({ typeName, calcType }, config);
   }
@@ -76,6 +96,7 @@ class MappingBaseType extends InfoHandler {
   }
 
   resolveValue() {
+    const { value } = this;
     this.value = this.resolve(value);
   }
 

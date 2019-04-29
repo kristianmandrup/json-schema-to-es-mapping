@@ -33,12 +33,12 @@ describe("ResultHandler", () => {
     });
   });
 
-  describe("resultObj", () => {
+  describe("result", () => {
     const obj = {
       name: "x"
     };
     test("is expected obj", () => {
-      expect(handler.resultObj).toEqual(obj);
+      expect(handler.result).toEqual(obj);
     });
   });
 
@@ -51,7 +51,7 @@ describe("ResultHandler", () => {
   describe("createAndStoreResult", () => {
     test("should store resolvedResult", () => {
       handler.createAndStoreResult();
-      expect(this.resultObj).toEqual(this.resolvedResult);
+      expect(this.result).toEqual(this.resolvedResult);
     });
   });
 });

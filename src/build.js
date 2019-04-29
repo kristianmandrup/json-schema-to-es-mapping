@@ -5,7 +5,7 @@ function build(schema, config = {}) {
   try {
     config = buildConfig(config, schema);
     properties = config.buildProperties(schema, config);
-    results = config.resultObj;
+    results = config.result;
     onComplete && onComplete(results);
     return {
       properties,

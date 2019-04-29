@@ -25,7 +25,7 @@ class ResultHandler {
     return true;
   }
 
-  get resultObj() {
+  get result() {
     const key = this.resultKey(this);
     return this.resultMap[key];
   }
@@ -47,12 +47,12 @@ class ResultHandler {
     return this.createResult();
   }
 
-  setResultObj(result) {
+  setResultMap(result) {
     this.resultMap[this.resultKeyName] = result;
   }
 
   setResult(result) {
-    this.setResultObj(result);
+    this.setResultMap(result);
     this.dispatch();
   }
 

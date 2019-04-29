@@ -28,6 +28,7 @@ class InfoHandler {
     const errMsg = this.captionedMsg(name, msg);
     this.info(name, msg, data);
     this.onError(errMsg, data);
+    console.log("THROW");
     throw new ConvertMappingSchemaError(errMsg);
   }
 
