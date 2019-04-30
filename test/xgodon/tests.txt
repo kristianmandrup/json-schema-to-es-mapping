@@ -1,0 +1,140 @@
+// def test_string_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+// def test_integer():
+//     builder = JsToEs(json_schema=schema_integer, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {
+//         'type': 'integer'}}}}}
+
+// def test_integer_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+// def test_number():
+//     builder = JsToEs(json_schema=schema_number, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {
+//         'type': 'float'}}}}}
+
+// def test_number_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+// def test_object():
+//     builder = JsToEs(json_schema=schema_object, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     print(r)
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {'properties': {'prop1': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}, 'prop2': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}}, 'type': 'nested'}}}}}
+
+// def test_object_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+// def test_array_str():
+
+//     builder = JsToEs(json_schema=a, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {
+//         'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}}}}}
+
+// def test_array_str_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+// def test_list_to_str():
+
+//     builder = JsToEs(json_schema=b, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {
+//         'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}}}}}
+
+// def test_list_to_str_rules():
+//     """no convertion from * to string needed because during the insertion, no convertion should be done : all value are text by default
+//     """
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+// def test_list_to_float():
+
+//     builder = JsToEs(json_schema=c, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {
+//         'test': {'properties': {'MedlineCitation': {'type': 'float'}}}}}
+
+// def test_list_to_float_rules():
+//     """no convertion from int to float needed because during the insertion, due to Coercion 
+//     see : https://www.elastic.co/guide/en/elasticsearch/reference/current/coerce.html
+//     """
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+// def test_list_to_int():
+
+//     builder = JsToEs(json_schema=d, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {
+//         'test': {'properties': {'MedlineCitation': {'type': 'integer'}}}}}
+
+// def test_list_to_int_rules():
+//     """no convertion because int is the weakest type. Nothing should be converted to int
+//     """
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         assert c == []
+
+
+// def test_anyof_str_obj():
+
+//     builder = JsToEs(json_schema=e, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {'type': 'nested', 'properties': {'object_from_string': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}, 'prop1': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}, 'prop2': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}}}}}}}
+
+// def test_anyof_str_obj_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         expected = [{'to': 'object', 'path': ['MedlineCitation'], 'from': 'string'}]
+//         assert any(elem in expected  for elem in c)
+
+// def test_anyof_num_obj():
+
+//     builder = JsToEs(json_schema=f, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {'type': 'nested', 'properties': {'object_from_number': {'type': 'float'}, 'prop1': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}, 'prop2': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}}}}}}}
+
+// def test_anyof_num_obj_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         expected = [{'to': 'object', 'path': ['MedlineCitation'], 'from': 'float'}]
+//         assert any(elem in expected  for elem in c)
+
+// def test_anyof_int_obj():
+
+//     builder = JsToEs(json_schema=g, nested=True, index="test", level=0, path=[
+//     ], js_path=[], data_convertion_instuction_file_path=rf)
+//     r = builder.to_es()
+//     assert r == {'mappings': {'test': {'properties': {'MedlineCitation': {'type': 'nested', 'properties': {'object_from_integer': {'type': 'integer'}, 'prop1': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}, 'prop2': {'type': 'text', 'fields': {'keyword': {'type': 'keyword', 'ignore_above': 256}}}}}}}}}
+
+// def test_anyof_int_obj_rules():
+//     with open(rf) as f: 
+//         c = json.load(f)
+//         expected = [{'to': 'object', 'path': ['MedlineCitation'], 'from': 'integer'}]
+//         assert any(elem in expected  for elem in c)
+//
