@@ -7,6 +7,7 @@ const { createReferenceResolver } = require("./reference");
 const { createTypeHandler } = require("./type-handler");
 const { createEntryObj } = require("./entry");
 const { isObjectType, isStringType } = require("../util");
+const { Composer } = require("./composer");
 
 class MappingBaseType extends InfoHandler {
   constructor(opts = {}, config) {
@@ -29,70 +30,23 @@ class MappingBaseType extends InfoHandler {
     this.nestingLv = config.nestingLv;
   }
 
-  validateInit() {
-    const { opts, config, key, value, schema } = this;
-    if (!isObjectType(value)) {
-      this.error("validateInit", "Missing or invalid value", { opts });
-    }
-    if (!isStringType(key)) {
-      this.error("validateInit", "Missing or invalid key", { opts });
-    }
+  validateSchema(schema) {
+    schema = schema || this.schema;
     if (!isObjectType(schema)) {
       this.error("validateInit", "Missing or invalid schema", {
-        config,
+        config: this.config,
         schema
       });
     }
   }
 
   init() {
-    this.validateInit();
-    this.initKeyMaker();
-    this.initEntryObj();
-    this.initDispatcher();
-    this.initTypeHandler();
-    this.initResultHandler();
-    this.initReferenceResolver();
+    this.validateSchema();
+    // use Composer to compose
+    this.composer = new Composer({ target: this, ...this.opts });
+    this.composer.init();
     this.resolveValue();
     return this;
-  }
-
-  initKeyMaker() {
-    const { key, parentName, config } = this;
-    this.keyMaker = createKeyMaker({ key, parentName }, config);
-    this.nestedKey = this.keyMaker.nestedKey;
-    return this;
-  }
-
-  initEntryObj() {
-    const { key, nestedKey, config } = this;
-    this.entryObj = createEntryObj({ key, nestedKey }, config);
-    this.entry = this.entryObj.entry;
-    return this;
-  }
-
-  initDispatcher() {
-    const { config } = this;
-    this.dispatcher = createDispatcher(config);
-  }
-
-  initTypeHandler() {
-    const { type, typeName, config } = this;
-    const calcType = () => type;
-    this.typeHandler = createTypeHandler({ typeName, calcType }, config);
-  }
-
-  initResultHandler() {
-    const { entry, keyMaker, typeHandler, config } = this;
-    this.resultHandler = createResultHandler(
-      { entry, keyMaker, typeHandler },
-      config
-    );
-  }
-
-  initReferenceResolver() {
-    const { opts, config } = this;
-    this.referenceResolver = createReferenceResolver(opts, config);
   }
 
   resolveValue() {

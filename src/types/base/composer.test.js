@@ -1,8 +1,18 @@
-const { MappingBaseType } = require("./index");
+const { Composer } = require("./composer");
 
-const create = (opts, config) => new MappingBaseType(opts, config);
+const target = {};
 
-describe("MappingBaseType", () => {
+const create = (opts, config) => {
+  const $opts = {
+    target,
+    ...opts
+  };
+  // const composer =
+  new Composer($opts, config).init();
+  return target;
+};
+
+describe("Composer", () => {
   describe("init", () => {
     const schema = {
       title: "person",
