@@ -7,8 +7,10 @@ class ResultHandler extends InfoHandler {
     super(config);
     this.opts = opts;
     this.shouldSetResult = config.shouldSetResult || this.shouldSetResult;
+    // TODO: refactor to setter
     this.keyMaker =
       opts.keyMaker || config.keyMaker || createKeyMaker(opts, config);
+
     this.typeHandler = opts.typeHandler || config.typeHandler;
     this.resultKey = config.resultKey || this.calcResultKey.bind(this);
     this.entry = opts.entry;

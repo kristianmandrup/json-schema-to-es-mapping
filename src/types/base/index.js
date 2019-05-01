@@ -25,18 +25,8 @@ class MappingBaseType extends InfoHandler {
     this.nestingLv = config.nestingLv;
   }
 
-  validateSchema(schema) {
-    schema = schema || this.schema;
-    if (!isObjectType(schema)) {
-      this.error("validateInit", "Missing or invalid schema", {
-        config: this.config,
-        schema
-      });
-    }
-  }
-
   init() {
-    this.validateSchema();
+    // this.validateSchema();
     // use Composer to compose
     this.composer = this.createComposer({
       target: this,
