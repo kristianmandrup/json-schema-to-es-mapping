@@ -1,11 +1,6 @@
 const merge = require("merge");
 const { InfoHandler } = require("../info");
 const { $default } = require("../default");
-const { createKeyMaker, createResultHandler } = require("./result");
-const { createDispatcher } = require("./dispatcher");
-const { createReferenceResolver } = require("./reference");
-const { createTypeHandler } = require("./type-handler");
-const { createEntryObj } = require("./entry");
 const { isObjectType, isStringType } = require("../util");
 const { Composer } = require("./composer");
 
@@ -54,10 +49,12 @@ class MappingBaseType extends InfoHandler {
     this.value = this.resolve(value);
   }
 
+  get calculatedType() {
+    return this.typeHandler.type;
+  }
+
   get type() {
-    const calculatedType = this.typeHandler.type;
-    console.log({ calculatedType });
-    return calculatedType || this.baseType;
+    return this.calculatedType || this.baseType;
   }
 
   get typeMap() {
@@ -85,14 +82,20 @@ class MappingBaseType extends InfoHandler {
     this.resultHandler.createAndStoreResult();
   }
 
-  resolve(obj) {
-    const resolved = this.referenceResolver.resolve(obj);
-    this.wasCacheHit = this.referenceResolver.wasCacheHit;
-    return resolved;
+  get result() {
+    return this.resultHandler.result;
   }
 
-  message() {
-    return config.messages[this.key] || config.messages[this.type] || {};
+  resolve(obj) {
+    if (!isObjectType(obj)) {
+      this.error("resolve", "Missing or invalid object", {
+        obj
+      });
+    }
+    const resolved = this.referenceResolver.resolve(obj);
+    this.wasCacheHit = this.referenceResolver.wasCacheHit;
+    // this.resolved = resolved
+    return resolved;
   }
 }
 

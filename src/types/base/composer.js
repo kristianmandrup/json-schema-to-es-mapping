@@ -1,4 +1,9 @@
 const { isObjectType, isStringType } = require("../util");
+const { createKeyMaker, createResultHandler } = require("./result");
+const { createDispatcher } = require("./dispatcher");
+const { createReferenceResolver } = require("./reference");
+const { createTypeHandler } = require("./type-handler");
+const { createEntryObj } = require("./entry");
 
 class Composer {
   constructor(opts = {}, config = {}) {

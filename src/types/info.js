@@ -7,10 +7,9 @@ class InfoHandler {
     this.config = config || this.config;
     this.logging = config.logging;
     this.log = config.log || console.log;
-  }
-
-  errMessage(errKey = "default") {
-    return this.message[errKey] || "error";
+    this.throws =
+      config.throws === true ||
+      (config.throws === undefined && !config.onError);
   }
 
   captionedMsg(name, msg) {
@@ -27,8 +26,14 @@ class InfoHandler {
   error(name, msg, data) {
     const errMsg = this.captionedMsg(name, msg);
     this.info(name, msg, data);
+    if (this.throws) {
+      this.throw(errMsg);
+    }
     this.onError(errMsg, data);
-    console.log("THROW");
+  }
+
+  throw(errMsg) {
+    if (!this.throws) return;
     throw new ConvertMappingSchemaError(errMsg);
   }
 
