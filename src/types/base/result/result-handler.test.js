@@ -1,4 +1,5 @@
 const { createResultHandler } = require("./result-handler");
+const { createTypeHandler } = require("../type-handler");
 const create = createResultHandler;
 
 describe("ResultHandler", () => {
@@ -49,9 +50,21 @@ describe("ResultHandler", () => {
   });
 
   describe("createAndStoreResult", () => {
-    test("should store resolvedResult", () => {
-      handler.createAndStoreResult();
-      expect(this.result).toEqual(this.resolvedResult);
+    describe("Missing typeHandler", () => {
+      test("throws", () => {
+        expect(() => handler.createAndStoreResult()).not.toThrow();
+        expect(handler.createAndStoreResult()).toEqual({ type: "keyword" });
+      });
+    });
+    describe("Missing typeHandler", () => {
+      const typeName = "string";
+      const entry = {};
+      const type = "keyword";
+      handler.typeHandler = createTypeHandler({ typeName, entry, type });
+      test("creates, stores and returns result", () => {
+        expect(() => handler.createAndStoreResult()).not.toThrow();
+        expect(handler.createAndStoreResult()).toEqual(handler.resolvedResult);
+      });
     });
   });
 });

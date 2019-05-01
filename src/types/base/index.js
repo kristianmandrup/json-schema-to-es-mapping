@@ -1,8 +1,8 @@
 const merge = require("merge");
 const { InfoHandler } = require("../info");
 const { $default } = require("../default");
-const { isObjectType, isStringType } = require("../util");
-const { Composer } = require("./composer");
+const { isObjectType } = require("../util");
+const { createComposer } = require("./composer");
 
 class MappingBaseType extends InfoHandler {
   constructor(opts = {}, config) {
@@ -38,10 +38,19 @@ class MappingBaseType extends InfoHandler {
   init() {
     this.validateSchema();
     // use Composer to compose
-    this.composer = new Composer({ target: this, ...this.opts });
+    this.composer = this.createComposer({
+      target: this,
+      type: this.type,
+      ...this.opts
+    });
     this.composer.init();
     this.resolveValue();
     return this;
+  }
+
+  createComposer(opts = {}) {
+    const $createComposer = this.config.createComposer || createComposer;
+    return $createComposer(opts, this.config);
   }
 
   resolveValue() {
@@ -82,7 +91,7 @@ class MappingBaseType extends InfoHandler {
     this.resultHandler.createAndStoreResult();
   }
 
-  get result() {
+  get resolvedResult() {
     return this.resultHandler.result;
   }
 

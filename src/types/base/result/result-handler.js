@@ -1,8 +1,11 @@
 const createResultHandler = (opts, config) => new ResultHandler(opts, config);
 const { createKeyMaker } = require("./key-maker");
+const { InfoHandler } = require("../../info");
 
-class ResultHandler {
+class ResultHandler extends InfoHandler {
   constructor(opts = {}, config = {}) {
+    super(config);
+    this.opts = opts;
     this.shouldSetResult = config.shouldSetResult || this.shouldSetResult;
     this.keyMaker =
       opts.keyMaker || config.keyMaker || createKeyMaker(opts, config);
@@ -11,9 +14,24 @@ class ResultHandler {
     this.entry = opts.entry;
     this.dispatcher = opts.dispatcher || config.dispatcher;
     this.resultMap = config.resultMap || {};
+    this._type = opts.type;
   }
 
   get type() {
+    return this._type || this.calcType();
+  }
+
+  get _ctx() {
+    return {
+      opts: this.opts,
+      config: this.config
+    };
+  }
+
+  calcType() {
+    if (!this.typeHandler) {
+      this.error("calcType", "Missing typeHandler", this._ctx);
+    }
     return this.typeHandler.calcType();
   }
 
@@ -69,6 +87,7 @@ class ResultHandler {
     if (this.shouldSetResult(this.resolvedResult)) {
       const result = this.resolvedResult;
       this.setResult(result);
+      return result;
     }
   }
 }

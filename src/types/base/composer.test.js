@@ -1,4 +1,4 @@
-const { Composer } = require("./composer");
+const { createComposer } = require("./composer");
 
 const target = {};
 
@@ -7,8 +7,8 @@ const create = (opts, config) => {
     target,
     ...opts
   };
-  // const composer =
-  new Composer($opts, config).init();
+  const composer = createComposer($opts, config);
+  composer.init();
   return target;
 };
 
@@ -37,7 +37,11 @@ describe("Composer", () => {
           });
 
           test("generates key as expected", () => {
-            const opts = { key: mapper.key, parentName: mapper.parentName };
+            const opts = {
+              key: mapper.key,
+              parentName: mapper.parentName,
+              value: { type: "string" }
+            };
             expect(mapper.keyMaker(opts, mapper.config)).toEqual("x");
           });
         });

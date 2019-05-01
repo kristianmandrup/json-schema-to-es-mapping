@@ -4,19 +4,24 @@ const { createDispatcher } = require("./dispatcher");
 const { createReferenceResolver } = require("./reference");
 const { createTypeHandler } = require("./type-handler");
 const { createEntryObj } = require("./entry");
+const { InfoHandler } = require("../info");
 
-class Composer {
+const createComposer = (opts, config) => new Composer(opts, config);
+
+class Composer extends InfoHandler {
   constructor(opts = {}, config = {}) {
-    const { key, parentName } = opts;
+    super(config);
+    const { key, parentName, value, target } = opts;
     this.opts = opts;
     this.key = key;
+    this.value = value;
     this.parentName = parentName;
     this.config = opts.config || config;
     this.target = target;
   }
 
   validateInit() {
-    const { opts, config, key, value, schema } = this;
+    const { opts, key, value } = this;
     if (!isObjectType(value)) {
       this.error("validateInit", "Missing or invalid value", { opts });
     }
@@ -36,27 +41,29 @@ class Composer {
     return this;
   }
 
-  initKeyMaker({ key, parentName, config }) {
+  initKeyMaker({ key, parentName, config } = {}) {
     const { target } = this;
 
     key = key || this.key;
     parentName = parentName || this.parentName;
     config = config || this.config;
 
-    target.keyMaker = createKeyMaker({ key, parentName }, config);
-    target.nestedKey = this.keyMaker.nestedKey;
+    const keyMaker = createKeyMaker({ key, parentName }, config);
+    target.keyMaker = keyMaker;
+    target.nestedKey = keyMaker.nestedKey;
     return this;
   }
 
-  initEntryObj({ key, nestedKey, config }) {
+  initEntryObj({ key, nestedKey, config } = {}) {
     const { target } = this;
 
     key = key || this.key;
     nestedKey = nestedKey || this.nestedKey;
     config = config || this.config;
 
-    target.entryObj = createEntryObj({ key, nestedKey }, config);
-    target.entry = this.entryObj.entry;
+    const entryObj = createEntryObj({ key, nestedKey }, config);
+    target.entryObj = entryObj;
+    target.entry = entryObj.entry;
     return this;
   }
 
@@ -69,7 +76,7 @@ class Composer {
     return this;
   }
 
-  initTypeHandler({ type, typeName, calcType, config }) {
+  initTypeHandler({ type, typeName, calcType, config } = {}) {
     const { target } = this;
 
     type = type || this.type;
@@ -81,7 +88,7 @@ class Composer {
     return this;
   }
 
-  initResultHandler({ entry, keyMaker, typeHandler, config }) {
+  initResultHandler({ entry, keyMaker, typeHandler, config } = {}) {
     const { target } = this;
 
     entry = entry || this.entry;
@@ -96,7 +103,7 @@ class Composer {
     return this;
   }
 
-  initReferenceResolver({ opts, config }) {
+  initReferenceResolver({ opts, config } = {}) {
     const { target } = this;
 
     opts = opts || this.opts;
@@ -108,5 +115,6 @@ class Composer {
 }
 
 module.exports = {
-  Composer
+  Composer,
+  createComposer
 };

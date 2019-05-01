@@ -342,13 +342,13 @@ describe("MappingBaseType", () => {
     });
   });
 
-  describe("result", () => {
+  describe("resolvedResult", () => {
     const mapper = create();
     describe("init", () => {
       mapper.init();
 
       test("undefined", () => {
-        const result = mapper.result;
+        const result = mapper.resolvedResult;
         expect(result).toBeUndefined();
       });
     });
