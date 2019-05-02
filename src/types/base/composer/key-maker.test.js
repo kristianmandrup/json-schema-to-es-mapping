@@ -1,21 +1,42 @@
 const { create, opts } = require("./helpers");
 describe("create keyMaker", () => {
   describe("default", () => {
-    const composer = create(opts);
+    const c = create(opts);
     test("is undefined before init", () => {
-      expect(composer.keyMaker).toBeUndefined();
+      expect(c.keyMaker).toBeUndefined();
     });
+  });
+
+  describe("initKeyMaker", () => {
+    const composer = create(opts);
+    composer.initKeyMaker();
+    test("is object", () => {
+      expect(typeof composer.keyMaker).toEqual("object");
+    });
+
+    test("generates key as expected", () => {
+      expect(composer.keyMaker.key).toEqual("x");
+    });
+  });
+
+  describe("passed in config", () => {
+    const createKeyMaker = () => ({
+      key: "y"
+    });
+    const config = {
+      createKeyMaker
+    };
+    const composer = create(opts, config);
 
     describe("initKeyMaker", () => {
       composer.initKeyMaker();
-      test("is function", () => {
+      test("is object", () => {
         expect(typeof composer.keyMaker).toEqual("object");
       });
 
       test("generates key as expected", () => {
-        expect(composer.keyMaker.key).toEqual("x");
+        expect(composer.keyMaker.key).toEqual("y");
       });
     });
   });
-  describe("passed in config", () => {});
 });
