@@ -11,7 +11,6 @@ const createComposer = (opts, config) => new Composer(opts, config);
 class Composer extends InfoHandler {
   constructor(opts = {}, config = {}) {
     super(config);
-    console.log("Composer", { opts, config });
     const { key, parentName, value, schema, target } = opts;
     this.opts = opts;
     this.key = key;
@@ -22,13 +21,20 @@ class Composer extends InfoHandler {
     this.target = target;
   }
 
+  get ctx() {
+    return {
+      opts: this.opts,
+      config: this.config
+    };
+  }
+
   validateInit() {
     const { opts, key, value } = this;
     if (!isObjectType(value)) {
-      this.error("validateInit", "Missing or invalid value", { opts });
+      this.error("validateInit", "Missing or invalid value", { opts, value });
     }
     if (!isStringType(key)) {
-      this.error("validateInit", "Missing or invalid key", { opts });
+      this.error("validateInit", "Missing or invalid key", { opts, key });
     }
     this.validateSchema();
     return this;
@@ -61,10 +67,9 @@ class Composer extends InfoHandler {
     key = key || this.key;
     parentName = parentName || this.parentName;
     config = config || this.config;
-    console.log("initKeyMaker", { key, parentName });
-
     const $createKeyMaker = config.createKeyMaker || createKeyMaker;
     const keyMaker = $createKeyMaker({ key, parentName }, config);
+    this.validateCreated("initKeyMaker", "keyMaker", keyMaker);
     this.keyMaker = keyMaker;
     target.keyMaker = keyMaker;
     target.nestedKey = keyMaker.nestedKey;
@@ -78,13 +83,21 @@ class Composer extends InfoHandler {
     nestedKey = nestedKey || this.nestedKey;
     config = config || this.config;
     const $createEntryObj = config.createEntryObj || createEntryObj;
-
     const entryObj = $createEntryObj({ key, nestedKey }, config);
+    this.validateCreated("initEntryObj", "entryObj", entryObj);
+
     target.entryObj = entryObj;
     const entry = entryObj.entry;
+    this.entryObj = entryObj;
     this.entry = entry;
     target.entry = entryObj.entry;
     return this;
+  }
+
+  validateCreated(method, label, created) {
+    if (!isObjectType(created)) {
+      this.error(method, `Missing or invalid ${label}`, this.ctx);
+    }
   }
 
   initDispatcher(config) {
@@ -92,8 +105,10 @@ class Composer extends InfoHandler {
 
     config = config || this.config;
     const $createDispatcher = config.createDispatcher || createDispatcher;
-
-    target.dispatcher = $createDispatcher(config);
+    const dispatcher = $createDispatcher(config);
+    this.validateCreated("initDispatcher", "dispatcher", dispatcher);
+    target.dispatcher = dispatcher;
+    this.dispatcher = dispatcher;
     return this;
   }
 
@@ -106,6 +121,7 @@ class Composer extends InfoHandler {
     calcType = calcType || (() => type);
     const $createTypeHandler = config.createTypeHandler || createTypeHandler;
     const typeHandler = $createTypeHandler({ typeName, calcType }, config);
+    this.validateCreated("initTypeHandler", "typeHandler", typeHandler);
     this.typeHandler = typeHandler;
     target.typeHandler = typeHandler;
     return this;
@@ -121,10 +137,14 @@ class Composer extends InfoHandler {
     const $createResultHandler =
       config.createResultHandler || createResultHandler;
 
-    target.resultHandler = $createResultHandler(
+    const resultHandler = $createResultHandler(
       { entry, keyMaker, typeHandler },
       config
     );
+    this.validateCreated("initResultHandler", "resultHandler", resultHandler);
+
+    target.resultHandler = resultHandler;
+    this.resultHandler = resultHandler;
     return this;
   }
 
@@ -136,7 +156,15 @@ class Composer extends InfoHandler {
     const $createReferenceResolver =
       config.createReferenceResolver || createReferenceResolver;
 
-    target.referenceResolver = $createReferenceResolver(opts, config);
+    const referenceResolver = $createReferenceResolver(opts, config);
+    this.validateCreated(
+      "initReferenceResolver",
+      "referenceResolver",
+      referenceResolver
+    );
+
+    target.referenceResolver = referenceResolver;
+    this.referenceResolver = referenceResolver;
     return this;
   }
 }

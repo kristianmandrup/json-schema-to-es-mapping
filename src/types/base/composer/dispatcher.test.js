@@ -1,20 +1,20 @@
 const { create, opts } = require("./helpers");
-describe("create entryObj", () => {
+
+describe("create dispatcher", () => {
   describe("default", () => {
     describe("no init", () => {
       const mapper = create(opts);
       test("is undefined before init", () => {
-        expect(mapper.entryObj).toBeUndefined();
+        expect(mapper.dispatcher).toBeUndefined();
       });
     });
-
     describe("init", () => {
-      describe("initEntryObj", () => {
+      describe("initDispatcher", () => {
         const mapper = create(opts);
-        mapper.initEntryObj();
+        mapper.initDispatcher();
 
-        test("is function", () => {
-          expect(typeof mapper.entryObj).toEqual("object");
+        test("is object", () => {
+          expect(typeof mapper.dispatcher).toEqual("object");
         });
       });
     });

@@ -5,7 +5,6 @@ const createKeyMaker = (opts, config) => new KeyMaker(opts, config);
 class KeyMaker extends InfoHandler {
   constructor(opts = {}, config = {}) {
     super(config);
-    console.log('KeyMaker', { opts, config})
     const { key, parentName } = opts;
     this.opts = opts;
     this.nameSeparator = config.nameSeparator || this.defaultNameSeparator;
@@ -13,11 +12,16 @@ class KeyMaker extends InfoHandler {
     this.key = key;
   }
 
+  get ctx() {
+    return {
+      opts: this.opts,
+      config: this.config
+    };
+  }
+
   set key(key) {
     if (!isStringType(key)) {
-      this.error("set key", `Invalid or missing key ${key}`, {
-        opts: this.opts
-      });
+      this.error("set key", `Invalid or missing key ${key}`, this.ctx);
     }
     this._key = key;
   }

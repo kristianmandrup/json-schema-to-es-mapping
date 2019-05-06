@@ -9,7 +9,6 @@ const create = (opts, config = { logging: true }) => {
     schema,
     ...opts
   };
-  console.log({ $opts });
   return createComposer($opts, config);
 };
 
