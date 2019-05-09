@@ -1,5 +1,5 @@
-const { MappingRange } = require("./range");
-const { isNumber, safeToFloat, safeToInt } = require("./util");
+const { MappingRange } = require("../range");
+const { isNumber, safeToFloat, safeToInt } = require("../util");
 
 function toNumber(obj) {
   return isNumber(obj.type) && MappingNumber.create(obj).convert();

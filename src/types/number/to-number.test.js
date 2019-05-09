@@ -1,4 +1,4 @@
-const { isNumber, toNumber, MappingNumber } = require("./number");
+const { isNumber, toNumber, MappingNumber } = require(".");
 
 const create = opts => ({
   type: "number",

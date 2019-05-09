@@ -4,16 +4,16 @@ const { AnyOfMapper, chooseObjMapper } = obj;
 const { MappingBaseType, ConvertMappingSchemaError } = require("./base");
 const { MappingArray, toArray } = require("./array");
 const { MappingBoolean, toBoolean } = require("./boolean");
-const { MappingNumber, toNumber } = require("./number");
+const { MappingNumber, toNumber } = require("./number/number");
 const {
   MappingDateRange,
   toDateRange,
   MappingNumericRange,
   toNumericRange
 } = require("./range");
-const { MappingObject, toObject } = require("./object");
+const { MappingObject, toObject } = require("./object/object");
 const { MappingString, toString } = require("./string/string");
-const { MappingDate, toDate } = require("./date");
+const { MappingDate, toDate } = require("./date/date");
 const { MappingIp, toIp } = require("./ip");
 const { MappingGeoPoint, toGeoPoint } = require("./geo/point");
 

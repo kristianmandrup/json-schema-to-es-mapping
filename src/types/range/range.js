@@ -1,5 +1,5 @@
-const { MappingBaseType } = require("./base");
-const { safeToInt } = require("./util");
+const { MappingBaseType } = require("../base");
+const { safeToInt } = require("../util");
 
 const INT_MAX = Math.pow(2, 31);
 

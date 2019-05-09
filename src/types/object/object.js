@@ -1,5 +1,5 @@
-const { MappingBaseType } = require("./base");
-const { isFunction, isObject, isObjectType } = require("./util");
+const { MappingBaseType } = require("../base");
+const { isFunction, isObject, isObjectType } = require("../util");
 
 function toObject(obj) {
   return isObject(obj) && MappingObject.create(obj).convert();

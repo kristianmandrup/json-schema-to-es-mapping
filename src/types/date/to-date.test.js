@@ -1,4 +1,4 @@
-const { isDate, toDate, MappingDate } = require("./date");
+const { isDate, toDate, MappingDate } = require(".");
 
 const create = opts => ({
   type: "date",

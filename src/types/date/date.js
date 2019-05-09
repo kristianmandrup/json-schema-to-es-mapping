@@ -1,5 +1,5 @@
-const { MappingBaseType } = require("./base");
-const { isDate } = require("./util");
+const { MappingBaseType } = require("../base");
+const { isDate } = require("../util");
 
 function toDate(obj) {
   return isDate(obj) && MappingDate.create(obj).convert();

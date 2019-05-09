@@ -1,4 +1,4 @@
-const { MappingRange } = require("./range");
+const { MappingRange } = require(".");
 const schema = {};
 const config = {
   schema,

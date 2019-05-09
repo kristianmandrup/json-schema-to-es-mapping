@@ -1,5 +1,5 @@
-const { MappingBaseType } = require("../base");
-const { createMappingItemFactory } = require("./item");
+const { MappingBaseType } = require("../../base");
+const { createMappingItemFactory } = require("../item");
 
 const createItemsMapping = (opts, config) => {
   return new MappingItems(opts, config);

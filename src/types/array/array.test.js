@@ -1,4 +1,4 @@
-const { build } = require("..");
+const { build } = require("../..");
 
 describe("array", () => {
   test("no items", () => {

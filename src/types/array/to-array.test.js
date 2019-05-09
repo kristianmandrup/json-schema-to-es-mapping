@@ -1,4 +1,4 @@
-const { isArray, toArray, MappingArray } = require("./array");
+const { isArray, toArray, MappingArray } = require(".");
 
 const create = opts => ({
   type: "array",

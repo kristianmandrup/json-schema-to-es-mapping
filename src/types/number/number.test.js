@@ -1,4 +1,4 @@
-const { build } = require("..");
+const { build } = require("../..");
 
 const schema = {};
 
