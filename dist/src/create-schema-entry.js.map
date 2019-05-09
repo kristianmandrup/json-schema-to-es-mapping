@@ -1,0 +1,1 @@
+{"version":3,"file":"create-schema-entry.js","sourceRoot":"","sources":["../../src/create-schema-entry.ts"],"names":[],"mappings":";AAAQ,IAAA,4CAAW,CAAwB;AAE3C,SAAS,iBAAiB,CAAC,GAAG,EAAE,MAAM;IACpC,OAAO,IAAI,WAAW,CAAC,GAAG,EAAE,MAAM,CAAC,CAAC,OAAO,EAAE,CAAC;AAChD,CAAC;AAED,MAAM,CAAC,OAAO,GAAG;IACf,iBAAiB,mBAAA;CAClB,CAAC"}
