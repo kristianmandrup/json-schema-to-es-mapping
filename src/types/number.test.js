@@ -1,5 +1,7 @@
 const { build } = require("..");
 
+const schema = {};
+
 const create = opts => ({
   type: "object",
   properties: {
@@ -7,17 +9,21 @@ const create = opts => ({
       type: "number",
       ...opts
     }
-  }
+  },
+  schema
 });
 
 const INT_MAX = Math.pow(2, 31);
 const NEG_INT_MAX = -(INT_MAX + 1);
 
-const config = {};
+const config = {
+  schema,
+  logging: true
+};
 
 const number = opts => {
-  const schema = create(opts);
-  const obj = build(schema, config);
+  const $schema = create(opts);
+  const obj = build($schema, config);
   return obj.properties.votes;
 };
 

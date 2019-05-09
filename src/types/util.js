@@ -51,6 +51,9 @@ function safeToInt(num, defaultValue = 1) {
   }
 }
 
+const keysOf = obj => Object.keys(obj);
+const isEmptyObj = obj => !obj || keysOf(obj).length === 0;
+
 function isInteger(type) {
   return type === "integer";
 }
@@ -153,5 +156,7 @@ module.exports = {
   assign,
   createAssign,
   assignAt,
-  stringify
+  stringify,
+  isEmptyObj,
+  keysOf
 };

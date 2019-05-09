@@ -11,14 +11,15 @@ const createComposer = (opts, config) => new Composer(opts, config);
 class Composer extends InfoHandler {
   constructor(opts = {}, config = {}) {
     super(config);
-    const { key, parentName, value, schema, target } = opts;
+    const { key, parentName, value, entry, schema, target } = opts;
     this.opts = opts;
     this.key = key;
     this.value = value;
-    this.schema = schema;
-    this.parentName = parentName;
     this.config = opts.config || config;
+    this.schema = schema || this.config.schema || config.schema;
+    this.parentName = parentName;
     this.target = target;
+    this.entry = entry;
   }
 
   get ctx() {
@@ -44,7 +45,7 @@ class Composer extends InfoHandler {
     schema = schema || this.schema;
     if (!isObjectType(schema)) {
       this.error("validateInit", "Missing or invalid schema", {
-        config: this.config,
+        ...this.ctx,
         schema
       });
     }
@@ -120,11 +121,20 @@ class Composer extends InfoHandler {
     config = config || this.config;
     calcType = calcType || (() => type);
     const $createTypeHandler = config.createTypeHandler || createTypeHandler;
-    const typeHandler = $createTypeHandler({ typeName, calcType }, config);
+    const entry = this.entry || this.defaultEntry;
+    const typeHandler = $createTypeHandler(
+      { typeName, entry, calcType },
+      config
+    );
     this.validateCreated("initTypeHandler", "typeHandler", typeHandler);
     this.typeHandler = typeHandler;
     target.typeHandler = typeHandler;
     return this;
+  }
+
+  get defaultEntry() {
+    this.initEntryObj();
+    return this.entry;
   }
 
   initResultHandler({ entry, keyMaker, typeHandler, config } = {}) {

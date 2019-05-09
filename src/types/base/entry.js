@@ -16,6 +16,10 @@ class EntryObj {
     return this.lookedUpEntry || this.configEntry || {};
   }
 
+  get type() {
+    return this.entry.type;
+  }
+
   get lookedUpEntry() {
     const { entryFor } = this;
     return entryFor && entryFor(this.lookupObj);

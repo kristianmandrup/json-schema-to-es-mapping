@@ -22,6 +22,13 @@ class ResultHandler extends InfoHandler {
     this._type = opts.type;
   }
 
+  get ctx() {
+    return {
+      opts: this.opts,
+      config: this.config
+    };
+  }
+
   set keyMaker(keyMaker) {
     if (!keyMaker) {
       this.error("set keyMaker", "invalid or missing keyMaker", this.ctx);

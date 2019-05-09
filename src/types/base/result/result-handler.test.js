@@ -82,7 +82,7 @@ describe("ResultHandler", () => {
           expect(handler.createAndStoreResult()).toEqual({ type: "keyword" });
         });
       });
-      describe("Missing typeHandler", () => {
+      describe("typeHandler", () => {
         const typeName = "string";
         const entry = {};
         const type = "keyword";

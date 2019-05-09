@@ -29,22 +29,57 @@ describe("TypeHandler", () => {
   const entry = {
     type: "string"
   };
-  const handler = create({ typeName, entry, calcType }, config);
-  describe("typeMapValue", () => {
-    test("string", () => {
-      expect(handler.typeMapValue).toEqual("keyword");
+
+  describe("default calcType function used", () => {
+    describe("typeMap typeName used", () => {
+      const handler = create({ typeName }, config);
+      describe("type", () => {
+        test("entry type string", () => {
+          expect(handler.type).toEqual("keyword");
+        });
+      });
+    });
+
+    describe("entry object passed", () => {
+      const handler = create({ typeName, entry }, config);
+
+      describe("type", () => {
+        test("entry type string", () => {
+          expect(handler.type).toEqual("string");
+        });
+      });
     });
   });
 
-  describe("calcType", () => {
-    test("string", () => {
-      expect(handler.calcType()).toEqual("text");
+  describe("type value passed", () => {
+    const type = "string";
+    const handler = create({ typeName, entry, type }, config);
+
+    describe("type", () => {
+      test("string", () => {
+        expect(handler.type).toEqual("string");
+      });
     });
   });
 
-  describe("type", () => {
-    test("string", () => {
-      expect(handler.type).toEqual("string");
+  describe("calcType function passed", () => {
+    const handler = create({ typeName, entry, calcType }, config);
+    describe("typeMapValue", () => {
+      test("string", () => {
+        expect(handler.typeMapValue).toEqual("keyword");
+      });
+    });
+
+    describe("calcType", () => {
+      test("string", () => {
+        expect(handler.calcType()).toEqual("text");
+      });
+    });
+
+    describe("type", () => {
+      test("string", () => {
+        expect(handler.type).toEqual("string");
+      });
     });
   });
 });
