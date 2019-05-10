@@ -96,7 +96,9 @@ Currently all Elastic Search core data types are supported (except for `binary`)
 - geo_point (soon)
 - ip (soon)
 
-Note: The most feature complete version can currently be found in the [tests](https://github.com/kristianmandrup/json-schema-to-es-mapping/tree/tests) branch. It is almost complete. Please help with the finishing touches so it can be released if you want or need these extra mappings and other features.
+Note: The most feature complete version can currently be found in the [to-ts](https://github.com/kristianmandrup/json-schema-to-es-mapping/commits/to-ts) branch. This branch is almost complete. It has unit test coverage of most of the functionality, includes initial support for complex schema types (such as `anyOf` a list of types) and the code has been converted to TypeScript. 
+
+Please help with the finishing touches so it can be released if you want or need these extra mappings and other features.
 
 ### Numeric
 
